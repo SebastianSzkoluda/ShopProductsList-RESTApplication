@@ -17,15 +17,15 @@ public class Product {
     @Id
     @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer productId;
+    private Integer product_id;
 
     @Getter
     @Column(name = "product_name")
-    private String productName;
+    private String product_name;
 
     @Getter
     @Column(name = "frequency_of_use")
-    private Integer frequencyOfUse;
+    private Integer frequency_of_use;
 
     @Getter
     @Column(name = "amount")
@@ -33,14 +33,7 @@ public class Product {
 
     @Getter
     @Column(name = "in_stock")
-    private Integer inStock;
-
-    @Getter
-    @Column(name = "Family_family_id")
-    private Integer familyIdFk;
-
-
-
+    private Integer in_stock;
 
 
 }

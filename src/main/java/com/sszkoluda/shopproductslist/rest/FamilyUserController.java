@@ -10,20 +10,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api")
 public class FamilyUserController {
 
-    final
-    FamilyUserService familyUserService;
+    final FamilyUserService familyUserService;
 
     @Autowired
     public FamilyUserController(FamilyUserService familyUserService) {
         this.familyUserService = familyUserService;
     }
 
+    @PostMapping("/signup")
+    public FamilyUser saveUser(@RequestBody FamilyUser user){
+        return familyUserService.saveUser(user);
+    }
+
     @GetMapping("/user")
-    public ResponseEntity<FamilyUser> getUser(@RequestParam(value = "email",required = true) String email) throws FamilyUserException {
+    public ResponseEntity<FamilyUser> getUser(@RequestParam String email) throws FamilyUserException {
 
         return this.familyUserService.findUserByEmail(email)
                 .map(familyUser -> ResponseEntity.ok(familyUser))
@@ -31,8 +37,15 @@ public class FamilyUserController {
 
     }
 
+    @GetMapping("/user/{id}")
+    public Optional<FamilyUser> getUserById(@PathVariable Integer id) throws FamilyUserException {
+
+        return familyUserService.findById(id);
+
+    }
+
     @GetMapping("/listAllUsers")
-    public Iterable<FamilyUser> getAllUsers(){
+    public Iterable<FamilyUser> getAllUsers() {
 
         return familyUserService.listAllUsers();
     }
@@ -42,6 +55,6 @@ public class FamilyUserController {
         ErrorResponse error = new ErrorResponse();
         error.setErrorCode(HttpStatus.NOT_FOUND.value());
         error.setMessage(ex.getMessage());
-        return new ResponseEntity<ErrorResponse>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }

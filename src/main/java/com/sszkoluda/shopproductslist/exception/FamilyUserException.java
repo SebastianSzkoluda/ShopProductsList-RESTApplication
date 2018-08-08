@@ -8,10 +8,12 @@ public class FamilyUserException extends Exception {
     public String getErrorMessage() {
         return errorMessage;
     }
+
     public FamilyUserException(String errorMessage) {
         super(errorMessage);
         this.errorMessage = errorMessage;
     }
+
     public FamilyUserException() {
         super();
     }

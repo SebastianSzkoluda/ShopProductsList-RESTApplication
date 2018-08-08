@@ -16,16 +16,10 @@ public class ProductToBuy {
     @Id
     @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer productId;
+    private Integer product_id;
 
     @Getter
     @Column(name = "available_shop")
-    private String availableShop;
-
-    @Getter
-    @Column(name = "Family_family_id")
-    private Integer familyIdFk;
-
-
+    private String available_shop;
 
 }

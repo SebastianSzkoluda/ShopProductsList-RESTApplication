@@ -1,7 +1,14 @@
 .example-icon {
     padding: 0 14px;
   }
-  
+
   .example-spacer {
     flex: 1 1 auto;
   }
+.example-card {
+  width: 20vw;
+}
+
+mat-card {
+  border-radius: 4px;
+}

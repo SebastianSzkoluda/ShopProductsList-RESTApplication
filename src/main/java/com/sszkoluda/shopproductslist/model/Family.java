@@ -17,10 +17,10 @@ public class Family {
     @Id
     @Column(name = "family_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer familyId;
+    private Integer family_id;
 
     @Getter
     @Column(name = "family_name")
-    private String familyName;
+    private String family_name;
 
 }

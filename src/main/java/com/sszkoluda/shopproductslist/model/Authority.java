@@ -15,7 +15,7 @@ public class Authority {
 
     @Getter
     @Id
-    @Column(name = "product_id")
+    @Column(name = "name")
     private String name;
 
 

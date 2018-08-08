@@ -15,8 +15,10 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private userService: UserService) {
   }
 
+  loading = false;
   public users: User[];
   public user = new User();
+  localStorage: Storage;
 
   ngOnInit() {
     this
@@ -27,7 +29,9 @@ export class LoginComponent implements OnInit {
   public login(): void {
 
     if (this.users.find(user => this.user.username === user.username && this.user.password === user.password)) {
-      this.router.navigate(['admin/user']);
+      this.user.isLogged = true;
+      this.userService.setLoggedUser(this.user);
+      this.router.navigate(['user']);
     } else {
       alert('Invalid credentials');
     }

@@ -19,10 +19,11 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.sszkoluda.shopproductslist.rest"))
-                .paths(regex("/api.*"))
+                .paths(regex("/(api|token).*"))
                 .build();
 
     }
+
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("swagger-ui.html")

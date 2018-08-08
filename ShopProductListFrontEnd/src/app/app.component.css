@@ -1,0 +1,27 @@
+:host ::ng-deep .trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+:host ::ng-deep .trigger:hover {
+  color: #1890ff;
+}
+
+:host ::ng-deep .logo {
+  height: 32px;
+  margin: 16px;
+}
+.loggedUser{
+  float: right;
+  margin-right: 5px;
+  font-size: 16px;
+}
+
+html,body{ margin:0; padding:0; height:100%; width:100%; }
+#full-size{
+  height:100vh;
+  overflow:hidden; /* or overflow:auto; if you want scrollbars */
+}

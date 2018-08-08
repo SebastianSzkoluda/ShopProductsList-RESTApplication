@@ -1,3 +1,20 @@
-<p>
-  user works!
-</p>
+<nz-table nzShowSizeChanger [nzFrontPagination]="true" #filterTable  [nzData]="users">
+  <thead (nzSortChange)="sort($event)" nzSingleSort>
+  <tr>
+    <th nzShowSort nzSortKey="user_id">UserId</th>
+    <th nzShowSort nzSortKey="username">UserName</th>
+    <th nzShowSort nzSortKey="email">Email</th>
+    <th nzShowSort nzSortKey="password">Password</th>
+    <th nzShowSort nzSortKey="age">Age</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of filterTable .data">
+    <td>{{data.user_id}}</td>
+    <td>{{data.username}}</td>
+    <td>{{data.email}}</td>
+    <td>{{data.password}}</td>
+    <td>{{data.age}}</td>
+  </tr>
+  </tbody>
+</nz-table>
