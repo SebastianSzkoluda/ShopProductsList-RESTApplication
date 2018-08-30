@@ -1,5 +1,7 @@
 package com.sszkoluda.shopproductslist.configuration;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,17 +35,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         logger.warn(header);
         String username = null;
         String authToken = null;
-        if(header != null && header.startsWith(TOKEN_PREFIX)) {
-            authToken.replace(TOKEN_PREFIX, "");
-            username = jwtTokenUtil.getUsernameFromToken(authToken);
-        } else {
-            logger.warn("coudn't find string, will ignore the header");
+        if (header != null && header.startsWith(TOKEN_PREFIX)) {
+            authToken = header.replace(TOKEN_PREFIX,"");
+            try {
+                username = jwtTokenUtil.getUsernameFromToken(authToken);
+                System.out.println("Username: " + username);
+            } catch (IllegalArgumentException e) {
+                logger.error("an error occured during getting username from token", e);
+            } catch (ExpiredJwtException e) {
+                logger.warn("the token is expired and not valid anymore", e);
+            } catch(SignatureException e){
+                logger.error("Authentication Failed. Username or Password not valid.");
+            }} else {
+            logger.warn("couldn't find string, will ignore the header");
         }
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            System.out.println("Authorities: " + userDetails.getAuthorities());
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 logger.info("authenticated user " + username + ", setting security context");
                 SecurityContextHolder.getContext().setAuthentication(authentication);

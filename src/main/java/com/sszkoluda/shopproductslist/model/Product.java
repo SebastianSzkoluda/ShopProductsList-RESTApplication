@@ -1,6 +1,7 @@
 package com.sszkoluda.shopproductslist.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -34,6 +35,12 @@ public class Product {
     @Getter
     @Column(name = "in_stock")
     private Integer in_stock;
+
+    @Getter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="family_id", nullable=false)
+    @JsonIgnoreProperties("productsList")
+    private Family family;
 
 
 }

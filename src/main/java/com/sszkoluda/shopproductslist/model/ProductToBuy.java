@@ -6,8 +6,8 @@ import lombok.Getter;
 
 import javax.persistence.*;
 
-@Data
 @Builder
+@Data
 @Entity
 @Table(name = "producttobuy")
 public class ProductToBuy {

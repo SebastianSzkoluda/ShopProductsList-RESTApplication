@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {UserService} from '../services/user-manager/user.service';
-import {User} from '../services/user-manager/user';
+import {FamilyUser} from '../services/user-manager/familyUser';
 
 @Component({
   selector: 'app-user',
@@ -11,11 +11,9 @@ import {User} from '../services/user-manager/user';
 export class UserComponent implements OnInit {
   constructor(private router: Router, private userService: UserService) {
   }
-  public users: User[];
+  public users: Array<FamilyUser>;
   sortName = null;
   sortValue = null;
-  searchValue = '';
-  searchAddress = [];
   ngOnInit() {
     this
       .userService
@@ -24,7 +22,6 @@ export class UserComponent implements OnInit {
       console.log(this.users);
     });
   }
-
 
   sort(sort: { key: string, value: string }): void {
     this.sortName = sort.key;
@@ -39,6 +36,4 @@ export class UserComponent implements OnInit {
       this.users = [...data];
     }
   }
-
-
 }

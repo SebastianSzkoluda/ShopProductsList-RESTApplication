@@ -8,7 +8,7 @@ public interface FamilyUserService {
 
     FamilyUser saveUser(FamilyUser user);
 
-    FamilyUser findOne(String username);
+    Optional<FamilyUser> findOne(String username);
 
     Optional<FamilyUser> findById(Integer id);
 
@@ -18,5 +18,5 @@ public interface FamilyUserService {
 
     boolean doesLoadUserHaveAFamily();
 
-    void addingUserToFamily(FamilyUser familyUser);
+    void addingUserToFamily(String familyName);
 }

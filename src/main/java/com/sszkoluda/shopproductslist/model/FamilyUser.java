@@ -1,15 +1,15 @@
 package com.sszkoluda.shopproductslist.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
-
-@EqualsAndHashCode
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
 @Table(name = "user")
@@ -37,10 +37,17 @@ public class FamilyUser {
     @Column(name = "age")
     private Integer age;
 
+    @Getter
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "grantedauthorities", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
     inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Authority> authorities;
+
+    @Getter
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "familymembers", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "family_id", referencedColumnName = "id")})
+    @JsonIgnoreProperties("familyMembers")
+    private Set<Family> userFamilies;
 
 }

@@ -19,7 +19,7 @@
   display: flex;
 }
 #narrow {
-  width: 30vw;
+  width: 23vw;
   margin-left:auto;
   margin-right:auto;
   /* Just so it's visible */
@@ -28,9 +28,12 @@
   margin-bottom: 10px;
 }
 #info {
-  height: 46vh;
+  height: 39vh;
   background: #fff;
 }
 #wide {
   flex: 1;
+}
+.jumbotron {
+background-color: rgba(233, 236, 239,.9);
 }

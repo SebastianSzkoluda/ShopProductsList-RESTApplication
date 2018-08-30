@@ -1,0 +1,43 @@
+<button nz-button nzType="primary" (click)="showModal()">Create Product</button>
+<nz-modal [nzStyle]="{ top: '100px' }" nzOkText="Create product" nzMaskClosable="true" [(nzVisible)]="isVisible" nzTitle="Create Product" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm()" [nzOkLoading]="isOkLoading">
+
+  <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="anticon anticon-usergroup-add">
+          <input type="text" nz-input formControlName="productName" placeholder="Product name">
+        </nz-input-group>
+        <nz-form-explain *ngIf="validateForm.get('productName').dirty && validateForm.get('productName').errors">Please input product name!</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="anticon anticon-usergroup-add">
+          <input type="text" nz-input formControlName="frequencyOfUse" placeholder="Frequency of use">
+        </nz-input-group>
+        <nz-form-explain *ngIf="validateForm.get('frequencyOfUse').dirty && validateForm.get('frequencyOfUse').errors">Please input product frequency of use!</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="anticon anticon-usergroup-add">
+          <input type="text" nz-input formControlName="amount" placeholder="Amount">
+        </nz-input-group>
+        <nz-form-explain *ngIf="validateForm.get('amount').dirty && validateForm.get('amount').errors">Please input product amount!</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="anticon anticon-usergroup-add">
+          <input type="text" nz-input formControlName="inStock" placeholder="In stock">
+        </nz-input-group>
+        <nz-form-explain *ngIf="validateForm.get('inStock').dirty && validateForm.get('inStock').errors">Please input number of products in stock!</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+
+</nz-modal>

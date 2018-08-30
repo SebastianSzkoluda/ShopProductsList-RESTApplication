@@ -1,15 +1,15 @@
 package com.sszkoluda.shopproductslist.model;
 
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
 @Builder
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "authority")
 public class Authority {
 

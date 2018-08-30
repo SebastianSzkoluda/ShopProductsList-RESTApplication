@@ -1,20 +1,32 @@
-<mat-card>
+<nz-card>
   <h2>Login</h2>
-  <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
-    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
-      <label for="username">Username</label>
-      <input type="text" class="form-control" id="username" name="username" [(ngModel)]="user.username" #username="ngModel" required />
-      <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
-    </div>
-    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
-      <label for="password">Password</label>
-      <input type="password" class="form-control" id="password" name="password" [(ngModel)]="user.password" #password="ngModel" required />
-      <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
-    </div>
-    <div class="form-group">
-      <button [disabled]="loading" (click)="login()" class="btn btn-primary">Login</button>
-      <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-      <a [routerLink]="['/register']" class="btn btn-link">Register</a>
-    </div>
-  </form>
-</mat-card>
+<form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group nzPrefixIcon="anticon anticon-user">
+        <input type="text" nz-input formControlName="userName" placeholder="Username">
+      </nz-input-group>
+      <nz-form-explain *ngIf="validateForm.get('userName').dirty && validateForm.get('userName').errors">Please input your username!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group nzPrefixIcon="anticon anticon-lock">
+        <input type="password" nz-input formControlName="password" placeholder="Password">
+      </nz-input-group>
+      <nz-form-explain *ngIf="validateForm.get('password').dirty && validateForm.get('password').errors">Please input your Password!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <label nz-checkbox formControlName="remember">
+        <span>Remember me</span>
+      </label>
+      <a class="login-form-forgot" class="login-form-forgot">Forgot password</a>
+      <button nz-button class="login-form-button" [nzType]="'primary'">Log in</button>
+      Or
+      <app-register></app-register>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+</nz-card>

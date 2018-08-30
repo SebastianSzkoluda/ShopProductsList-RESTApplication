@@ -1,0 +1,47 @@
+<a (click)="showModal()">register now!</a>
+<nz-modal [nzStyle]="{ top: '100px' }" nzOkText="Register" nzMaskClosable="true" [(nzVisible)]="isVisible" nzTitle="Register" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm()" [nzOkLoading]="isOkLoading">
+
+  <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+
+          <nz-form-item>
+            <nz-form-control>
+              <nz-input-group nzPrefixIcon="anticon anticon-user">
+                <input type="text" nz-input formControlName="userName" placeholder="Username">
+              </nz-input-group>
+              <nz-form-explain *ngIf="validateForm.get('userName').dirty && validateForm.get('userName').errors">Please input your username!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-control>
+              <nz-input-group nzPrefixIcon="anticon anticon-lock">
+                <input type="password" nz-input formControlName="password" placeholder="Password">
+              </nz-input-group>
+              <nz-form-explain *ngIf="validateForm.get('password').dirty && validateForm.get('password').errors">Please input your Password!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+
+
+          <nz-form-item>
+            <nz-form-control>
+              <nz-input-group nzPrefixIcon="anticon anticon-mail">
+                <input type="text" nz-input formControlName="email" placeholder="Email">
+              </nz-input-group>
+              <nz-form-explain *ngIf="validateForm.get('email').dirty && validateForm.get('email').errors">Please input your email!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-control>
+              <nz-input-group nzPrefixIcon="anticon anticon-heart-o">
+                <input type="text" nz-input formControlName="age" placeholder="Age">
+              </nz-input-group>
+              <nz-form-explain *ngIf="validateForm.get('age').dirty && validateForm.get('age').errors">Please input your age!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+
+
+        </form>
+
+
+</nz-modal>

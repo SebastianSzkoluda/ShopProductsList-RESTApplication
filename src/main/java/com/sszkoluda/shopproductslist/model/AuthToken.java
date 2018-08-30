@@ -1,7 +1,9 @@
 package com.sszkoluda.shopproductslist.model;
 
+import lombok.Data;
 import lombok.Getter;
 
+@Data
 public class AuthToken {
 
     @Getter

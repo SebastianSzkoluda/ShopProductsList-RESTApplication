@@ -1,0 +1,46 @@
+<div class="container">
+  <nz-card>
+    <div id="wrapper">
+      <div id="first">
+        <h2>ProductsList started</h2>
+      </div>
+      <div id="second">
+        <nz-dropdown [nzTrigger]="'click'">
+          <a class="dropdown" nz-dropdown (click)="getFamilies()">
+            Select Family <i class="anticon anticon-down"></i>
+          </a>
+          <ul nz-menu >
+            <li *ngIf="families?.length == 0" nz-menu-item >empty</li>
+            <li *ngFor="let family of families"  (click)="getProductsForFamily(family.family_name)"  nz-menu-item routerLink="/productsList">{{family.family_name}}</li>
+          </ul>
+        </nz-dropdown>
+      </div>
+    </div>
+    <app-create-product (productsListChanged)="productsListHandler($event)" [familyName]="familyName"></app-create-product>
+
+    <div class="container">
+      <nz-table class="main" nzShowSizeChanger [nzFrontPagination]="true" #filterTable  [nzData]="products" [nzPageSize]="10">
+        <thead (nzSortChange)="sort($event)" nzSingleSort>
+        <tr>
+          <th nzShowSort nzSortKey="product_id">ProductID</th>
+          <th nzShowSort nzSortKey="product_name">ProductName</th>
+          <th nzShowSort nzSortKey="frequency_of_use">FrequencyOfUse</th>
+          <th nzShowSort nzSortKey="amount">Amount</th>
+          <th nzShowSort nzSortKey="in_stock">InStock</th>
+        </tr>
+        </thead>
+        <tbody style="background-color: #fff" >
+        <tr *ngFor="let data of filterTable.data">
+          <td>{{data.product_id}}</td>
+          <td>{{data.product_name}}</td>
+          <td>{{data.frequency_of_use}}</td>
+          <td>{{data.amount}}</td>
+          <td>{{data.in_stock}}</td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </div>
+
+
+  </nz-card>
+</div>

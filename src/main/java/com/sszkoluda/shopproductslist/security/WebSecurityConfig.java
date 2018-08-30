@@ -41,10 +41,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(encoder());
     }
-    @Bean
-    public JwtAuthenticationEntryPoint unauthorizedHandler() throws Exception {
-        return new JwtAuthenticationEntryPoint();
-    }
 
     @Bean
     public JwtAuthenticationFilter authenticationTokenFilterBean() throws Exception {
@@ -55,9 +51,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().
                 authorizeRequests()
-                .antMatchers("/token/*","/signup").permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers("/**/*").permitAll()
+                .antMatchers("/api/family/*").permitAll()
+                .antMatchers("/api/user/*").permitAll()
+                .antMatchers("/api/token/*").permitAll()
+                .antMatchers("/api/product/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
@@ -77,6 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-resources/**",
             "/swagger-ui.html",
             "/v2/api-docs",
-            "/webjars/**"
+            "/webjars/**",
+            "/api/signup"
     };
 }

@@ -14,14 +14,57 @@
   height: 32px;
   margin: 16px;
 }
-.loggedUser{
-  float: right;
-  margin-right: 5px;
-  font-size: 16px;
+
+nz-layout  {
+  min-height: 100%;
+  background: url('http://thumbs.dreamstime.com/b/black-brick-wall-dark-background-design-gloomy-stone-texture-84568943.jpg') fixed;
 }
 
-html,body{ margin:0; padding:0; height:100%; width:100%; }
-#full-size{
-  height:100vh;
-  overflow:hidden; /* or overflow:auto; if you want scrollbars */
+
+.loggedUser{
+  position: absolute;
+  right: 18%;
+  padding: 0px 10px 0px;
+  margin-right: -10px;
+  font-size: 18px;
 }
+.logout {
+  position: absolute;
+  right: 10%;
+  padding: 0px 10px 0px;
+  margin-right: -10px;
+  font-size: 18px;
+}
+
+.logo {
+  top: 0;
+  width: 200px;
+  height: 31px;
+  margin-top: -5px;
+  float: left;
+}
+.log {
+  width: 200px;
+  height: 31px;
+  margin: 16px 0px 36px 0px;
+  float: left;
+}
+
+.anticon {
+  color: #ffffffa6;
+}
+.nav-text {
+  color: #ffffffa6;
+}
+
+nz-header {
+  z-index: 2;
+  position:fixed;
+  width:100%;
+  background-color: #060606
+}
+.dropdown-toggle {
+  padding: 0;
+}
+
+

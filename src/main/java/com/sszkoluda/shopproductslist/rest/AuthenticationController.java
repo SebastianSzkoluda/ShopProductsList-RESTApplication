@@ -3,6 +3,7 @@ package com.sszkoluda.shopproductslist.rest;
 import com.sszkoluda.shopproductslist.configuration.JwtTokenUtil;
 import com.sszkoluda.shopproductslist.model.AuthToken;
 import com.sszkoluda.shopproductslist.model.FamilyUser;
+import com.sszkoluda.shopproductslist.model.LoginUser;
 import com.sszkoluda.shopproductslist.service.FamilyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import javax.naming.AuthenticationException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/token")
+@RequestMapping("/api/token")
 public class AuthenticationController {
 
     @Autowired
@@ -29,17 +30,17 @@ public class AuthenticationController {
     private FamilyUserService familyUserService;
 
     @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
-    public ResponseEntity<?> register(@RequestParam String username, @RequestParam String password) throws AuthenticationException {
+    public ResponseEntity<?> register(@RequestBody LoginUser loginUser) throws AuthenticationException {
 
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        username,
-                        password
+                        loginUser.getUsername(),
+                        loginUser.getPassword()
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        final FamilyUser familyUser = familyUserService.findOne(username);
-        final String token = jwtTokenUtil.generateToken(familyUser);
+        final Optional<FamilyUser> familyUser = familyUserService.findOne(loginUser.getUsername());
+        final String token = jwtTokenUtil.generateToken(familyUser.get());
         return ResponseEntity.ok(new AuthToken(token));
     }
 }

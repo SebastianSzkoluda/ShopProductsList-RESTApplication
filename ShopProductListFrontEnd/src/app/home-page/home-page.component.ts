@@ -1,19 +1,18 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs/internal/Observable';
+import {Component, OnInit} from '@angular/core';
+import {Family} from '../services/family-manager/family';
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css']
 })
-export class HomePageComponent implements OnInit{
+export class HomePageComponent implements OnInit {
 
-  constructor(private router: Router) { }
-
-  localStorage: Storage;
+  families: Array<Family>;
+  constructor() { }
 
   ngOnInit() {
+    sessionStorage.clear();
   }
 
 }

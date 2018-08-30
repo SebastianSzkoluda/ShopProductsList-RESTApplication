@@ -14,5 +14,5 @@ public interface FamilyUserRepository extends CrudRepository<FamilyUser,Integer>
     Optional<FamilyUser> findByEmail(@Param("email") String email);
 
     @Query("SELECT u FROM FamilyUser u WHERE u.username LIKE :username ")
-    FamilyUser findByUserName(@Param("username") String username);
+    Optional<FamilyUser> findByUserName(@Param("username") String username);
 }

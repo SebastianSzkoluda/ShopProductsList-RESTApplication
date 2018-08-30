@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 public class FamilyUserController {
 
     final FamilyUserService familyUserService;
@@ -38,9 +38,11 @@ public class FamilyUserController {
     }
 
     @GetMapping("/user/{id}")
-    public Optional<FamilyUser> getUserById(@PathVariable Integer id) throws FamilyUserException {
+    public ResponseEntity<FamilyUser> getUserById(@PathVariable Integer id) throws FamilyUserException {
 
-        return familyUserService.findById(id);
+        return this.familyUserService.findById(id)
+                .map(familyUser -> ResponseEntity.ok(familyUser))
+                .orElseThrow(() -> new FamilyUserException("User with id: " + id + " not found"));
 
     }
 

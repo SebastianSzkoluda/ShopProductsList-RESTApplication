@@ -1,11 +1,13 @@
-<nz-content style="margin:0 16px;">
+<nz-content style="padding:0; ">
   <nz-breadcrumb style="margin:16px 0;">
   </nz-breadcrumb>
-  <div id="parent">
-    <div id="wide" style="padding:24px; background: #fff; min-height: 89vh;">Wide (rest of width)</div>
-    <div id="narrow" style=" margin: 0 0px 0px 10px;">
-      <div id="login"><app-login></app-login></div>
-      <div id="info"></div>
+    <div class="jumbotron jumbotron-fluid" style="padding-left: 100px; width: 100%; margin-top: 130px; height: 70vh; overflow: hidden; opacity: 20%">
+      <div class="container" style="float: left; width: 60vw;">
+        <h1 class="display-4">Built for people</h1>
+        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+      </div>
+      <div id="narrow" style=" float: left;">
+        <div id="login"><app-login></app-login></div>
+      </div>
     </div>
-  </div>
 </nz-content>

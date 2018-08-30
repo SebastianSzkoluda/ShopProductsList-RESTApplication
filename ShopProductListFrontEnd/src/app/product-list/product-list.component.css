@@ -1,0 +1,28 @@
+nz-card {
+  width: 100%;
+  background-color: #9a9d97;
+}
+.container {
+
+  padding-top: 50px;
+}
+#wrapper {
+  width: 100%;
+  overflow: hidden; /* will contain if #first is longer than #second */
+}
+#first {
+  width: 300px;
+  float:left; /* add this */
+}
+#second {
+  float: right;
+  right: 0;
+}
+.dropdown {
+  font-weight: bold;
+  font-size: 15px;
+}
+.anticon {
+  font-weight: bold;
+  font-size: 15px;
+}
