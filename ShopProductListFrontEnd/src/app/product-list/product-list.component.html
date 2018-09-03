@@ -6,7 +6,7 @@
       </div>
       <div id="second">
         <nz-dropdown [nzTrigger]="'click'">
-          <a class="dropdown" nz-dropdown (click)="getFamilies()">
+          <a class="dropdown" nz-dropdown (click)="clickOnDropDownGetFamilies()">
             Select Family <i class="anticon anticon-down"></i>
           </a>
           <ul nz-menu >
@@ -19,7 +19,14 @@
     <app-create-product (productsListChanged)="productsListHandler($event)" [familyName]="familyName"></app-create-product>
 
     <div class="container">
-      <nz-table class="main" nzShowSizeChanger [nzFrontPagination]="true" #filterTable  [nzData]="products" [nzPageSize]="10">
+      <h5>Selected family: {{familyName}}</h5>
+      <nz-table class="main"
+                [nzFrontPagination]="true"
+                [nzShowPagination]="true"
+                 #filterTable
+                [nzData]="products"
+                [nzPageSize]="6"
+                nzSize="default">
         <thead (nzSortChange)="sort($event)" nzSingleSort>
         <tr>
           <th nzShowSort nzSortKey="product_id">ProductID</th>

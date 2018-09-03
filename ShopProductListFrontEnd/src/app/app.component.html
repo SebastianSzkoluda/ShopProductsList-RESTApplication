@@ -2,7 +2,7 @@
   <nz-header>
     <a class="navbar-brand logo" routerLink="/productsList">Shop Products List</a>
     <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'" style="line-height: 64px; background-color: #060606">
-      <li nz-menu-item routerLink="/user">User Manual</li>
+      <li nz-menu-item routerLink="/usermanual">User Manual</li>
       <li *ngIf="isLogged()" nz-menu-item routerLink="/productsList">Products List</li>
       <li *ngIf="isLogged()" nz-menu-item><app-family></app-family></li>
     <span *ngIf="isLogged()" class="logout" title><i class="anticon anticon-logout" ></i><a (click)="logout()" routerLink="/" class="nav-text">Logout</a></span>

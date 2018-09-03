@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FamilyService} from '../services/family-manager/family.service';
 import {Family} from '../services/family-manager/family';
 import {ProductService} from '../services/product-manager/product.service';
 import {Product} from '../services/product-manager/product';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-list',
@@ -10,21 +11,31 @@ import {Product} from '../services/product-manager/product';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-
-  constructor( private familyService: FamilyService, private productService: ProductService) { }
-  familyName: string;
+  familyName = 'No family selected';
   families: Array<Family>;
   products: Array<Product>;
   sortName = null;
   sortValue = null;
+  constructor( private familyService: FamilyService, private productService: ProductService) { }
   ngOnInit() {
-  }
-
-  getFamilies() {
-    this.familyService.loggedUserFamilies().subscribe(value => {
-      this.families = value;
+    this.getFamilies().subscribe(() => {
+      console.log(this.families);
+      this.familyName = this.families[0].family_name;
+      this.getProductsForFamily(this.families[0].family_name);
     });
   }
+//problem z defaultowym widokiem listy produktow dla rodzinki bo podczas klikania na dropdowna dopiero wtedy pobierane sa rodzinki
+  getFamilies() {
+    return this.familyService.loggedUserFamilies().pipe(map(value => {
+      this.families = value;
+    }));
+  }
+  clickOnDropDownGetFamilies() {
+    this.getFamilies().subscribe(() => {
+      console.log(this.families);
+    });
+  }
+
   getProductsForFamily (family: string) {
     this.familyName = family;
     this.productService.getProductsForCurrentFamily(family).subscribe(value => {
