@@ -28,18 +28,15 @@ public class FamilyServiceImpl implements FamilyService {
     }
 
     @Override
-    public void saveFamily(Family family) {
+    public Family saveFamily(Family family) {
         Set<FamilyUser> familyMembers = new HashSet<>();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
-        System.out.println("Logged User: " + familyUser.get().getUsername());
         familyUser.get().getUserFamilies().add(family);
         familyMembers.add(familyUser.get());
         Family familyTmp;
-        familyTmp = Family.builder().family_name(family.getFamily_name()).familyMembers(familyMembers).build();
-        System.out.println(familyTmp.getFamilyMembers().toString());
-        familyRepository.save(familyTmp);
-
+        familyTmp = Family.builder().familyName(family.getFamilyName()).familyMembers(familyMembers).build();
+        return familyRepository.save(familyTmp);
     }
 
     @Override

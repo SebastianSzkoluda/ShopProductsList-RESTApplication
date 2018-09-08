@@ -18,15 +18,15 @@ public class Product {
     @Id
     @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer product_id;
+    private Integer productId;
 
     @Getter
     @Column(name = "product_name")
-    private String product_name;
+    private String productName;
 
     @Getter
     @Column(name = "frequency_of_use")
-    private Integer frequency_of_use;
+    private Integer frequencyOfUse;
 
     @Getter
     @Column(name = "amount")
@@ -34,7 +34,7 @@ public class Product {
 
     @Getter
     @Column(name = "in_stock")
-    private Integer in_stock;
+    private Integer inStock;
 
     @Getter
     @ManyToOne(fetch = FetchType.LAZY)

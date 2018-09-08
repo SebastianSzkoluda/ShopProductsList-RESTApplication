@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface FamilyRepository extends CrudRepository<Family,Integer> {
-    @Query("SELECT f FROM Family f WHERE f.family_name LIKE :family_name ")
-    Optional<Family> findByName(@Param("family_name") String family_name);
+    @Query("SELECT f FROM Family f WHERE f.familyName LIKE :familyName")
+    Optional<Family> findByName(@Param("familyName") String familyName);
 }

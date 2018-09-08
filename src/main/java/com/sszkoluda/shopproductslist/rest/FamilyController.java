@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/family")
+@RequestMapping("/api")
 public class FamilyController {
 
     final FamilyService familyService;
@@ -25,7 +25,12 @@ public class FamilyController {
         this.familyUserService = familyUserService;
     }
 
-    @PostMapping("/createFamily")
+    @GetMapping("/family")
+    public Set<Family> loggedUserFamilies(){
+        return this.familyService.getLoggedUserFamilies();
+    }
+
+    @PostMapping("/family")
     public ResponseEntity<Family> createFamily(@RequestBody Family family){
         this.familyService.saveFamily(family);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -40,11 +45,4 @@ public class FamilyController {
             return false;
         }
     }
-
-    @GetMapping("/loggedUserFamilies")
-    public Set<Family> loggedUserFamilies(){
-        return this.familyService.getLoggedUserFamilies();
-    }
-
-
 }

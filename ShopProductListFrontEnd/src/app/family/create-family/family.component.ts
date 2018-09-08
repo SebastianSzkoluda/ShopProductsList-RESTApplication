@@ -39,8 +39,8 @@ export class FamilyComponent implements OnInit {
     }, 2000);
   }
   createFamily() {
-    this.family.family_name = this.validateForm.get('familyName').value;
-    console.log(this.family.family_name);
+    this.family.familyName = this.validateForm.get('familyName').value;
+    console.log(this.family.familyName);
     this.familyService.createFamily(this.family).subscribe(() => {
       this.familyService.updateFamiliesState({
         action: ACTION_CREATE,

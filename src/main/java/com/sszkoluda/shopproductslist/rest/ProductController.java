@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/api")
 public class ProductController {
 
     final
@@ -20,14 +20,13 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/getProductsForFamily")
+    @GetMapping("/product")
     public Set<Product> getProductsForFamily(@RequestParam String familyName) {
         return productService.getProductsForFamily(familyName);
     }
 
-    @PostMapping("/saveProductForCurrentFamily")
+    @PostMapping("/product")
     public Product saveProductForCurrentFamily(@RequestBody Product product, @RequestParam String familyName) {
-        System.out.println("Dotarlem");
         return productService.saveProductForCurrentFamily(product,familyName);
     }
 

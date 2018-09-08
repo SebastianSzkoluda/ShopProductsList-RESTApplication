@@ -12,11 +12,10 @@ export class AuthService {
 
   private helper = new JwtHelperService();
 
-  private tokenUrl = '/api/token/';
-  private baseUrl = '/api/user/';
+  private baseUrl = '/api/';
     constructor(private http: HttpClient) {}
     login(loginUser: LoginUser): Observable < AuthToken > {
-      return this.http.post < AuthToken > (this.tokenUrl + 'generate-token', loginUser).pipe(map(value => {
+      return this.http.post < AuthToken > (this.baseUrl + 'generate-token', loginUser).pipe(map(value => {
         const decodedUser = this.helper.decodeToken(value.token);
         console.log(decodedUser);
         if (value) {
@@ -25,7 +24,7 @@ export class AuthService {
       return value; }));
     }
     register(familyUser: FamilyUser): Observable < FamilyUser > {
-     return this.http.post< FamilyUser >(this.baseUrl + 'signup', familyUser);
+     return this.http.post< FamilyUser >(this.baseUrl + 'register', familyUser);
     }
 
 }

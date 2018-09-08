@@ -21,8 +21,8 @@ export class ProductListComponent implements OnInit {
     this.getFamilies().subscribe(() => {
       if (this.families.length !== 0) {
         console.log(this.families);
-        this.familyName = this.families[0].family_name;
-        this.getProductsForFamily(this.families[0].family_name);
+        this.familyName = this.families[0].familyName;
+        this.getProductsForFamily(this.families[0].familyName);
       }
     });
     this.familyService.getAllState().subscribe( state => {

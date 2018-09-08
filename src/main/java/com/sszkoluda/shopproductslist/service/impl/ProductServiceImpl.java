@@ -32,21 +32,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product saveProductForCurrentFamily(Product product, String familyName) {
-        Product productTmp;
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
         Set<Family> families = familyUser.get().getUserFamilies();
         for(Family family: families) {
-            if(family.getFamily_name().equals(familyName)){
-                productTmp = Product.builder()
-                        .product_name(product.getProduct_name())
-                        .frequency_of_use(product.getFrequency_of_use())
-                        .amount(product.getAmount())
-                        .in_stock(product.getIn_stock())
-                        .family(family)
-                        .build();
-                family.getProductsList().add(productTmp);
-                return productRepository.save(productTmp);
+            if(family.getFamilyName().equals(familyName)){
+                product.setFamily(family);
+                family.getProductsList().add(product);
+                return productRepository.save(product);
             }
         }
         return null;
@@ -58,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
         Set<Family> families = familyUser.get().getUserFamilies();
         for(Family family: families)
-            if(family.getFamily_name().equals(familyName))
+            if(family.getFamilyName().equals(familyName))
                 return family.getProductsList();
          return null;
     }

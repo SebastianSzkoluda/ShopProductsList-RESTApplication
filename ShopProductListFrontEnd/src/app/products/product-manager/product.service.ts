@@ -8,17 +8,17 @@ import {Product} from '../../model/product';
 })
 export class ProductService {
 
-  private productUrl = '/api/product/';
+  private productUrl = '/api/';
   constructor(private http: HttpClient) { }
 
   getProductsForCurrentFamily(familyName: string): Observable<Array<Product>> {
     const params = new HttpParams().set('familyName', familyName);
-    return this.http.get< Array<Product> >(this.productUrl + 'getProductsForFamily', {params: params});
+    return this.http.get< Array<Product> >(this.productUrl + 'product', {params: params});
   }
 
   saveProductForCurrentFamily(product: Product, familyName: string): Observable<Product> {
     const params = new HttpParams().set('familyName', familyName);
-    return this.http.post< Product >(this.productUrl + 'saveProductForCurrentFamily', product, {params: params});
+    return this.http.post< Product >(this.productUrl + 'product', product, {params: params});
   }
 
 }

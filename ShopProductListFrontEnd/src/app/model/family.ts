@@ -1,11 +1,11 @@
 export class Family {
 
-  family_id: number;
-  family_name: string;
+  familyId: number;
+  familyName: string;
 
-  constructor(family_id: number = 0, family_name: string = null) {
-    this.family_id = family_id;
-    this.family_name = family_name;
+  constructor(family_id: number = null, family_name: string = null) {
+    this.familyId = family_id;
+    this.familyName = family_name;
   }
 
 }

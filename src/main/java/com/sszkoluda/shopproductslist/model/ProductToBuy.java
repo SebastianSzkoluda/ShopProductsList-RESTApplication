@@ -14,12 +14,12 @@ public class ProductToBuy {
 
     @Getter
     @Id
-    @Column(name = "product_id")
+    @Column(name = "productId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer product_id;
+    private Integer productId;
 
     @Getter
     @Column(name = "available_shop")
-    private String available_shop;
+    private String availableShop;
 
 }

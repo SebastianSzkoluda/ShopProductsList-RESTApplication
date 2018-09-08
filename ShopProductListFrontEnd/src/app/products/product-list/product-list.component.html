@@ -11,7 +11,7 @@
           </a>
           <ul nz-menu >
             <li *ngIf="families?.length == 0" nz-menu-item >empty</li>
-            <li *ngFor="let family of families"  (click)="getProductsForFamily(family.family_name)"  nz-menu-item routerLink="/productsList">{{family.family_name}}</li>
+            <li *ngFor="let family of families" (click)="getProductsForFamily(family.familyName)" nz-menu-item routerLink="/productsList">{{family.familyName}}</li>
           </ul>
         </nz-dropdown>
       </div>
@@ -29,7 +29,7 @@
                 nzSize="default">
         <thead (nzSortChange)="sort($event)" nzSingleSort>
         <tr>
-          <th nzShowSort nzSortKey="product_id">ProductID</th>
+          <th nzShowSort nzSortKey="productId">ProductID</th>
           <th nzShowSort nzSortKey="product_name">ProductName</th>
           <th nzShowSort nzSortKey="frequency_of_use">FrequencyOfUse</th>
           <th nzShowSort nzSortKey="amount">Amount</th>
@@ -38,11 +38,11 @@
         </thead>
         <tbody style="background-color: #fff" >
         <tr *ngFor="let data of filterTable.data">
-          <td>{{data.product_id}}</td>
-          <td>{{data.product_name}}</td>
-          <td>{{data.frequency_of_use}}</td>
+          <td>{{data.productId}}</td>
+          <td>{{data.productName}}</td>
+          <td>{{data.frequencyOfUse}}</td>
           <td>{{data.amount}}</td>
-          <td>{{data.in_stock}}</td>
+          <td>{{data.inStock}}</td>
         </tr>
         </tbody>
       </nz-table>

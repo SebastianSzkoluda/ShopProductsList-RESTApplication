@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface FamilyService {
 
-    void saveFamily(Family family);
+    Family saveFamily(Family family);
     Optional<Family> findFamilyByName(String familyName);
     Set<Family> getLoggedUserFamilies();
 

@@ -49,10 +49,10 @@ export class CreateProductComponent implements OnInit {
     this.productsListChanged.emit(this.products);
   }
   createProduct() {
-    this.product.product_name = this.validateForm.get('productName').value;
-    this.product.frequency_of_use = this.validateForm.get('frequencyOfUse').value;
+    this.product.productName = this.validateForm.get('productName').value;
+    this.product.frequencyOfUse = this.validateForm.get('frequencyOfUse').value;
     this.product.amount = this.validateForm.get('amount').value;
-    this.product.in_stock = this.validateForm.get('inStock').value;
+    this.product.inStock = this.validateForm.get('inStock').value;
     this.productService.saveProductForCurrentFamily(this.product, this.familyName).subscribe(value => {
       this.productService.getProductsForCurrentFamily(this.familyName).subscribe(value1 => {
         this.products = value1;

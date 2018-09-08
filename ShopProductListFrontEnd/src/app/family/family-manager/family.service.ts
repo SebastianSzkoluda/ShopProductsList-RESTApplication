@@ -7,17 +7,17 @@ import {Store} from '@ngrx/store';
 @Injectable()
 export class FamilyService {
 
-  private familyUrl = '/api/family/';
+  private familyUrl = '/api/';
   constructor(private http: HttpClient, private store: Store<any>) { }
 
   createFamily(family: Family): Observable < Family > {
-    return this.http.post< Family >(this.familyUrl + 'createFamily', family);
+    return this.http.post< Family >(this.familyUrl + 'family', family);
   }
   checkIfUserHaveFamily(): Observable <boolean> {
     return this.http.get < boolean > (this.familyUrl + 'checkIfUserHaveFamily');
   }
   loggedUserFamilies(): Observable < Array<Family> > {
-    return this.http.get < Array<Family> >(this.familyUrl + 'loggedUserFamilies');
+    return this.http.get < Array<Family> >(this.familyUrl + 'family');
   }
   getAllState() {
     return this.store.select('familyReducer');
