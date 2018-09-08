@@ -1,29 +1,10 @@
-import { ACTION_LOGOUT, ACTION_LOGIN } from '../actions/app-actions';
+import {reducer, AppReducerState} from './app-reducer';
+import { ActionReducerMap } from '@ngrx/store';
 
-
-interface AppReducerState {
-  login: boolean;
-  user?: string;
+interface AppState {
+  appReducer: AppReducerState;
 }
 
-const initialState: AppReducerState = {
-  login: false,
-  user: 'guest'
+export const reducers: ActionReducerMap<AppState> = {
+  appReducer: reducer
 };
-
-export function reducer(state = initialState, action) {
-  switch (action.type) {
-    case ACTION_LOGOUT:
-      return {
-        ...state,
-        login: false
-      };
-    case ACTION_LOGIN:
-      return {
-        ...state,
-        login: true,
-        user: action.payload,
-      };
-  }
-  return state;
-}

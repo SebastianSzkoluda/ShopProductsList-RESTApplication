@@ -38,7 +38,7 @@ export class AuthService {
      return this.http.post< FamilyUser >(this.baseUrl + 'signup', familyUser);
     }
     getAllState() {
-      return this.store.select('index');
+      return this.store.select('appReducer');
     }
     updateUserState(obj) {
       this.store.dispatch(

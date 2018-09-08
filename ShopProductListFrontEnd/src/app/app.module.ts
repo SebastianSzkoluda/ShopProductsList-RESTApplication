@@ -27,7 +27,7 @@ import { CreateProductComponent } from './products/create-product/create-product
 import { HeaderComponent } from './page-content/header/header.component';
 
 import { StoreModule } from '@ngrx/store';
-import { reducer } from './store/reducers';
+import { reducers } from './store/reducers';
 
 registerLocaleData(en);
 
@@ -74,10 +74,7 @@ const appRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     NgZorroAntdModule,
-    StoreModule.forRoot({reducer}, {
-      initialState: {
-      }
-    }),
+    StoreModule.forRoot(reducers),
     /** import ng-zorro-antd root module，you should import NgZorroAntdModule instead in sub module **/
   ],
   exports: [
