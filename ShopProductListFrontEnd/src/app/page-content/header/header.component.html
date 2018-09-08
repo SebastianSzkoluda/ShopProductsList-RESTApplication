@@ -5,6 +5,6 @@
     <li *ngIf="isLogged()" nz-menu-item routerLink="/productsList">Products List</li>
     <li *ngIf="isLogged()" nz-menu-item><app-family></app-family></li>
     <span *ngIf="isLogged()" class="logout" title><i class="anticon anticon-logout" ></i><a (click)="logout()" routerLink="/" class="nav-text">Logout</a></span>
-    <span  class="loggedUser" title><i class="anticon anticon-user"></i><span class="nav-text">{{loggedUser}}</span></span>
+    <span *ngIf="isLogged()" class="loggedUser" title><i class="anticon anticon-user"></i><span class="nav-text">{{loggedUser}}</span></span>
   </ul>
 </nz-header>

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
-import { UserComponent } from './auth/user/user.component';
+import { UserComponent } from './auth/user/user-login/user.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -27,6 +27,7 @@ import { CreateProductComponent } from './products/create-product/create-product
 import { HeaderComponent } from './page-content/header/header.component';
 
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { reducers } from './store/reducers';
 
 registerLocaleData(en);
@@ -75,6 +76,9 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     NgZorroAntdModule,
     StoreModule.forRoot(reducers),
+    StoreDevtoolsModule.instrument({
+      maxAge: 5,
+    })
     /** import ng-zorro-antd root module，you should import NgZorroAntdModule instead in sub module **/
   ],
   exports: [

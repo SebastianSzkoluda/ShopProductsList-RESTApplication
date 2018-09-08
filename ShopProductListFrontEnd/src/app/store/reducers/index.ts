@@ -1,10 +1,14 @@
-import {reducer, AppReducerState} from './app-reducer';
+import {userReducer, UserReducerState} from './user-reducer';
+import {familyReducer} from './family-reducer';
 import { ActionReducerMap } from '@ngrx/store';
+import {FamilyReducerState} from './family-reducer';
 
 interface AppState {
-  appReducer: AppReducerState;
+  userReducer: UserReducerState;
+  familyReducer: FamilyReducerState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
-  appReducer: reducer
+  userReducer: userReducer,
+  familyReducer: familyReducer
 };

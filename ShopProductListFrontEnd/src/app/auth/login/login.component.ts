@@ -7,7 +7,8 @@ import {TokenStorage} from '../token/token.storage';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd';
 import {FamilyService} from '../../family/family-manager/family.service';
-import {ACTION_LOGIN} from '../../store/actions/app-actions';
+import {ACTION_LOGIN} from '../../store/actions/user-actions';
+import {UserService} from '../user/user-manager/user.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,14 @@ import {ACTION_LOGIN} from '../../store/actions/app-actions';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private router: Router, private authService: AuthService, private familyService: FamilyService, private zone: NgZone, private token: TokenStorage, private fb: FormBuilder, private message: NzMessageService) {
+  constructor(private router: Router,
+              private authService: AuthService,
+              private familyService: FamilyService,
+              private userService: UserService,
+              private zone: NgZone,
+              private token: TokenStorage,
+              private fb: FormBuilder,
+              private message: NzMessageService) {
   }
 
   loginUser: LoginUser = new LoginUser(null, null);
@@ -29,7 +37,7 @@ export class LoginComponent implements OnInit {
       console.log(value.token);
       this.token.saveToken(value.token);
       this.zone.run(() => this.router.navigate(['productsList']));
-      this.authService.updateUserState({
+      this.userService.updateUserState({
         action: ACTION_LOGIN,
         payload: this.loginUser.username
       });

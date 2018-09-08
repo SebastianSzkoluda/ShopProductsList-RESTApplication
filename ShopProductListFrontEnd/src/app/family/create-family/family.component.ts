@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FamilyService} from '../family-manager/family.service';
 import {Family} from '../../model/family';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ACTION_CREATE} from '../../store/actions/family-actions';
 
 @Component({
   selector: 'app-family',
@@ -41,6 +42,10 @@ export class FamilyComponent implements OnInit {
     this.family.family_name = this.validateForm.get('familyName').value;
     console.log(this.family.family_name);
     this.familyService.createFamily(this.family).subscribe(() => {
+      this.familyService.updateFamiliesState({
+        action: ACTION_CREATE,
+        payload: this.family,
+      });
      this.handleOk();
     });
   }

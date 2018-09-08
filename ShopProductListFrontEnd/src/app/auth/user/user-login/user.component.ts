@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthService} from '../auth-manager/auth.service';
-import {FamilyUser} from '../../model/family-user';
+import {FamilyUser} from '../../../model/family-user';
+import {UserService} from '../user-manager/user.service';
 
 @Component({
   selector: 'app-user',
@@ -9,7 +9,7 @@ import {FamilyUser} from '../../model/family-user';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  constructor(private router: Router, private userService: AuthService) {
+  constructor(private router: Router, private userService: UserService) {
   }
   public users: Array<FamilyUser>;
   sortName = null;
@@ -32,7 +32,8 @@ export class UserComponent implements OnInit {
   search(): void {
     /** sort data **/
     if (this.sortName) {
-      const data = this.users.sort((a, b) => (this.sortValue === 'ascend') ? (a[ this.sortName ] > b[ this.sortName ] ? 1 : -1) : (b[ this.sortName ] > a[ this.sortName ] ? 1 : -1));
+      const data = this.users.sort((a, b) =>
+        (this.sortValue === 'ascend') ? (a[ this.sortName ] > b[ this.sortName ] ? 1 : -1) : (b[ this.sortName ] > a[ this.sortName ] ? 1 : -1));
       this.users = [...data];
     }
   }
