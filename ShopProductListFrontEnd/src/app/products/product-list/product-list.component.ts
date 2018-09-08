@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FamilyService} from '../services/family-manager/family.service';
-import {Family} from '../services/family-manager/family';
-import {ProductService} from '../services/product-manager/product.service';
-import {Product} from '../services/product-manager/product';
+import {FamilyService} from '../../family/family-manager/family.service';
+import {Family} from '../../model/family';
+import {ProductService} from '../product-manager/product.service';
+import {Product} from '../../model/product';
 import {map} from 'rxjs/operators';
 
 @Component({
@@ -11,7 +11,7 @@ import {map} from 'rxjs/operators';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-  familyName = 'No family selected';
+  familyName = 'No create-family selected';
   families: Array<Family>;
   products: Array<Product>;
   sortName = null;

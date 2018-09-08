@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {FamilyUser} from '../services/user-manager/familyUser';
-import {UserService} from '../services/user-manager/user.service';
+import {FamilyUser} from '../../model/family-user';
+import {AuthService} from '../auth-manager/auth.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
@@ -10,7 +10,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private userService: UserService, private fb: FormBuilder) { }
+  constructor(private userService: AuthService, private fb: FormBuilder) { }
 
   familyUser: FamilyUser = new FamilyUser();
   validateForm: FormGroup;

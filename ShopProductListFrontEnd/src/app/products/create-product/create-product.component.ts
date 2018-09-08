@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Product} from '../services/product-manager/product';
-import {ProductService} from '../services/product-manager/product.service';
+import {Product} from '../../model/product';
+import {ProductService} from '../product-manager/product.service';
 
 @Component({
   selector: 'app-create-product',

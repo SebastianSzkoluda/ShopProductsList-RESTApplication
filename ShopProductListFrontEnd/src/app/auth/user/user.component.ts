@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {UserService} from '../services/user-manager/user.service';
-import {FamilyUser} from '../services/user-manager/familyUser';
+import {AuthService} from '../auth-manager/auth.service';
+import {FamilyUser} from '../../model/family-user';
 
 @Component({
   selector: 'app-user',
@@ -9,7 +9,7 @@ import {FamilyUser} from '../services/user-manager/familyUser';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  constructor(private router: Router, private userService: UserService) {
+  constructor(private router: Router, private userService: AuthService) {
   }
   public users: Array<FamilyUser>;
   sortName = null;

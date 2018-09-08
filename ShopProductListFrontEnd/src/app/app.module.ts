@@ -1,29 +1,34 @@
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { UserComponent } from './user/user.component';
+import { LoginComponent } from './auth/login/login.component';
+import { UserComponent } from './auth/user/user.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
 import {FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserService } from './services/user-manager/user.service';
+import { AuthService } from './auth/auth-manager/auth.service';
 import {CommonModule} from '@angular/common';
 
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
-import { HomePageComponent } from './home-page/home-page.component';
-import {LoginActivate} from './login/LoginActivate';
-import {TokenStorage} from './token/token.storage';
-import {Interceptor} from './token/interceptor';
-import { RegisterComponent } from './register/register.component';
+import { HomePageComponent } from './page-content/home-page/home-page.component';
+import {LoginActivate} from './auth/login/LoginActivate';
+import {TokenStorage} from './auth/token/token.storage';
+import {Interceptor} from './auth/token/interceptor';
+import { RegisterComponent } from './auth/register/register.component';
 import { UserManualComponent } from './user-manual/user-manual.component';
-import { FamilyComponent } from './family/family.component';
-import {FamilyService} from './services/family-manager/family.service';
-import { ProductListComponent } from './product-list/product-list.component';
-import {ProductService} from './services/product-manager/product.service';
-import { CreateProductComponent } from './create-product/create-product.component';
+import { FamilyComponent } from './family/create-family/family.component';
+import {FamilyService} from './family/family-manager/family.service';
+import { ProductListComponent } from './products/product-list/product-list.component';
+import {ProductService} from './products/product-manager/product.service';
+import { CreateProductComponent } from './products/create-product/create-product.component';
+import { HeaderComponent } from './page-content/header/header.component';
+
+import { StoreModule } from '@ngrx/store';
+import { reducer } from './store/reducers';
+
 registerLocaleData(en);
 
 const appRoutes: Routes = [
@@ -58,6 +63,7 @@ const appRoutes: Routes = [
     FamilyComponent,
     ProductListComponent,
     CreateProductComponent,
+    HeaderComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -68,20 +74,31 @@ const appRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     NgZorroAntdModule,
+    StoreModule.forRoot({reducer}, {
+      initialState: {
+      }
+    }),
     /** import ng-zorro-antd root module，you should import NgZorroAntdModule instead in sub module **/
   ],
   exports: [
     RouterModule,
     CommonModule,
   ],
-  providers: [UserService, { provide: NZ_I18N, useValue: en_US }, LoginActivate, TokenStorage,
+  providers: [
+    {
+      provide: NZ_I18N,
+      useValue: en_US
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: Interceptor,
       multi: true
     },
+    LoginActivate,
+    TokenStorage,
     FormBuilder,
     FamilyService,
+    AuthService,
     ProductService
   ],
   bootstrap: [AppComponent]

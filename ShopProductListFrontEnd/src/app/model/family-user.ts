@@ -1,4 +1,4 @@
-import {Family} from '../family-manager/family';
+import {Family} from './family';
 
 export class FamilyUser {
 

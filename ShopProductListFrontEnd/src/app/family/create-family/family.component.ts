@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {FamilyService} from '../services/family-manager/family.service';
-import {Family} from '../services/family-manager/family';
+import {FamilyService} from '../family-manager/family.service';
+import {Family} from '../../model/family';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({

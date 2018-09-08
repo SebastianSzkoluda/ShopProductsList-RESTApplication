@@ -1,26 +1,21 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import { Observable, Subject, asapScheduler, pipe, of, from, interval, merge, fromEvent } from 'rxjs';
-import {LoginUser} from './loginUser';
-import {AuthToken} from '../../token/authToken';
-import {FamilyUser} from './familyUser';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import { Observable } from 'rxjs';
+import {LoginUser} from '../../model/login-user';
+import {AuthToken} from '../../model/auth-token';
+import {FamilyUser} from '../../model/family-user';
 import {map} from 'rxjs/operators';
 import {JwtHelperService} from '@auth0/angular-jwt';
-
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+import {Store} from '@ngrx/store';
 
 @Injectable()
-export class UserService {
+export class AuthService {
 
   private helper = new JwtHelperService();
-  private loggedUser: string;
-  private isLogged = false;
 
   private baseUrl = '/api/user/';
   private tokenUrl = '/api/token/';
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private store: Store<any>) {}
 
     getUser(email: string): Observable < FamilyUser > {
       const params = new HttpParams().set('email', email);
@@ -33,13 +28,25 @@ export class UserService {
     login(loginUser: LoginUser): Observable < AuthToken > {
       return this.http.post < AuthToken > (this.tokenUrl + 'generate-token', loginUser).pipe(map(value => {
         const decodedUser = this.helper.decodeToken(value.token);
-      if (value) {
+        console.log(decodedUser);
+        if (value) {
         sessionStorage.setItem('currentUser', decodedUser.sub);
       }
       return value; }));
     }
     register(familyUser: FamilyUser): Observable < FamilyUser > {
      return this.http.post< FamilyUser >(this.baseUrl + 'signup', familyUser);
+    }
+    getAllState() {
+      return this.store.select('index');
+    }
+    updateUserState(obj) {
+      this.store.dispatch(
+        {
+          type: obj.action,
+          payload: obj.payload
+        }
+      );
     }
 
 }

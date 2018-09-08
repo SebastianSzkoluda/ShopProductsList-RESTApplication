@@ -1,13 +1,13 @@
 import {Component, NgZone, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
-import {UserService} from '../services/user-manager/user.service';
-import {LoginUser} from '../services/user-manager/loginUser';
+import {AuthService} from '../auth-manager/auth.service';
+import {LoginUser} from '../../model/login-user';
 import {TokenStorage} from '../token/token.storage';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd';
-import {error} from 'util';
-import {FamilyService} from '../services/family-manager/family.service';
+import {FamilyService} from '../../family/family-manager/family.service';
+import {ACTION_LOGIN} from '../../store/actions/app-actions';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +16,7 @@ import {FamilyService} from '../services/family-manager/family.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private router: Router, private userService: UserService, private familyService: FamilyService, private zone: NgZone, private token: TokenStorage, private fb: FormBuilder, private message: NzMessageService) {
+  constructor(private router: Router, private authService: AuthService, private familyService: FamilyService, private zone: NgZone, private token: TokenStorage, private fb: FormBuilder, private message: NzMessageService) {
   }
 
   loginUser: LoginUser = new LoginUser(null, null);
@@ -25,13 +25,18 @@ export class LoginComponent implements OnInit {
   public login(): void {
     this.loginUser.username = this.validateForm.get('userName').value;
     this.loginUser.password = this.validateForm.get('password').value;
-    this.userService.login(this.loginUser).subscribe(value => {
+    this.authService.login(this.loginUser).subscribe(value => {
       console.log(value.token);
       this.token.saveToken(value.token);
       this.zone.run(() => this.router.navigate(['productsList']));
+      this.authService.updateUserState({
+        action: ACTION_LOGIN,
+        payload: this.loginUser.username
+      });
+      this.createMessage('success', 'Successfully logged in!');
     },
     error => {
-      this.createMessage('error');
+      this.createMessage('error', `Wrong login or password! Please try log in one more time.`);
     });
   }
 
@@ -52,8 +57,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  createMessage(type: string): void {
-    this.message.create(type, `Wrong login or password!\nPlease try log in one more time.`);
+  createMessage(type: string, message: string): void {
+    this.message.create(type, message);
   }
 }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs/index';
-import {Family} from './family';
+import {Family} from '../../model/family';
 import {HttpClient} from '@angular/common/http';
 
 @Injectable()

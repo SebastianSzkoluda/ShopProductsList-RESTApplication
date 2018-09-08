@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Family} from '../services/family-manager/family';
+import {Family} from '../../model/family';
 
 @Component({
   selector: 'app-home-page',
