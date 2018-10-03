@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Product} from '../../model/product';
 import {ProductService} from '../product-manager/product.service';
+import {ACTION_CREATE} from '../../store/actions/product-actions';
 
 @Component({
   selector: 'app-create-product',
@@ -12,8 +13,6 @@ export class CreateProductComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private productService: ProductService) { }
 
-  @Output()
-  productsListChanged = new EventEmitter();
   @Input()
   familyName: string;
   products: Array<Product>;
@@ -26,7 +25,8 @@ export class CreateProductComponent implements OnInit {
       productName: [ null, [ Validators.required ] ],
       frequencyOfUse: [ null, [ Validators.required ] ],
       amount: [ null, [ Validators.required ] ],
-      inStock: [ null, [ Validators.required ] ]
+      inStock: [ null, [ Validators.required ] ],
+      userComment: [ null, [ Validators.required ] ]
     });
   }
   ngOnInit(): void {
@@ -45,21 +45,18 @@ export class CreateProductComponent implements OnInit {
       this.isOkLoading = false;
     }, 2000);
   }
-  productsListChange() {
-    this.productsListChanged.emit(this.products);
-  }
+
   createProduct() {
     this.product.productName = this.validateForm.get('productName').value;
     this.product.frequencyOfUse = this.validateForm.get('frequencyOfUse').value;
     this.product.amount = this.validateForm.get('amount').value;
     this.product.inStock = this.validateForm.get('inStock').value;
-    this.productService.saveProductForCurrentFamily(this.product, this.familyName).subscribe(value => {
-      this.productService.getProductsForCurrentFamily(this.familyName).subscribe(value1 => {
-        this.products = value1;
-        console.log('In create product component: ' + value1);
-        this.productsListChange();
+    this.product.userComment = this.validateForm.get('userComment').value;
+    this.productService.saveProductForCurrentFamily(this.product, this.familyName).subscribe(() => {
+      this.productService.updateProductState({
+        action: ACTION_CREATE,
+        payload: this.product,
       });
-      console.log(value);
       this.handleOk();
     });
   }

@@ -32,7 +32,7 @@ public class Family {
     private Set<FamilyUser> familyMembers;
 
     @Getter
-    @OneToMany(mappedBy = "family", fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "family", fetch = FetchType.EAGER)
     @JsonIgnoreProperties("family")
     private Set<Product> productsList;
 

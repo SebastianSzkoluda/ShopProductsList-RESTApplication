@@ -1,12 +1,13 @@
 package com.sszkoluda.shopproductslist.service;
 
 import com.sszkoluda.shopproductslist.model.FamilyUser;
+import com.sszkoluda.shopproductslist.model.Notification;
 
 import java.util.Optional;
 
 public interface FamilyUserService {
 
-    FamilyUser saveUser(FamilyUser user);
+    Optional<FamilyUser> saveUser(FamilyUser user);
 
     Optional<FamilyUser> findOne(String username);
 
@@ -18,5 +19,7 @@ public interface FamilyUserService {
 
     boolean doesLoadUserHaveAFamily();
 
-    void addingUserToFamily(String familyName);
+    boolean addingUserToFamilyNotificationStep(String familyName, String invitedUserEmail);
+
+    void addingUserToFamilyAcceptStep(Notification notification);
 }

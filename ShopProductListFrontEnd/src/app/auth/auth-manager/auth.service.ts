@@ -19,11 +19,12 @@ export class AuthService {
         const decodedUser = this.helper.decodeToken(value.token);
         console.log(decodedUser);
         if (value) {
-        sessionStorage.setItem('currentUser', decodedUser.sub);
+          sessionStorage.setItem('currentUser', decodedUser.sub);
       }
       return value; }));
     }
     register(familyUser: FamilyUser): Observable < FamilyUser > {
+      console.log('bylem tu');
      return this.http.post< FamilyUser >(this.baseUrl + 'register', familyUser);
     }
 

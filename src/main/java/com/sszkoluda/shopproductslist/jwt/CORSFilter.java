@@ -1,4 +1,4 @@
-package com.sszkoluda.shopproductslist.configuration;
+package com.sszkoluda.shopproductslist.jwt;
 
 import java.io.IOException;
 

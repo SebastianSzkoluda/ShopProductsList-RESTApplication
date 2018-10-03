@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Set;
 
 @Data
@@ -29,6 +30,7 @@ public class FamilyUser {
     private String username;
 
     @Getter
+    @Email
     @Column(name = "email")
     private String email;
 
@@ -48,5 +50,10 @@ public class FamilyUser {
             inverseJoinColumns = {@JoinColumn(name = "family_id", referencedColumnName = "id")})
     @JsonIgnoreProperties("familyMembers")
     private Set<Family> userFamilies;
+
+    @Getter
+    @OneToMany(mappedBy = "familyUser", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("familyUser")
+    private Set<Notification> notificationsList;
 
 }

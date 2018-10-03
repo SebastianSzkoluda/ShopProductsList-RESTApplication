@@ -1,4 +1,4 @@
-package com.sszkoluda.shopproductslist.configuration;
+package com.sszkoluda.shopproductslist.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

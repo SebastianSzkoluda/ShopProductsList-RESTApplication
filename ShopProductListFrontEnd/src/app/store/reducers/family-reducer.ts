@@ -1,4 +1,4 @@
-import { ACTION_CREATE } from '../actions/family-actions';
+import {ACTION_CREATE, ACTION_INITIAL_FAMILY} from '../actions/family-actions';
 import {Family} from '../../model/family';
 
 
@@ -14,6 +14,10 @@ const initialState: FamilyReducerState = {
 
 export function familyReducer(state = initialState, action): FamilyReducerState {
   switch (action.type) {
+    case ACTION_INITIAL_FAMILY:
+      return {
+        ...initialState,
+      }
     case ACTION_CREATE:
       return {
         ...state,

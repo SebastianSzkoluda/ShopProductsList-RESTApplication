@@ -29,6 +29,10 @@ import { HeaderComponent } from './page-content/header/header.component';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { reducers } from './store/reducers';
+import { EditProductComponent } from './products/edit-product/edit-product.component';
+import { NotificationComponent } from './page-content/notification/notification.component';
+import {UserInviteComponent} from './auth/user/user-invite/user-invite.component';
+import {NotificationService} from './page-content/notification/notification-manager/notification.service';
 
 registerLocaleData(en);
 
@@ -65,6 +69,9 @@ const appRoutes: Routes = [
     ProductListComponent,
     CreateProductComponent,
     HeaderComponent,
+    EditProductComponent,
+    NotificationComponent,
+    UserInviteComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -100,7 +107,8 @@ const appRoutes: Routes = [
     FormBuilder,
     FamilyService,
     AuthService,
-    ProductService
+    ProductService,
+    NotificationService
   ],
   bootstrap: [AppComponent]
 })

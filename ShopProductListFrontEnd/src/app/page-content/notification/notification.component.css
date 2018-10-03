@@ -1,0 +1,18 @@
+.notify {
+  position: absolute;
+  right: 25%;
+  padding: 0px 10px 0px;
+  margin-right: -10px;
+  font-size: 20px;
+}
+.text {
+  font-size: 16px;
+}
+#narrow {
+  float: right;
+  display: inline-block;
+}
+#wide {
+  float: right;
+  display: inline-block;
+}

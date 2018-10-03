@@ -1,7 +1,7 @@
 package com.sszkoluda.shopproductslist.security;
 
-import com.sszkoluda.shopproductslist.configuration.JwtAuthenticationEntryPoint;
-import com.sszkoluda.shopproductslist.configuration.JwtAuthenticationFilter;
+import com.sszkoluda.shopproductslist.jwt.JwtAuthenticationEntryPoint;
+import com.sszkoluda.shopproductslist.jwt.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,7 +52,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().
                 authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers("/api/*").permitAll()
+                .antMatchers("/api/generate-token").permitAll()
+                .antMatchers("/api/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()

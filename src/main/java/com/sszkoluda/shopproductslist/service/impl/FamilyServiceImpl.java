@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -28,15 +29,15 @@ public class FamilyServiceImpl implements FamilyService {
     }
 
     @Override
-    public Family saveFamily(Family family) {
+    public Optional<Family> saveFamily(Family family) {
         Set<FamilyUser> familyMembers = new HashSet<>();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
-        familyUser.get().getUserFamilies().add(family);
-        familyMembers.add(familyUser.get());
-        Family familyTmp;
-        familyTmp = Family.builder().familyName(family.getFamilyName()).familyMembers(familyMembers).build();
-        return familyRepository.save(familyTmp);
+        return familyUser.map(f -> {
+            f.getUserFamilies().add(family);
+            familyMembers.add(f);
+            return familyRepository.save(Family.builder().familyName(family.getFamilyName()).familyMembers(familyMembers).build());
+        });
     }
 
     @Override
@@ -48,6 +49,6 @@ public class FamilyServiceImpl implements FamilyService {
     public Set<Family> getLoggedUserFamilies() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
-        return familyUser.get().getUserFamilies();
+        return familyUser.map(FamilyUser::getUserFamilies).orElse(Collections.emptySet());
     }
 }

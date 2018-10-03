@@ -13,15 +13,23 @@ export class FamilyService {
   createFamily(family: Family): Observable < Family > {
     return this.http.post< Family >(this.familyUrl + 'family', family);
   }
+
   checkIfUserHaveFamily(): Observable <boolean> {
     return this.http.get < boolean > (this.familyUrl + 'checkIfUserHaveFamily');
   }
+
+  getFamilyByName(familyName: string): Observable<Family> {
+    return this.http.get<Family>(this.familyUrl + 'family' + `/${familyName}`)
+  }
+
   loggedUserFamilies(): Observable < Array<Family> > {
     return this.http.get < Array<Family> >(this.familyUrl + 'family');
   }
+
   getAllState() {
     return this.store.select('familyReducer');
   }
+
   updateFamiliesState(obj) {
     this.store.dispatch(
       {

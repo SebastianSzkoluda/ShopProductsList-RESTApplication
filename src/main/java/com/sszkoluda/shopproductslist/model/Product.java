@@ -37,7 +37,11 @@ public class Product {
     private Integer inStock;
 
     @Getter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "user_comment")
+    private String userComment;
+
+    @Getter
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="family_id", nullable=false)
     @JsonIgnoreProperties("productsList")
     private Family family;

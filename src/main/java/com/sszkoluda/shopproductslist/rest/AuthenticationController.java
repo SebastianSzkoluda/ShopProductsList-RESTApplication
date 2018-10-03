@@ -1,6 +1,6 @@
 package com.sszkoluda.shopproductslist.rest;
 
-import com.sszkoluda.shopproductslist.configuration.JwtTokenUtil;
+import com.sszkoluda.shopproductslist.jwt.JwtTokenUtil;
 import com.sszkoluda.shopproductslist.model.AuthToken;
 import com.sszkoluda.shopproductslist.model.FamilyUser;
 import com.sszkoluda.shopproductslist.model.LoginUser;
@@ -37,6 +37,7 @@ public class AuthenticationController {
     @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
     public ResponseEntity<?> register(@RequestBody LoginUser loginUser) throws AuthenticationException {
 
+        System.out.println("YYYYYY: " + loginUser);
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginUser.getUsername(),
@@ -45,13 +46,15 @@ public class AuthenticationController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final Optional<FamilyUser> familyUser = familyUserService.findOne(loginUser.getUsername());
+        System.out.println("XXXXX: " + familyUser.get());
         final String token = jwtTokenUtil.generateToken(familyUser.get());
         return ResponseEntity.ok(new AuthToken(token));
     }
 
     @PostMapping("/register")
     public ResponseEntity<FamilyUser> saveUser(@RequestBody FamilyUser user){
-        familyUserService.saveUser(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return this.familyUserService.saveUser(user)
+                .map(fU -> new ResponseEntity<FamilyUser>(HttpStatus.CREATED))
+                .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 }

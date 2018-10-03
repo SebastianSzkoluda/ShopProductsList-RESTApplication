@@ -1,5 +1,6 @@
 <div class="container">
   <nz-card>
+    <app-edit-product></app-edit-product>
     <div id="wrapper">
       <div id="first">
         <h2>ProductsList started</h2>
@@ -16,34 +17,47 @@
         </nz-dropdown>
       </div>
     </div>
-    <app-create-product (productsListChanged)="productsListHandler($event)" [familyName]="familyName"></app-create-product>
+    <app-create-product [familyName]="familyName"></app-create-product>
 
     <div class="container">
       <h5>Selected family: {{familyName}}</h5>
-      <nz-table class="main"
+      <nz-table #nzTable class="main"
                 [nzFrontPagination]="true"
                 [nzShowPagination]="true"
                  #filterTable
                 [nzData]="products"
-                [nzPageSize]="6"
+                [nzPageSize]="5"
                 nzSize="default">
         <thead (nzSortChange)="sort($event)" nzSingleSort>
         <tr>
+          <th nzShowExpand></th>
           <th nzShowSort nzSortKey="productId">ProductID</th>
           <th nzShowSort nzSortKey="product_name">ProductName</th>
           <th nzShowSort nzSortKey="frequency_of_use">FrequencyOfUse</th>
           <th nzShowSort nzSortKey="amount">Amount</th>
           <th nzShowSort nzSortKey="in_stock">InStock</th>
+          <th>Action</th>
         </tr>
         </thead>
         <tbody style="background-color: #fff" >
-        <tr *ngFor="let data of filterTable.data">
+        <ng-template ngFor let-data [ngForOf]="nzTable.data">
+        <tr>
+          <td nzShowExpand [(nzExpand)]="data.expand"></td>
           <td>{{data.productId}}</td>
           <td>{{data.productName}}</td>
           <td>{{data.frequencyOfUse}}</td>
           <td>{{data.amount}}</td>
           <td>{{data.inStock}}</td>
+          <td>
+            <button nz-button (click)="deleteProduct(data)" nzType="danger" nz-tooltip nzTitle="delete product" nzShape="circle"><i class="anticon anticon-delete"></i></button>
+            <button nz-button (click)="editMode(data)" nzType="default" nz-tooltip nzTitle="edit product" nzShape="circle"><i class="anticon anticon-edit"></i></button>
+          </td>
         </tr>
+        <tr [nzExpand]="data.expand">
+          <td></td>
+          <td colspan="6">{{data.userComment}}</td>
+        </tr>
+        </ng-template>
         </tbody>
       </nz-table>
     </div>

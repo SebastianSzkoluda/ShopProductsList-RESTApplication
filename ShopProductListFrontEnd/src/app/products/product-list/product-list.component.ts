@@ -4,6 +4,8 @@ import {Family} from '../../model/family';
 import {ProductService} from '../product-manager/product.service';
 import {Product} from '../../model/product';
 import {map} from 'rxjs/operators';
+import {ACTION_DELETE, ACTION_EDIT_BUTTON, ACTION_INITIAL_PRODUCT} from '../../store/actions/product-actions';
+import {ACTION_INITIAL_FAMILY} from '../../store/actions/family-actions';
 
 @Component({
   selector: 'app-product-list',
@@ -11,7 +13,7 @@ import {map} from 'rxjs/operators';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-  familyName = 'No create-family selected';
+  familyName = 'No family selected';
   families: Array<Family>;
   products: Array<Product>;
   sortName = null;
@@ -22,14 +24,26 @@ export class ProductListComponent implements OnInit {
       if (this.families.length !== 0) {
         console.log(this.families);
         this.familyName = this.families[0].familyName;
-        this.getProductsForFamily(this.families[0].familyName);
+        this.getProductsForFamily(this.familyName);
       }
     });
     this.familyService.getAllState().subscribe( state => {
-      if (state.family != null) {
+      if (state.family != null && state.create == true) {
         this.families.push(state.family);
+        this.familyService.updateFamiliesState({
+          action: ACTION_INITIAL_FAMILY,
+         })
       }
     });
+    this.productService.getAllState().subscribe(state => {
+      if(state.product != null && (state.edit == true || state.create == true)) {
+        this.getProductsForFamily(this.familyName);
+        this.products.push(state.product);
+        this.productService.updateProductState({
+          action: ACTION_INITIAL_PRODUCT,
+        })
+      }
+    })
   }
 
   getFamilies() {
@@ -45,9 +59,21 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-  productsListHandler(products: Array<Product>) {
-    this.products = products;
-    console.log(this.products);
+  editMode(product: Product) {
+    this.productService.updateProductState({
+      action: ACTION_EDIT_BUTTON,
+      payload: product,
+    })
+  }
+
+  deleteProduct(product: Product) {
+    this.productService.deleteProduct(product.productId).subscribe(() => {
+      this.productService.updateProductState({
+        action: ACTION_DELETE,
+        payload: product
+      });
+      this.products = this.products.filter(item => item != product);
+    });
   }
 
   sort(sort: { key: string, value: string }): void {

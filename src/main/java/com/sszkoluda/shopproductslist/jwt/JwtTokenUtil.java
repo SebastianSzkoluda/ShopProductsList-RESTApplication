@@ -1,4 +1,4 @@
-package com.sszkoluda.shopproductslist.configuration;
+package com.sszkoluda.shopproductslist.jwt;
 
 import com.sszkoluda.shopproductslist.model.FamilyUser;
 import io.jsonwebtoken.Claims;

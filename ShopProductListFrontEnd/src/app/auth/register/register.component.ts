@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FamilyUser} from '../../model/family-user';
 import {AuthService} from '../auth-manager/auth.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-register',
@@ -10,7 +11,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private userService: AuthService, private fb: FormBuilder) { }
+  constructor(private userService: AuthService, private fb: FormBuilder, private message: NzMessageService) { }
 
   familyUser: FamilyUser = new FamilyUser();
   validateForm: FormGroup;
@@ -21,8 +22,7 @@ export class RegisterComponent implements OnInit {
       userName: [ null, [ Validators.required ] ],
       password: [ null, [ Validators.required ] ],
       email: [ null, [ Validators.required ] ],
-      age: [ null, [ Validators.required ] ],
-      remember: [ true ]
+      age: [ null, [ Validators.required ] ]
     });
   }
   showModal(): void {
@@ -45,9 +45,12 @@ export class RegisterComponent implements OnInit {
     this.familyUser.password = this.validateForm.get('password').value;
     this.familyUser.email = this.validateForm.get('email').value;
     this.familyUser.age = this.validateForm.get('age').value;
-    this.userService.register(this.familyUser).subscribe(value => {
+    this.userService.register(this.familyUser).subscribe(() => {
       this.handleOk();
-      console.log(value);
+      this.createMessage('success', 'You have successfully create your account!')
+    },
+    err => {
+      this.createMessage('error', 'Something is wrong, please check all fields in register form!')
     });
 }
 
@@ -61,6 +64,10 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.initialize();
+  }
+
+  createMessage(type: string, message: string): void {
+    this.message.create(type, message);
   }
 
 }

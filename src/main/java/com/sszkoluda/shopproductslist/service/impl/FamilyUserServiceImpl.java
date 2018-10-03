@@ -1,9 +1,12 @@
 package com.sszkoluda.shopproductslist.service.impl;
 
 import com.sszkoluda.shopproductslist.model.Authority;
+import com.sszkoluda.shopproductslist.model.Family;
 import com.sszkoluda.shopproductslist.model.FamilyUser;
+import com.sszkoluda.shopproductslist.model.Notification;
 import com.sszkoluda.shopproductslist.repository.FamilyRepository;
 import com.sszkoluda.shopproductslist.repository.FamilyUserRepository;
+import com.sszkoluda.shopproductslist.repository.NotificationRepository;
 import com.sszkoluda.shopproductslist.service.FamilyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,69 +26,106 @@ import java.util.*;
 @Service(value = "userService")
 public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsService {
 
-    @Autowired
-    FamilyUserRepository familyUserRepository;
+    private final FamilyRepository familyRepository;
+
+    private final FamilyUserRepository familyUserRepository;
+
+    private final BCryptPasswordEncoder bcryptEncoder;
+
+    private final NotificationRepository notificationRepository;
 
     @Autowired
-    FamilyRepository familyRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder bcryptEncoder;
+    public FamilyUserServiceImpl(FamilyUserRepository familyUserRepository, BCryptPasswordEncoder bcryptEncoder, FamilyRepository familyRepository, NotificationRepository notificationRepository) {
+        this.familyUserRepository = familyUserRepository;
+        this.bcryptEncoder = bcryptEncoder;
+        this.familyRepository = familyRepository;
+        this.notificationRepository = notificationRepository;
+    }
 
     @Override
-    public FamilyUser saveUser(FamilyUser user) {
+    public Optional<FamilyUser> saveUser(FamilyUser user) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(new Authority("user"));
-        FamilyUser newUser = FamilyUser.builder()
+        Optional<FamilyUser> newUser = Optional.of(FamilyUser.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .age(user.getAge())
                 .password(bcryptEncoder.encode(user.getPassword()))
                 .authorities(authorities)
-                .build();
+                .build());
 
-        return familyUserRepository.save(newUser);
+        return newUser.map(familyUserRepository::save);
     }
 
     @Override
     public Iterable<FamilyUser> listAllUsers() {
-        // TODO Auto-generated method stub
-        return familyUserRepository.findAll();
+        return this.familyUserRepository.findAll();
     }
+
     @Override
     public Optional<FamilyUser> findOne(String username) {
-        return familyUserRepository.findByUserName(username);
+        return this.familyUserRepository.findByUserName(username);
     }
 
     @Override
     public Optional<FamilyUser> findById(Integer id) {
-        return familyUserRepository.findById(id);
+        return this.familyUserRepository.findById(id);
     }
 
     @Override
     public Optional<FamilyUser> findUserByEmail(String email) {
-        return familyUserRepository.findByEmail(email);
+        return this.familyUserRepository.findByEmail(email);
     }
 
     @Override
     public boolean doesLoadUserHaveAFamily() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<FamilyUser> familyUser = familyUserRepository.findByEmail(auth.getName());
-        if(familyUser.get().getUserFamilies().isEmpty()) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
+        return familyUser.map(fU -> fU.getUserFamilies().isEmpty()).get();
     }
 
-    @Transactional
     @Override
-    public void addingUserToFamily(String familyName) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        Optional<FamilyUser>  familyUserTemp = familyUserRepository.findByEmail(auth.getName());
-//        Optional<Family> family = familyRepository.findByName(familyName);
-//        family.get().getFamilyMembers().add()
+    public boolean addingUserToFamilyNotificationStep(String familyName, String invitedUserName) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
+        Optional<FamilyUser> invitedUser = familyUserRepository.findByUserName(invitedUserName);
+        return invitedUser
+                .map(iU -> {
+                    Family familyFromFamilyUser = familyUser.map(familyUser1 -> familyUser1.getUserFamilies()
+                            .stream().filter(family -> family.getFamilyName().equals(familyName)).findFirst().get()).get();
+                    if(familyFromFamilyUser.getFamilyMembers().stream().noneMatch(familyUser1 -> familyUser1.getUsername().equals(iU.getUsername()))) {
+                        Notification notification = Notification.builder()
+                                .familyUser(iU)
+                                .notificationInfo(familyUser.get().getUsername() + " wants to invite you to family: " + familyName)
+                                .familyUserNameFrom(familyUser.get().getUsername())
+                                .familyNameFromFamilyUser(familyName).build();
+                        if (iU.getNotificationsList().stream()
+                                .noneMatch(n -> notification.getNotificationInfo().equals(n.getNotificationInfo()))) {
+                            iU.getNotificationsList().add(notification);
+                            this.notificationRepository.save(notification);
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                }).get();
+    }
+
+    @Override
+    public void addingUserToFamilyAcceptStep(Notification notification) {
+        Optional<FamilyUser> familyUserFrom = this.familyUserRepository.findByUserName(notification.getFamilyUserNameFrom());
+        familyUserFrom.map(fUF -> fUF.getUserFamilies()
+                .stream()
+                .filter(family -> family.getFamilyName().equals(notification.getFamilyNameFromFamilyUser()))
+                .findFirst()).map(family -> {
+                    family.get().getFamilyMembers().add(notification.getFamilyUser());
+                    FamilyUser familyUser = notification.getFamilyUser();
+                    familyUser.getUserFamilies().add(family.get());
+                    return this.familyUserRepository.save(familyUser);
+        });
+        this.notificationRepository.delete(notification);
     }
 
     @Override
