@@ -35,15 +35,14 @@ public class ProductServiceImpl implements ProductService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
 
-        return familyUser.map(fU -> fU.getUserFamilies().stream()
+        return familyUser.flatMap(fU -> fU.getUserFamilies().stream()
                 .filter(family -> family.getFamilyName().equals(familyName))
                 .findFirst()
                 .map(family -> {
                     product.setFamily(family);
                     family.getProductsList().add(product);
                     return productRepository.save(product);
-                }))
-                .orElse(Optional.empty());
+                }));
     }
 
     @Override

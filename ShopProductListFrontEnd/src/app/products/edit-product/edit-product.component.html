@@ -1,7 +1,8 @@
-<nz-modal [nzStyle]="{ top: '100px' }" nzOkText="Edit product" nzMaskClosable="true" [(nzVisible)]="isVisible" nzTitle="Edit Product" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm()" [nzOkLoading]="isOkLoading">
+<nz-modal [nzStyle]="{ top: '70px' }" nzOkText="Edit product" nzMaskClosable="true" [(nzVisible)]="isVisible" nzTitle="Edit Product" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm()" [nzOkLoading]="isOkLoading">
 
   <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
     <nz-form-item>
+      <nz-form-label>Product name</nz-form-label>
       <nz-form-control>
         <nz-input-group nzPrefixIcon="anticon anticon-barcode">
           <input type="text" nz-input formControlName="productName" placeholder="Product name">
@@ -11,6 +12,7 @@
     </nz-form-item>
 
     <nz-form-item>
+      <nz-form-label>Frequency of use</nz-form-label>
       <nz-form-control>
         <nz-input-group nzPrefixIcon="anticon anticon-hourglass">
           <input type="text" nz-input formControlName="frequencyOfUse" placeholder="Frequency of use">
@@ -20,6 +22,7 @@
     </nz-form-item>
 
     <nz-form-item>
+      <nz-form-label>Price</nz-form-label>
       <nz-form-control>
         <nz-input-group nzPrefixIcon="anticon anticon-wallet">
           <input type="text" nz-input formControlName="amount" placeholder="Price">
@@ -29,6 +32,7 @@
     </nz-form-item>
 
     <nz-form-item>
+      <nz-form-label>In stock</nz-form-label>
       <nz-form-control>
         <nz-input-group nzPrefixIcon="anticon anticon-inbox">
           <input type="text" nz-input formControlName="inStock" placeholder="In stock">
@@ -38,6 +42,7 @@
     </nz-form-item>
 
     <nz-form-item>
+      <nz-form-label>User comment</nz-form-label>
       <nz-form-control>
         <textarea nz-input formControlName="userComment" placeholder="Your comment to created product" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
       </nz-form-control>

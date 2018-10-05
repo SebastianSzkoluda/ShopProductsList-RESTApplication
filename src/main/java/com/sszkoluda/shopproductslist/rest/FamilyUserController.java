@@ -60,7 +60,7 @@ public class FamilyUserController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/user/declineInviteToFamily")
+    @PostMapping("/user/declineInviteToFamily")
     public ResponseEntity<?> declineInviteToFamily(@RequestBody Notification notification) {
         this.notificationRepository.delete(notification);
         return ResponseEntity.ok().build();

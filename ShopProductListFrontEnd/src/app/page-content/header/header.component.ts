@@ -15,8 +15,12 @@ export class HeaderComponent implements OnInit {
   }
   loggedUser: string;
 
+  ngOnInit() {
+    this.updateLoggedUserState();
+  }
+
   isLogged(): boolean {
-    if (sessionStorage.getItem('currentUser') != null) {
+    if (localStorage.getItem('currentUser') != null) {
       return true;
     } else {
       return false;
@@ -34,11 +38,9 @@ export class HeaderComponent implements OnInit {
     this.message.create(type, `Logged out`);
   }
 
-  ngOnInit() {
+  updateLoggedUserState() {
     this.userService.getAllState().subscribe(state => {
-      // console.log(state);
       this.loggedUser = state.user;
     });
   }
-
 }

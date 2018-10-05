@@ -17,7 +17,7 @@ export function familyReducer(state = initialState, action): FamilyReducerState 
     case ACTION_INITIAL_FAMILY:
       return {
         ...initialState,
-      }
+      };
     case ACTION_CREATE:
       return {
         ...state,

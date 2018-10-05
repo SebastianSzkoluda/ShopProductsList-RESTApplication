@@ -3,6 +3,7 @@
 
   <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
     <nz-form-item>
+      <nz-form-label nzRequired>Family name</nz-form-label>
       <nz-form-control>
         <nz-input-group nzPrefixIcon="anticon anticon-usergroup-add">
           <input type="text" nz-input formControlName="familyName" placeholder="Family name">

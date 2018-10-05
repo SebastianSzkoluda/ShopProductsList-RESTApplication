@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {FamilyUser} from '../../../model/family-user';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/index';
 import {Store} from '@ngrx/store';
 import {Notification} from '../../../model/notification';

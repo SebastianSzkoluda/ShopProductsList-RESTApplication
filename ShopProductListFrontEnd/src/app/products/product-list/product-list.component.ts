@@ -20,30 +20,9 @@ export class ProductListComponent implements OnInit {
   sortValue = null;
   constructor( private familyService: FamilyService, private productService: ProductService) { }
   ngOnInit() {
-    this.getFamilies().subscribe(() => {
-      if (this.families.length !== 0) {
-        console.log(this.families);
-        this.familyName = this.families[0].familyName;
-        this.getProductsForFamily(this.familyName);
-      }
-    });
-    this.familyService.getAllState().subscribe( state => {
-      if (state.family != null && state.create == true) {
-        this.families.push(state.family);
-        this.familyService.updateFamiliesState({
-          action: ACTION_INITIAL_FAMILY,
-         })
-      }
-    });
-    this.productService.getAllState().subscribe(state => {
-      if(state.product != null && (state.edit == true || state.create == true)) {
-        this.getProductsForFamily(this.familyName);
-        this.products.push(state.product);
-        this.productService.updateProductState({
-          action: ACTION_INITIAL_PRODUCT,
-        })
-      }
-    })
+    this.initializeProductList();
+    this.updateFamilyState();
+    this.updateProductState();
   }
 
   getFamilies() {
@@ -88,5 +67,38 @@ export class ProductListComponent implements OnInit {
       const data = this.products.sort((a, b) => (this.sortValue === 'ascend') ? (a[ this.sortName ] > b[ this.sortName ] ? 1 : -1) : (b[ this.sortName ] > a[ this.sortName ] ? 1 : -1));
       this.products = [...data];
     }
+  }
+
+  updateFamilyState() {
+    this.familyService.getAllState().subscribe( state => {
+      if (state.family != null && state.create == true) {
+        this.families.push(state.family);
+        this.familyService.updateFamiliesState({
+          action: ACTION_INITIAL_FAMILY,
+         })
+      }
+    });
+  }
+
+  updateProductState() {
+    this.productService.getAllState().subscribe(state => {
+      if(state.product != null && (state.edit == true || state.create == true)) {
+        this.getProductsForFamily(this.familyName);
+        this.products.push(state.product);
+        this.productService.updateProductState({
+          action: ACTION_INITIAL_PRODUCT,
+        })
+      }
+    })
+  }
+
+  initializeProductList() {
+    this.getFamilies().subscribe(() => {
+      if (this.families.length !== 0) {
+        console.log(this.families);
+        this.familyName = this.families[0].familyName;
+        this.getProductsForFamily(this.familyName);
+      }
+    });
   }
 }

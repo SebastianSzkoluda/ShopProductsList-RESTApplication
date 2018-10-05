@@ -6,8 +6,9 @@
     <li *ngIf="isLogged()" nz-menu-item><app-family></app-family></li>
     <li *ngIf="isLogged()" nz-menu-item><app-user-invite></app-user-invite></li>
 
-    <span *ngIf="isLogged()" class="logout" title><i class="anticon anticon-logout" ></i><a (click)="logout()" routerLink="/" class="nav-text">Logout</a></span>
-    <span *ngIf="isLogged()" class="loggedUser" title><i class="anticon anticon-user"></i><span class="nav-text">{{loggedUser}}</span></span>
-    <app-notification *ngIf="isLogged()"></app-notification>
+    <li *ngIf="isLogged()" nz-menu-item style="float: right;" (click)="logout()" routerLink="/"><i class="anticon anticon-logout"></i>Logout</li>
+    <!--<li *ngIf="isLogged()" nz-menu-item style="float: right" ><i class="anticon anticon-logout"><a (click)="logout()" routerLink="/" class="nav-text">Logout</a></i></li>-->
+    <li *ngIf="isLogged()" style="float: right"><i class="anticon anticon-user"></i>{{loggedUser}}</li>
+    <li *ngIf="isLogged()" nz-menu-item style="float: right"><app-notification></app-notification></li>
   </ul>
 </nz-header>

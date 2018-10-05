@@ -4,6 +4,7 @@
   <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
 
     <nz-form-item>
+      <nz-form-label nzRequired>Username</nz-form-label>
       <nz-form-control>
         <nz-input-group nzPrefixIcon="anticon anticon-user">
           <input type="text" nz-input formControlName="userName" placeholder="Username">
@@ -13,6 +14,7 @@
     </nz-form-item>
 
           <nz-form-item>
+            <nz-form-label nzRequired>Password</nz-form-label>
             <nz-form-control>
               <nz-input-group nzPrefixIcon="anticon anticon-lock">
                 <input type="password" nz-input formControlName="password" placeholder="Password">
@@ -23,6 +25,7 @@
 
 
           <nz-form-item>
+            <nz-form-label nzRequired>Email</nz-form-label>
             <nz-form-control>
               <nz-input-group nzPrefixIcon="anticon anticon-mail">
                 <input type="text" nz-input formControlName="email" placeholder="Email">
@@ -32,6 +35,7 @@
           </nz-form-item>
 
           <nz-form-item>
+            <nz-form-label nzRequired>Age</nz-form-label>
             <nz-form-control>
               <nz-input-group nzPrefixIcon="anticon anticon-heart-o">
                 <input type="text" nz-input formControlName="age" placeholder="Age">

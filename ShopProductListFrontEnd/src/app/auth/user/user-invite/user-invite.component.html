@@ -3,7 +3,7 @@
 
   <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>Family name</nz-form-label>
+      <nz-form-label nzRequired>Family name</nz-form-label>
       <nz-form-control>
         <nz-select id="familyName" formControlName="familyName" nzPlaceHolder="Select family">
           <nz-option *ngFor="let family of families" nzValue={{family.familyName}} nzLabel={{family.familyName}}></nz-option>
@@ -12,7 +12,7 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSpan]="4" nzRequired>Username</nz-form-label>
+      <nz-form-label nzRequired>Username</nz-form-label>
         <nz-form-control>
           <nz-input-group nzPrefixIcon="anticon anticon-user-add">
             <input type="text" placeholder="Username" formControlName="userName" nz-input (input)="onInput($event.target?.value)" [nzAutocomplete]="auto">

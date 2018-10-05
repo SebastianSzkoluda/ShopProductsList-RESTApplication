@@ -9,16 +9,16 @@ export class TokenStorage {
   constructor() { }
 
   public logout() {
-    window.sessionStorage.removeItem(TOKEN_KEY);
-    window.sessionStorage.clear();
+    window.localStorage.removeItem(TOKEN_KEY);
+    window.localStorage.clear();
   }
 
   public saveToken(token: string) {
-    window.sessionStorage.removeItem(TOKEN_KEY);
-    window.sessionStorage.setItem(TOKEN_KEY,  token);
+    window.localStorage.removeItem(TOKEN_KEY);
+    window.localStorage.setItem(TOKEN_KEY,  token);
   }
 
   public getToken(): string {
-    return sessionStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(TOKEN_KEY);
   }
 }

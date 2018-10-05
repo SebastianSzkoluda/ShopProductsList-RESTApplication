@@ -19,7 +19,7 @@ export class AuthService {
         const decodedUser = this.helper.decodeToken(value.token);
         console.log(decodedUser);
         if (value) {
-          sessionStorage.setItem('currentUser', decodedUser.sub);
+          localStorage.setItem('currentUser', decodedUser.sub);
       }
       return value; }));
     }

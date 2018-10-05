@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Product} from '../../model/product';
 import {ProductService} from '../product-manager/product.service';
 import {ACTION_CREATE} from '../../store/actions/product-actions';
+import {NzMessageService} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-create-product',
@@ -11,7 +12,7 @@ import {ACTION_CREATE} from '../../store/actions/product-actions';
 })
 export class CreateProductComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private productService: ProductService) { }
+  constructor(private fb: FormBuilder, private productService: ProductService, private message: NzMessageService) { }
 
   @Input()
   familyName: string;
@@ -34,8 +35,12 @@ export class CreateProductComponent implements OnInit {
   }
 
   showModal(): void {
-    this.initialize();
-    this.isVisible = true;
+    if(this.familyName === 'No family selected'){
+      this.createMessage('error', 'No family selected! Please select family!')
+    } else {
+      this.initialize();
+      this.isVisible = true;
+    }
   }
 
   handleOk(): void {
@@ -47,19 +52,24 @@ export class CreateProductComponent implements OnInit {
   }
 
   createProduct() {
-    this.product.productName = this.validateForm.get('productName').value;
-    this.product.frequencyOfUse = this.validateForm.get('frequencyOfUse').value;
-    this.product.amount = this.validateForm.get('amount').value;
-    this.product.inStock = this.validateForm.get('inStock').value;
-    this.product.userComment = this.validateForm.get('userComment').value;
-    this.productService.saveProductForCurrentFamily(this.product, this.familyName).subscribe(() => {
-      this.productService.updateProductState({
-        action: ACTION_CREATE,
-        payload: this.product,
+      this.product.productName = this.validateForm.get('productName').value;
+      this.product.frequencyOfUse = this.validateForm.get('frequencyOfUse').value;
+      this.product.amount = this.validateForm.get('amount').value;
+      this.product.inStock = this.validateForm.get('inStock').value;
+      this.product.userComment = this.validateForm.get('userComment').value;
+      this.productService.saveProductForCurrentFamily(this.product, this.familyName).subscribe(() => {
+        this.productService.updateProductState({
+          action: ACTION_CREATE,
+          payload: this.product,
+        });
+        this.handleOk();
       });
-      this.handleOk();
-    });
   }
+
+  createMessage(type: string, message: string): void {
+    this.message.create(type, message);
+  }
+
   submitForm(): void {
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[ i ].markAsDirty();

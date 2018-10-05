@@ -6,3 +6,6 @@ div, i {
   margin-right: 3px;
   font-weight: bold;
 }
+nz-form-label {
+  line-height: 15px !important;
+}

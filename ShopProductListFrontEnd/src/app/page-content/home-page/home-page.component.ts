@@ -12,7 +12,7 @@ export class HomePageComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    sessionStorage.clear();
+    localStorage.clear();
   }
 
 }

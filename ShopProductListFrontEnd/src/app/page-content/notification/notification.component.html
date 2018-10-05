@@ -1,4 +1,4 @@
-<span class="notify" title><a (click)="open()" class="nav-text"><i class="anticon anticon-bell"></i></a></span>
+<a (click)="open()" class="nav-text" style="width: 100px"><i class="anticon anticon-bell"></i></a>
 <nz-drawer [nzClosable]="true" [nzWidth]="400" [nzVisible]="visible" nzPlacement="right" nzTitle="Notifications" (nzOnClose)="close()">
   <nz-card id="parent" *ngFor="let notification of notifications">
     <div>

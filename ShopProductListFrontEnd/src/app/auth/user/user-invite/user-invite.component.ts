@@ -6,6 +6,8 @@ import {FamilyUser} from '../../../model/family-user';
 import {UserService} from '../user-manager/user.service';
 import {ACTION_INITIAL_FAMILY} from '../../../store/actions/family-actions';
 import {NzMessageService} from 'ng-zorro-antd';
+import {NotificationService} from '../../../page-content/notification/notification-manager/notification.service';
+import {ACTION_NOTIFICATION_CREATE} from '../../../store/actions/notification-actions';
 
 @Component({
   selector: 'app-user-invite',
@@ -14,7 +16,11 @@ import {NzMessageService} from 'ng-zorro-antd';
 })
 export class UserInviteComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private familyService: FamilyService, private userService: UserService, private message: NzMessageService) { }
+  constructor(private fb: FormBuilder,
+              private familyService: FamilyService,
+              private userService: UserService,
+              private message: NzMessageService,
+              private notificationService: NotificationService) { }
   families = new Array<Family>();
   users = new Array<FamilyUser>();
   options = new Array<FamilyUser>();
@@ -28,14 +34,7 @@ export class UserInviteComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.familyService.getAllState().subscribe( state => {
-      if (state.family != null && state.create == true) {
-        this.families.push(state.family);
-        this.familyService.updateFamiliesState({
-          action: ACTION_INITIAL_FAMILY,
-        })
-      }
-    });
+    this.updateFamilyState();
     this.getFamilies();
     this.getAllUsers();
     this.initialize();
@@ -86,7 +85,8 @@ export class UserInviteComponent implements OnInit {
     this.userService.sendInviteToFamily(this.validateForm.get('familyName').value, this.validateForm.get('userName').value)
       .subscribe(value => {
         if(value) {
-          this.createMessage('success','Invite sent successfully!')
+          this.createMessage('success','Invite sent successfully!');
+          this.updateNotificationStateCreate();
         } else {
           this.createMessage('error', 'This user is in your family!')
         }
@@ -95,5 +95,19 @@ export class UserInviteComponent implements OnInit {
   }
   createMessage(type: string, message: string): void {
     this.message.create(type, message);
+  }
+
+  updateFamilyState() {
+    this.familyService.getAllState().subscribe( state => {
+      if (state.family != null && state.create == true) {
+        this.families.push(state.family);
+      }
+    });
+  }
+
+  updateNotificationStateCreate() {
+    this.notificationService.updateNotificationState({
+      action: ACTION_NOTIFICATION_CREATE
+    })
   }
 }

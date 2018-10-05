@@ -27,7 +27,9 @@ import { CreateProductComponent } from './products/create-product/create-product
 import { HeaderComponent } from './page-content/header/header.component';
 
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { NotificationEffects } from './store/effects/notification-effects';
 import { reducers } from './store/reducers';
 import { EditProductComponent } from './products/edit-product/edit-product.component';
 import { NotificationComponent } from './page-content/notification/notification.component';
@@ -82,6 +84,7 @@ const appRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     NgZorroAntdModule,
+    EffectsModule.forRoot([NotificationEffects]),
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({
       maxAge: 5,

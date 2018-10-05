@@ -7,8 +7,8 @@ export interface UserReducerState {
 }
 
 const initialState: UserReducerState = {
-  login: (sessionStorage.getItem('currentUser') != null),
-  user: sessionStorage.getItem('currentUser')
+  login: (localStorage.getItem('currentUser') != null),
+  user: localStorage.getItem('currentUser')
 };
 
 export function userReducer(state = initialState, action): UserReducerState {

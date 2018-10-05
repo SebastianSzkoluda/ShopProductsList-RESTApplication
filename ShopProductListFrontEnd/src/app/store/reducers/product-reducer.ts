@@ -25,7 +25,7 @@ export function productReducer(state = initialState, action): ProductReducerStat
     case ACTION_INITIAL_PRODUCT:
       return {
         ...initialState
-      }
+      };
     case ACTION_CREATE:
       return {
         ...state,
