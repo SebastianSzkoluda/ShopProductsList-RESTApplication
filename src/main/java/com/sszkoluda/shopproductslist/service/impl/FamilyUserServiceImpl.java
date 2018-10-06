@@ -98,6 +98,7 @@ public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsServ
                                 .familyUser(iU)
                                 .notificationInfo(familyUser.get().getUsername() + " wants to invite you to family: " + familyName)
                                 .familyUserNameFrom(familyUser.get().getUsername())
+                                .familyIdFromFamilyUser(familyFromFamilyUser.getFamilyId())
                                 .familyNameFromFamilyUser(familyName).build();
                         if (iU.getNotificationsList().stream()
                                 .noneMatch(n -> notification.getNotificationInfo().equals(n.getNotificationInfo()))) {
@@ -120,7 +121,10 @@ public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsServ
                 .stream()
                 .filter(family -> family.getFamilyName().equals(notification.getFamilyNameFromFamilyUser()))
                 .findFirst()).map(family -> {
-                    family.get().getFamilyMembers().add(notification.getFamilyUser());
+                    FamilyUser familyUserInvited = notification.getFamilyUser();
+                    familyUserInvited.getUserFamilies().add(family.get());
+            System.out.println("FU: " + notification.getFamilyUser());
+                    family.get().getFamilyMembers().add(familyUserInvited);
                     FamilyUser familyUser = notification.getFamilyUser();
                     familyUser.getUserFamilies().add(family.get());
                     return this.familyUserRepository.save(familyUser);

@@ -32,6 +32,10 @@ public class Notification {
     private String familyNameFromFamilyUser;
 
     @Getter
+    @Column(name = "family_id_from_user")
+    private Integer familyIdFromFamilyUser;
+
+    @Getter
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id", nullable=false)
     @JsonIgnoreProperties("notificationsList")

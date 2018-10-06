@@ -1,6 +1,4 @@
-import {ACTION_CREATE, ACTION_EDIT_BUTTON, ACTION_INITIAL_PRODUCT} from '../actions/product-actions';
-import { ACTION_EDIT } from '../actions/product-actions';
-import { ACTION_DELETE } from '../actions/product-actions';
+import * as product from '../actions/product-actions';
 import {Product} from '../../model/product';
 
 
@@ -20,13 +18,13 @@ const initialState: ProductReducerState = {
   product: null,
 };
 
-export function productReducer(state = initialState, action): ProductReducerState {
+export function productReducer(state = initialState, action: product.ProductActionsUnion): ProductReducerState {
   switch (action.type) {
-    case ACTION_INITIAL_PRODUCT:
+    case product.ACTION_INITIAL_PRODUCT:
       return {
         ...initialState
       };
-    case ACTION_CREATE:
+    case product.ACTION_CREATE_PRODUCT:
       return {
         ...state,
         create: true,
@@ -35,7 +33,7 @@ export function productReducer(state = initialState, action): ProductReducerStat
         delete: false,
         product: action.payload
       };
-    case ACTION_EDIT:
+    case product.ACTION_EDIT_PRODUCT:
       return {
         ...state,
         create: false,
@@ -44,7 +42,7 @@ export function productReducer(state = initialState, action): ProductReducerStat
         delete: false,
         product: action.payload
       };
-    case ACTION_DELETE:
+    case product.ACTION_DELETE_PRODUCT:
       return {
         ...state,
         create: false,
@@ -53,7 +51,7 @@ export function productReducer(state = initialState, action): ProductReducerStat
         delete: true,
         product: action.payload
       };
-    case ACTION_EDIT_BUTTON:
+    case product.ACTION_EDIT_BUTTON:
       return {
         ...state,
         create: false,

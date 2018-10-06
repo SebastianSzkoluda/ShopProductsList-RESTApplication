@@ -3,6 +3,7 @@ package com.sszkoluda.shopproductslist.rest;
 import com.sszkoluda.shopproductslist.exception.ErrorResponse;
 import com.sszkoluda.shopproductslist.exception.FamilyException;
 import com.sszkoluda.shopproductslist.model.Family;
+import com.sszkoluda.shopproductslist.repository.FamilyRepository;
 import com.sszkoluda.shopproductslist.service.FamilyService;
 import com.sszkoluda.shopproductslist.service.FamilyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,13 @@ public class FamilyController {
 
     private final FamilyUserService familyUserService;
 
+    private final FamilyRepository familyRepository;
+
     @Autowired
-    public FamilyController(FamilyService familyService, FamilyUserService familyUserService) {
+    public FamilyController(FamilyService familyService, FamilyUserService familyUserService, FamilyRepository familyRepository) {
         this.familyService = familyService;
         this.familyUserService = familyUserService;
+        this.familyRepository = familyRepository;
     }
 
     @GetMapping("/family")
@@ -31,9 +35,9 @@ public class FamilyController {
         return this.familyService.getLoggedUserFamilies();
     }
 
-    @GetMapping("family/{familyName}")
-    public Family getFamilyByName(@PathVariable("familyName") String familyName) {
-        return this.familyService.findFamilyByName(familyName).get();
+    @GetMapping("family/{id}")
+        public Family getFamilyByName(@PathVariable("id")Integer id) {
+        return this.familyRepository.findById(id).get();
     }
 
     @PostMapping("/family")

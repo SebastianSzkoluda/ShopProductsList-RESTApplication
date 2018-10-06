@@ -38,7 +38,7 @@ export class InitialNotificationAction implements Action {
   constructor(public payload: any) { }
 }
 
-export type Actions
+export type NotificationActionsUnion
   = CreateNotificationAction
   | AcceptNotificationAction
   | DeclineNotificationAction

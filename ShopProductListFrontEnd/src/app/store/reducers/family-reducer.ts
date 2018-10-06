@@ -1,4 +1,4 @@
-import {ACTION_CREATE, ACTION_INITIAL_FAMILY} from '../actions/family-actions';
+import * as family from '../actions/family-actions';
 import {Family} from '../../model/family';
 
 
@@ -12,13 +12,13 @@ const initialState: FamilyReducerState = {
   family: null,
 };
 
-export function familyReducer(state = initialState, action): FamilyReducerState {
+export function familyReducer(state = initialState, action: family.FamilyActionsUnion): FamilyReducerState {
   switch (action.type) {
-    case ACTION_INITIAL_FAMILY:
+    case family.ACTION_INITIAL_FAMILY:
       return {
         ...initialState,
       };
-    case ACTION_CREATE:
+    case family.ACTION_CREATE_FAMILY:
       return {
         ...state,
         create: true,

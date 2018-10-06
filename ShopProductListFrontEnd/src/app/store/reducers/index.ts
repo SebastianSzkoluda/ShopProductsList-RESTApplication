@@ -1,7 +1,7 @@
 import {userReducer, UserReducerState} from './user-reducer';
 import {familyReducer} from './family-reducer';
 import {productReducer, ProductReducerState} from './product-reducer';
-import { ActionReducerMap } from '@ngrx/store';
+import {ActionReducerMap, createFeatureSelector, createSelector} from '@ngrx/store';
 import {FamilyReducerState} from './family-reducer';
 import {notificationReducer, NotificationReducerState} from './notification-reducer';
 
@@ -18,3 +18,9 @@ export const reducers: ActionReducerMap<AppState> = {
   productReducer: productReducer,
   notificationReducer: notificationReducer
 };
+
+export const selectLoginState = createFeatureSelector<AppState,UserReducerState>('userReducer');
+
+export const selectLoggedIn = createSelector(
+  selectLoginState, (state: UserReducerState) => state.login
+);

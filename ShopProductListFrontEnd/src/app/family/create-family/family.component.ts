@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FamilyService} from '../family-manager/family.service';
 import {Family} from '../../model/family';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ACTION_CREATE} from '../../store/actions/family-actions';
+import {ACTION_CREATE_FAMILY} from '../../store/actions/family-actions';
 
 @Component({
   selector: 'app-family',
@@ -43,7 +43,7 @@ export class FamilyComponent implements OnInit {
     console.log(this.family.familyName);
     this.familyService.createFamily(this.family).subscribe(() => {
       this.familyService.updateFamiliesState({
-        action: ACTION_CREATE,
+        action: ACTION_CREATE_FAMILY,
         payload: this.family,
       });
      this.handleOk();

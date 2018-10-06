@@ -22,7 +22,7 @@ const initialState: NotificationReducerState = {
   notifications: []
 };
 
-export function notificationReducer(state = initialState, action: notification.Actions): NotificationReducerState {
+export function notificationReducer(state = initialState, action: notification.NotificationActionsUnion): NotificationReducerState {
   switch (action.type) {
     case notification.ACTION_INITIAL_NOTIFICATION:
       return {

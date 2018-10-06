@@ -1,4 +1,4 @@
-import { ACTION_LOGOUT, ACTION_LOGIN } from '../actions/user-actions';
+import * as auth from '../actions/user-actions';
 
 
 export interface UserReducerState {
@@ -11,15 +11,15 @@ const initialState: UserReducerState = {
   user: localStorage.getItem('currentUser')
 };
 
-export function userReducer(state = initialState, action): UserReducerState {
+export function userReducer(state = initialState, action: auth.AuthActionsUnion): UserReducerState {
   switch (action.type) {
-    case ACTION_LOGOUT:
+    case auth.ACTION_LOGOUT:
       return {
         ...state,
         login: false,
         user: action.payload
       };
-    case ACTION_LOGIN:
+    case auth.ACTION_LOGIN:
       return {
         ...state,
         login: true,

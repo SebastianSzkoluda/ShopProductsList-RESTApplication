@@ -4,7 +4,7 @@ import {Family} from '../../model/family';
 import {ProductService} from '../product-manager/product.service';
 import {Product} from '../../model/product';
 import {map} from 'rxjs/operators';
-import {ACTION_DELETE, ACTION_EDIT_BUTTON, ACTION_INITIAL_PRODUCT} from '../../store/actions/product-actions';
+import {ACTION_DELETE_PRODUCT, ACTION_EDIT_BUTTON, ACTION_INITIAL_PRODUCT} from '../../store/actions/product-actions';
 import {ACTION_INITIAL_FAMILY} from '../../store/actions/family-actions';
 
 @Component({
@@ -48,7 +48,7 @@ export class ProductListComponent implements OnInit {
   deleteProduct(product: Product) {
     this.productService.deleteProduct(product.productId).subscribe(() => {
       this.productService.updateProductState({
-        action: ACTION_DELETE,
+        action: ACTION_DELETE_PRODUCT,
         payload: product
       });
       this.products = this.products.filter(item => item != product);

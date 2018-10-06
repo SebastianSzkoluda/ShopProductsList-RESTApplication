@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Product} from '../../model/product';
 import {ProductService} from '../product-manager/product.service';
-import {ACTION_EDIT} from '../../store/actions/product-actions';
+import {ACTION_EDIT_PRODUCT} from '../../store/actions/product-actions';
 
 @Component({
   selector: 'app-edit-product',
@@ -66,7 +66,7 @@ export class EditProductComponent implements OnInit {
     this.product.userComment = this.validateForm.get('userComment').value;
     this.productService.editProduct(this.product, this.productId).subscribe(value => {
       this.productService.updateProductState({
-        action: ACTION_EDIT,
+        action: ACTION_EDIT_PRODUCT,
         payload: this.product,
       });
       console.log(value);

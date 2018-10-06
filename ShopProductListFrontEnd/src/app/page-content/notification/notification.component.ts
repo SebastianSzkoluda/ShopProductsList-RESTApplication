@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {NotificationService} from './notification-manager/notification.service';
 import {Notification} from '../../model/notification';
 import {UserService} from '../../auth/user/user-manager/user.service';
-import {ACTION_CREATE} from '../../store/actions/family-actions';
+import {ACTION_CREATE_FAMILY} from '../../store/actions/family-actions';
 import {FamilyService} from '../../family/family-manager/family.service';
 import {Family} from '../../model/family';
 import {
@@ -51,7 +51,7 @@ export class NotificationComponent implements OnInit {
   }
   accept(notification: Notification) {
     console.log(notification);
-    this.familyService.getFamilyByName(notification.familyNameFromFamilyUser).subscribe(value => {
+    this.familyService.getFamilyById(notification.familyIdFromFamilyUser).subscribe(value => {
       this.family = value;
       this.userService.acceptInviteToFamily(notification).subscribe(() => {
         this.notificationService.updateNotificationState({
@@ -61,7 +61,7 @@ export class NotificationComponent implements OnInit {
         this.notifications = this.notifications.filter(item => item != notification);
       });
       this.familyService.updateFamiliesState({
-        action: ACTION_CREATE,
+        action: ACTION_CREATE_FAMILY,
         payload: this.family,
       });
     });

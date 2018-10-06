@@ -18,8 +18,8 @@ export class FamilyService {
     return this.http.get < boolean > (this.familyUrl + 'checkIfUserHaveFamily');
   }
 
-  getFamilyByName(familyName: string): Observable<Family> {
-    return this.http.get<Family>(this.familyUrl + 'family' + `/${familyName}`)
+  getFamilyById(id: number): Observable<Family> {
+    return this.http.get<Family>(this.familyUrl + 'family' + `/${id}`)
   }
 
   loggedUserFamilies(): Observable < Array<Family> > {

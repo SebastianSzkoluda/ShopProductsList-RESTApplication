@@ -30,7 +30,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NotificationEffects } from './store/effects/notification-effects';
-import { reducers } from './store/reducers';
+import { reducers } from './store/reducers/index';
 import { EditProductComponent } from './products/edit-product/edit-product.component';
 import { NotificationComponent } from './page-content/notification/notification.component';
 import {UserInviteComponent} from './auth/user/user-invite/user-invite.component';

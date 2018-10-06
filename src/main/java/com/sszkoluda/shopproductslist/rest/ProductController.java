@@ -47,6 +47,7 @@ public class ProductController {
     @PutMapping("/product/{id}")
     public Optional<Product> editProduct(@PathVariable("id") Integer productId, @RequestBody Product product) {
         return this.productRepository.findById(productId).map(productEdit -> {
+            System.out.println("Jestem");
             productEdit.setAmount(product.getAmount());
             productEdit.setFrequencyOfUse(product.getFrequencyOfUse());
             productEdit.setInStock(product.getInStock());

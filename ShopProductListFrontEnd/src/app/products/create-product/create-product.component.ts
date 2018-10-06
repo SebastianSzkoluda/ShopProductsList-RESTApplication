@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Product} from '../../model/product';
 import {ProductService} from '../product-manager/product.service';
-import {ACTION_CREATE} from '../../store/actions/product-actions';
+import {ACTION_CREATE_PRODUCT} from '../../store/actions/product-actions';
 import {NzMessageService} from 'ng-zorro-antd';
 
 @Component({
@@ -59,7 +59,7 @@ export class CreateProductComponent implements OnInit {
       this.product.userComment = this.validateForm.get('userComment').value;
       this.productService.saveProductForCurrentFamily(this.product, this.familyName).subscribe(() => {
         this.productService.updateProductState({
-          action: ACTION_CREATE,
+          action: ACTION_CREATE_PRODUCT,
           payload: this.product,
         });
         this.handleOk();

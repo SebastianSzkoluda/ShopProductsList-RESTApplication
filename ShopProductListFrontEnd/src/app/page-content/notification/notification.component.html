@@ -3,8 +3,8 @@
   <nz-card id="parent" *ngFor="let notification of notifications">
     <div>
       <div class="text">{{notification.notificationInfo}}</div>
-      <div id="narrow"><button (click)="decline(notification)" nzShape="circle" nz-button nzType="danger"><i class="anticon anticon-close"></i></button></div>
-      <div id="wide"><button (click)="accept(notification)" nzShape="circle" nz-button nzType="primary"><i class="anticon anticon-check"></i></button></div>
+      <div id="narrow"><button nz-tooltip nzTitle="Decline" (click)="decline(notification)" nzShape="circle" nz-button nzType="danger"><i class="anticon anticon-close"></i></button></div>
+      <div id="wide"><button nz-tooltip nzTitle="Accept" (click)="accept(notification)" nzShape="circle" nz-button nzType="primary"><i class="anticon anticon-check"></i></button></div>
     </div>
   </nz-card>
 </nz-drawer>
