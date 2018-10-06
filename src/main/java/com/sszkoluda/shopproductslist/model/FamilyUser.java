@@ -41,7 +41,7 @@ public class FamilyUser {
     @Getter
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "grantedauthorities", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-    inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
     private Set<Authority> authorities;
 
     @Getter

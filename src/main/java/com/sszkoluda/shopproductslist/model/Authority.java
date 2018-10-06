@@ -3,7 +3,10 @@ package com.sszkoluda.shopproductslist.model;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Builder
 @Entity

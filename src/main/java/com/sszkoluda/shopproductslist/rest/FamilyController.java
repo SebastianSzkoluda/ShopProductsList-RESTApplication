@@ -21,34 +21,31 @@ public class FamilyController {
 
     private final FamilyUserService familyUserService;
 
-    private final FamilyRepository familyRepository;
-
     @Autowired
-    public FamilyController(FamilyService familyService, FamilyUserService familyUserService, FamilyRepository familyRepository) {
+    public FamilyController(FamilyService familyService, FamilyUserService familyUserService) {
         this.familyService = familyService;
         this.familyUserService = familyUserService;
-        this.familyRepository = familyRepository;
     }
 
     @GetMapping("/family")
-    public Set<Family> loggedUserFamilies(){
+    public Set<Family> loggedUserFamilies() {
         return this.familyService.getLoggedUserFamilies();
     }
 
     @GetMapping("family/{id}")
-        public Family getFamilyByName(@PathVariable("id")Integer id) {
-        return this.familyRepository.findById(id).get();
+    public Family getFamilyById(@PathVariable("id") Integer id) {
+        return this.familyService.findFamilyById(id).get();
     }
 
     @PostMapping("/family")
-    public ResponseEntity<Family> createFamily(@RequestBody Family family){
+    public ResponseEntity<Family> createFamily(@RequestBody Family family) {
         return this.familyService.saveFamily(family)
                 .map(f -> new ResponseEntity<Family>(HttpStatus.CREATED))
                 .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     @GetMapping("/checkIfUserHaveFamily")
-    public boolean checkIfUserHaveFamily(){
+    public boolean checkIfUserHaveFamily() {
         return this.familyUserService.doesLoadUserHaveAFamily();
     }
 

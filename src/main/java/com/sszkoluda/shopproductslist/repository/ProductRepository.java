@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 
-public interface ProductRepository extends CrudRepository<Product,Integer> {
+public interface ProductRepository extends CrudRepository<Product, Integer> {
     @Query("SELECT p FROM Product p WHERE p.productName LIKE :productName ")
-    Optional<Product> findByProductName(@Param("productName")String productName);
+    Optional<Product> findByProductName(@Param("productName") String productName);
 }

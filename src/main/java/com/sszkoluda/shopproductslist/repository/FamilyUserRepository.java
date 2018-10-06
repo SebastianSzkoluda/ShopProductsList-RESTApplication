@@ -4,12 +4,10 @@ import com.sszkoluda.shopproductslist.model.FamilyUser;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
-public interface FamilyUserRepository extends CrudRepository<FamilyUser,Integer> {
+public interface FamilyUserRepository extends CrudRepository<FamilyUser, Integer> {
     @Query("SELECT u FROM FamilyUser u WHERE u.email LIKE :email ")
     Optional<FamilyUser> findByEmail(@Param("email") String email);
 

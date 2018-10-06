@@ -18,7 +18,7 @@ import java.util.Set;
 @Service
 public class FamilyServiceImpl implements FamilyService {
 
-    private FamilyRepository familyRepository;
+    private final FamilyRepository familyRepository;
 
     private final FamilyUserRepository familyUserRepository;
 
@@ -36,13 +36,20 @@ public class FamilyServiceImpl implements FamilyService {
         return familyUser.map(f -> {
             f.getUserFamilies().add(family);
             familyMembers.add(f);
-            return familyRepository.save(Family.builder().familyName(family.getFamilyName()).familyMembers(familyMembers).build());
+            return this.familyRepository.save(Family.builder()
+                    .familyName(family.getFamilyName())
+                    .familyMembers(familyMembers).build());
         });
     }
 
     @Override
     public Optional<Family> findFamilyByName(String familyName) {
-        return familyRepository.findByName(familyName);
+        return this.familyRepository.findByName(familyName);
+    }
+
+    @Override
+    public Optional<Family> findFamilyById(Integer id) {
+        return this.familyRepository.findById(id);
     }
 
     @Override

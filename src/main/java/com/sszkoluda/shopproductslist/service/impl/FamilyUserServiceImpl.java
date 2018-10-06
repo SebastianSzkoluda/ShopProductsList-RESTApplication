@@ -20,8 +20,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @Service(value = "userService")
 public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsService {
@@ -93,7 +94,7 @@ public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsServ
                 .map(iU -> {
                     Family familyFromFamilyUser = familyUser.map(familyUser1 -> familyUser1.getUserFamilies()
                             .stream().filter(family -> family.getFamilyName().equals(familyName)).findFirst().get()).get();
-                    if(familyFromFamilyUser.getFamilyMembers().stream().noneMatch(familyUser1 -> familyUser1.getUsername().equals(iU.getUsername()))) {
+                    if (familyFromFamilyUser.getFamilyMembers().stream().noneMatch(familyUser1 -> familyUser1.getUsername().equals(iU.getUsername()))) {
                         Notification notification = Notification.builder()
                                 .familyUser(iU)
                                 .notificationInfo(familyUser.get().getUsername() + " wants to invite you to family: " + familyName)
@@ -121,13 +122,12 @@ public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsServ
                 .stream()
                 .filter(family -> family.getFamilyName().equals(notification.getFamilyNameFromFamilyUser()))
                 .findFirst()).map(family -> {
-                    FamilyUser familyUserInvited = notification.getFamilyUser();
-                    familyUserInvited.getUserFamilies().add(family.get());
-            System.out.println("FU: " + notification.getFamilyUser());
-                    family.get().getFamilyMembers().add(familyUserInvited);
-                    FamilyUser familyUser = notification.getFamilyUser();
-                    familyUser.getUserFamilies().add(family.get());
-                    return this.familyUserRepository.save(familyUser);
+            FamilyUser familyUserInvited = notification.getFamilyUser();
+            familyUserInvited.getUserFamilies().add(family.get());
+            family.get().getFamilyMembers().add(familyUserInvited);
+            FamilyUser familyUser = notification.getFamilyUser();
+            familyUser.getUserFamilies().add(family.get());
+            return this.familyUserRepository.save(familyUser);
         });
         this.notificationRepository.delete(notification);
     }
@@ -135,7 +135,7 @@ public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsServ
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(s);
-        if(familyUser == null){
+        if (familyUser == null) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
         return new User(familyUser.get().getUsername(), familyUser.get().getPassword(), getAuthority(familyUser.get()));
@@ -143,7 +143,7 @@ public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsServ
 
     private Set<GrantedAuthority> getAuthority(FamilyUser familyUser) {
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for(Authority role : familyUser.getAuthorities()) {
+        for (Authority role : familyUser.getAuthorities()) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         }
         return grantedAuthorities;

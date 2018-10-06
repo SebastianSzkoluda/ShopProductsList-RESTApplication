@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface ProductService {
 
-    Optional<Product> saveProductForCurrentFamily(Product product,String familyName);
+    Optional<Product> saveProductForCurrentFamily(Product product, String familyName);
 
     Set<Product> getProductsForFamily(String familyName);
 

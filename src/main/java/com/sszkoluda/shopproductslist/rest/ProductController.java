@@ -39,7 +39,7 @@ public class ProductController {
 
     @PostMapping("/product")
     public ResponseEntity<Product> saveProductForCurrentFamily(@RequestBody Product product, @RequestParam String familyName) {
-        return this.productService.saveProductForCurrentFamily(product,familyName)
+        return this.productService.saveProductForCurrentFamily(product, familyName)
                 .map(p -> new ResponseEntity<Product>(HttpStatus.CREATED))
                 .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
@@ -47,7 +47,6 @@ public class ProductController {
     @PutMapping("/product/{id}")
     public Optional<Product> editProduct(@PathVariable("id") Integer productId, @RequestBody Product product) {
         return this.productRepository.findById(productId).map(productEdit -> {
-            System.out.println("Jestem");
             productEdit.setAmount(product.getAmount());
             productEdit.setFrequencyOfUse(product.getFrequencyOfUse());
             productEdit.setInStock(product.getInStock());
@@ -59,8 +58,8 @@ public class ProductController {
 
     @DeleteMapping("/product/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable("id") Integer productId) {
-        if(this.productService.removeProduct(productId)) {
-            return  ResponseEntity.ok().build();
+        if (this.productService.removeProduct(productId)) {
+            return ResponseEntity.ok().build();
         } else {
             return null;
         }

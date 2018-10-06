@@ -1,7 +1,9 @@
 package com.sszkoluda.shopproductslist.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.persistence.*;
 
@@ -11,7 +13,8 @@ import javax.persistence.*;
 @Table(name = "notification")
 public class Notification {
 
-    public Notification() {}
+    public Notification() {
+    }
 
     @Getter
     @Id
@@ -37,7 +40,7 @@ public class Notification {
 
     @Getter
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="id", nullable=false)
+    @JoinColumn(name = "id", nullable = false)
     @JsonIgnoreProperties("notificationsList")
     private FamilyUser familyUser;
 }
