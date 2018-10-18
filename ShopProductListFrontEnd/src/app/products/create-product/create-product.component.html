@@ -1,5 +1,6 @@
 <button nz-button nzType="primary" (click)="showModal()">Create Product</button>
-<nz-modal [nzStyle]="{ top: '70px' }" nzOkText="Create product" nzMaskClosable="true" [(nzVisible)]="isVisible" nzTitle="Create Product" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm()" [nzOkLoading]="isOkLoading">
+<nz-modal [nzStyle]="{ top: '70px' }" nzOkText="Create product" nzMaskClosable="true" [(nzVisible)]="isVisible"
+          nzTitle="Create Product" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm()" [nzOkLoading]="isOkLoading">
 
   <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
     <nz-form-item>
@@ -8,7 +9,9 @@
         <nz-input-group nzPrefixIcon="anticon anticon-barcode">
           <input type="text" nz-input formControlName="productName" placeholder="Product name">
         </nz-input-group>
-        <nz-form-explain *ngIf="validateForm.get('productName').dirty && validateForm.get('productName').errors">Please input product name!</nz-form-explain>
+        <nz-form-explain *ngIf="validateForm.get('productName').dirty && validateForm.get('productName').errors">Please
+          input product name!
+        </nz-form-explain>
       </nz-form-control>
     </nz-form-item>
 
@@ -18,7 +21,9 @@
         <nz-input-group nzPrefixIcon="anticon anticon-hourglass">
           <input type="text" nz-input formControlName="frequencyOfUse" placeholder="Frequency of use">
         </nz-input-group>
-        <nz-form-explain *ngIf="validateForm.get('frequencyOfUse').dirty && validateForm.get('frequencyOfUse').errors">Please input product frequency of use!</nz-form-explain>
+        <nz-form-explain *ngIf="validateForm.get('frequencyOfUse').dirty && validateForm.get('frequencyOfUse').errors">
+          Please input product frequency of use!
+        </nz-form-explain>
       </nz-form-control>
     </nz-form-item>
 
@@ -28,7 +33,9 @@
         <nz-input-group nzPrefixIcon="anticon anticon-wallet">
           <input type="text" nz-input formControlName="amount" placeholder="Price">
         </nz-input-group>
-        <nz-form-explain *ngIf="validateForm.get('amount').dirty && validateForm.get('amount').errors">Please input product price!</nz-form-explain>
+        <nz-form-explain *ngIf="validateForm.get('amount').dirty && validateForm.get('amount').errors">Please input
+          product price!
+        </nz-form-explain>
       </nz-form-control>
     </nz-form-item>
 
@@ -38,14 +45,17 @@
         <nz-input-group nzPrefixIcon="anticon anticon-inbox">
           <input type="text" nz-input formControlName="inStock" placeholder="In stock">
         </nz-input-group>
-        <nz-form-explain *ngIf="validateForm.get('inStock').dirty && validateForm.get('inStock').errors">Please input number of products in stock!</nz-form-explain>
+        <nz-form-explain *ngIf="validateForm.get('inStock').dirty && validateForm.get('inStock').errors">Please input
+          number of products in stock!
+        </nz-form-explain>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label nzRequired>User comment</nz-form-label>
+      <nz-form-label>User comment</nz-form-label>
       <nz-form-control>
-          <textarea nz-input formControlName="userComment" placeholder="Your comment to created product" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+        <textarea nz-input formControlName="userComment" placeholder="Your comment to created product"
+                  [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
       </nz-form-control>
     </nz-form-item>
   </form>

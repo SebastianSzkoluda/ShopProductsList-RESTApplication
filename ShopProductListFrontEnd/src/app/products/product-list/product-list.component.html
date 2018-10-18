@@ -7,9 +7,11 @@
           <a class="dropdown" nz-dropdown>
             Select Family <i class="anticon anticon-down"></i>
           </a>
-          <ul nz-menu >
-            <li *ngIf="families?.length == 0" nz-menu-item >empty</li>
-            <li *ngFor="let family of families" (click)="getProductsForFamily(family.familyName)" nz-menu-item routerLink="/productsList">{{family.familyName}}</li>
+          <ul nz-menu>
+            <li *ngIf="families?.length == 0" nz-menu-item>empty</li>
+            <li *ngFor="let family of families" (click)="getProductsForFamily(family.familyName)" nz-menu-item
+                routerLink="/productsList">{{family.familyName}}
+            </li>
           </ul>
         </nz-dropdown>
       </div>
@@ -17,11 +19,15 @@
     <app-create-product [familyName]="familyName"></app-create-product>
 
     <div class="container">
-      <h5>Selected family: {{familyName}}</h5>
+      <div>
+        <h5>Selected family: {{familyName}}<app-shop-map style="float: right"></app-shop-map></h5>
+
+      </div>
+
       <nz-table #nzTable class="main"
                 [nzFrontPagination]="true"
                 [nzShowPagination]="true"
-                 #filterTable
+                #filterTable
                 [nzData]="products"
                 [nzPageSize]="5"
                 nzSize="default">
@@ -36,24 +42,26 @@
           <th>Action</th>
         </tr>
         </thead>
-        <tbody style="background-color: #fff" >
+        <tbody style="background-color: #fff">
         <ng-template ngFor let-data [ngForOf]="nzTable.data">
-        <tr>
-          <td nzShowExpand [(nzExpand)]="data.expand"></td>
-          <td>{{data.productId}}</td>
-          <td>{{data.productName}}</td>
-          <td>{{data.frequencyOfUse}}</td>
-          <td>{{data.amount}}</td>
-          <td>{{data.inStock}}</td>
-          <td>
-            <button nz-button (click)="deleteProduct(data)" nzType="danger" nz-tooltip nzTitle="delete product" nzShape="circle"><i class="anticon anticon-delete"></i></button>
-            <button nz-button (click)="editMode(data)" nzType="default" nz-tooltip nzTitle="edit product" nzShape="circle"><i class="anticon anticon-edit"></i></button>
-          </td>
-        </tr>
-        <tr [nzExpand]="data.expand">
-          <td></td>
-          <td colspan="6">{{data.userComment}}</td>
-        </tr>
+          <tr>
+            <td nzShowExpand [(nzExpand)]="data.expand"></td>
+            <td>{{data.productId}}</td>
+            <td>{{data.productName}}</td>
+            <td>{{data.frequencyOfUse}}</td>
+            <td>{{data.amount}}</td>
+            <td>{{data.inStock}}</td>
+            <td>
+              <button nz-button (click)="deleteProduct(data)" nzType="danger" nz-tooltip nzTitle="delete product"
+                      nzShape="circle"><i class="anticon anticon-delete"></i></button>
+              <button nz-button (click)="editMode(data)" nzType="default" nz-tooltip nzTitle="edit product"
+                      nzShape="circle"><i class="anticon anticon-edit"></i></button>
+            </td>
+          </tr>
+          <tr [nzExpand]="data.expand">
+            <td></td>
+            <td colspan="6">{{data.userComment}}</td>
+          </tr>
         </ng-template>
         </tbody>
       </nz-table>

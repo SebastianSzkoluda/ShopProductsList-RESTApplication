@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Family} from '../../model/family';
 
 @Component({
   selector: 'app-home-page',
@@ -8,8 +7,8 @@ import {Family} from '../../model/family';
 })
 export class HomePageComponent implements OnInit {
 
-  families: Array<Family>;
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
     localStorage.clear();

@@ -1,5 +1,6 @@
 <a (click)="showModal()">Create Family</a>
-<nz-modal [nzStyle]="{ top: '100px' }" nzOkText="Create family" nzMaskClosable="true" [(nzVisible)]="isVisible" nzTitle="Create Family" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm()" [nzOkLoading]="isOkLoading">
+<nz-modal [nzStyle]="{ top: '100px' }" nzOkText="Create family" nzMaskClosable="true" [(nzVisible)]="isVisible"
+          nzTitle="Create Family" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm()" [nzOkLoading]="isOkLoading">
 
   <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
     <nz-form-item>
@@ -8,7 +9,9 @@
         <nz-input-group nzPrefixIcon="anticon anticon-usergroup-add">
           <input type="text" nz-input formControlName="familyName" placeholder="Family name">
         </nz-input-group>
-        <nz-form-explain *ngIf="validateForm.get('familyName').dirty && validateForm.get('familyName').errors">Please input your family name!</nz-form-explain>
+        <nz-form-explain *ngIf="validateForm.get('familyName').dirty && validateForm.get('familyName').errors">Please
+          input your family name!
+        </nz-form-explain>
       </nz-form-control>
     </nz-form-item>
   </form>

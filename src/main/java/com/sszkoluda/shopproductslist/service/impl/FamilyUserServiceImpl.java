@@ -86,7 +86,7 @@ public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsServ
     }
 
     @Override
-    public boolean addingUserToFamilyNotificationStep(String familyName, String invitedUserName) {
+    public boolean sendInviteToFamily(String familyName, String invitedUserName) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
         Optional<FamilyUser> invitedUser = familyUserRepository.findByUserName(invitedUserName);
@@ -116,18 +116,16 @@ public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsServ
     }
 
     @Override
-    public void addingUserToFamilyAcceptStep(Notification notification) {
+    public void acceptInviteToFamily(Notification notification) {
         Optional<FamilyUser> familyUserFrom = this.familyUserRepository.findByUserName(notification.getFamilyUserNameFrom());
         familyUserFrom.map(fUF -> fUF.getUserFamilies()
                 .stream()
-                .filter(family -> family.getFamilyName().equals(notification.getFamilyNameFromFamilyUser()))
+                .filter(family -> family.getFamilyId().equals(notification.getFamilyIdFromFamilyUser()))
                 .findFirst()).map(family -> {
             FamilyUser familyUserInvited = notification.getFamilyUser();
             familyUserInvited.getUserFamilies().add(family.get());
             family.get().getFamilyMembers().add(familyUserInvited);
-            FamilyUser familyUser = notification.getFamilyUser();
-            familyUser.getUserFamilies().add(family.get());
-            return this.familyUserRepository.save(familyUser);
+            return this.familyUserRepository.save(familyUserInvited);
         });
         this.notificationRepository.delete(notification);
     }

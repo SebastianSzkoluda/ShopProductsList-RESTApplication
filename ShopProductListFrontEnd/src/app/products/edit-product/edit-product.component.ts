@@ -16,32 +16,32 @@ export class EditProductComponent implements OnInit {
   validateForm: FormGroup;
   isVisible = false;
   isOkLoading = false;
-  constructor(private fb: FormBuilder, private productService: ProductService) { }
+
+  constructor(private fb: FormBuilder, private productService: ProductService) {
+  }
+
   initialize(): void {
     this.validateForm = this.fb.group({
-      productName: [ null, [ Validators.required ] ],
-      frequencyOfUse: [ null, [ Validators.required ] ],
-      amount: [ null, [ Validators.required ] ],
-      inStock: [ null, [ Validators.required ] ],
-      userComment: [ null, [ Validators.required ] ]
+      productName: [null, [Validators.required]],
+      frequencyOfUse: [null, [Validators.required]],
+      amount: [null, [Validators.required]],
+      inStock: [null, [Validators.required]],
+      userComment: [null, [Validators.required]]
     });
     this.productService.getAllState().subscribe(state => {
-      if(state.editButtonClicked == true) {
-        this.productId = state.product.productId;
-        this.productService.getProduct(this.productId).subscribe(product => {
-          this.product = product;
+      if (state.editButtonClicked == true) {
+          this.productId = state.product.productId;
+          this.product = state.product;
           this.validateForm.get('productName').setValue(this.product.productName);
           this.validateForm.get('frequencyOfUse').setValue(this.product.frequencyOfUse);
           this.validateForm.get('amount').setValue(this.product.amount);
           this.validateForm.get('inStock').setValue(this.product.inStock);
           this.validateForm.get('userComment').setValue(this.product.userComment);
           this.showModal();
-        });
       }
     });
-
-
   }
+
   ngOnInit(): void {
     this.initialize();
   }
@@ -73,13 +73,15 @@ export class EditProductComponent implements OnInit {
       this.handleOk();
     });
   }
+
   submitForm(): void {
     for (const i in this.validateForm.controls) {
-      this.validateForm.controls[ i ].markAsDirty();
-      this.validateForm.controls[ i ].updateValueAndValidity();
+      this.validateForm.controls[i].markAsDirty();
+      this.validateForm.controls[i].updateValueAndValidity();
     }
     this.editProduct();
   }
+
   handleCancel(): void {
     this.isVisible = false;
   }

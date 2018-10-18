@@ -11,17 +11,20 @@ import {ACTION_CREATE_FAMILY} from '../../store/actions/family-actions';
 })
 export class FamilyComponent implements OnInit {
 
-  constructor(private familyService: FamilyService, private fb: FormBuilder) { }
+  constructor(private familyService: FamilyService, private fb: FormBuilder) {
+  }
 
   family: Family = new Family();
   validateForm: FormGroup;
   isVisible = false;
   isOkLoading = false;
+
   initialize(): void {
     this.validateForm = this.fb.group({
-      familyName: [ null, [ Validators.required ] ]
+      familyName: [null, [Validators.required]]
     });
   }
+
   ngOnInit(): void {
     this.initialize();
   }
@@ -38,6 +41,7 @@ export class FamilyComponent implements OnInit {
       this.isOkLoading = false;
     }, 2000);
   }
+
   createFamily() {
     this.family.familyName = this.validateForm.get('familyName').value;
     console.log(this.family.familyName);
@@ -46,16 +50,18 @@ export class FamilyComponent implements OnInit {
         action: ACTION_CREATE_FAMILY,
         payload: this.family,
       });
-     this.handleOk();
+      this.handleOk();
     });
   }
+
   submitForm(): void {
     for (const i in this.validateForm.controls) {
-      this.validateForm.controls[ i ].markAsDirty();
-      this.validateForm.controls[ i ].updateValueAndValidity();
+      this.validateForm.controls[i].markAsDirty();
+      this.validateForm.controls[i].updateValueAndValidity();
     }
     this.createFamily();
   }
+
   handleCancel(): void {
     this.isVisible = false;
   }

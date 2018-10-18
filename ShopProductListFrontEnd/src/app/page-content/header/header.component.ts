@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TokenStorage} from '../../auth/token/token.storage';
 import {NzMessageService} from 'ng-zorro-antd';
-import {ACTION_LOGOUT} from '../../store/actions/user-actions';
-import {UserService} from '../../auth/user/user-manager/user.service';
+import {ACTION_LOGOUT} from '../../store/actions/auth-actions';
+import {AuthService} from '../../auth/auth-manager/auth.service';
+import {select, Store} from '@ngrx/store';
+import {Observable} from 'rxjs/internal/Observable';
+import {selectLoggedIn, selectLoggedUsername} from '../../store/reducers';
+import {map, take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -11,36 +15,29 @@ import {UserService} from '../../auth/user/user-manager/user.service';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private userService: UserService, private token: TokenStorage, private message: NzMessageService) {
-  }
-  loggedUser: string;
+  isLoggedIn$: Observable<boolean>;
+  loggedUser$: Observable<string>;
 
-  ngOnInit() {
-    this.updateLoggedUserState();
+  constructor(private authService: AuthService, private token: TokenStorage, private message: NzMessageService, private store: Store<any>) {
+    this.isLoggedIn$ = this.store.pipe(select(selectLoggedIn));
+    this.loggedUser$ = this.store.pipe(select(selectLoggedUsername));
   }
 
-  isLogged(): boolean {
-    if (localStorage.getItem('currentUser') != null) {
-      return true;
-    } else {
-      return false;
-    }
+
+
+  ngOnInit(): void {
   }
+
   logout(): void {
-    this.userService.updateUserState({
+    this.authService.updateUserState({
       action: ACTION_LOGOUT,
       payload: null
     });
     this.token.logout();
     this.createMessage('success');
   }
+
   createMessage(type: string): void {
     this.message.create(type, `Logged out`);
-  }
-
-  updateLoggedUserState() {
-    this.userService.getAllState().subscribe(state => {
-      this.loggedUser = state.user;
-    });
   }
 }

@@ -7,8 +7,8 @@ import {TokenStorage} from '../token/token.storage';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd';
 import {FamilyService} from '../../family/family-manager/family.service';
-import {ACTION_LOGIN} from '../../store/actions/user-actions';
-import {UserService} from '../user/user-manager/user.service';
+import {ACTION_LOGIN} from '../../store/actions/auth-actions';
+import {UserService} from '../../user/user-manager/user.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +22,6 @@ export class LoginComponent implements OnInit {
               private familyService: FamilyService,
               private userService: UserService,
               private zone: NgZone,
-              private token: TokenStorage,
               private fb: FormBuilder,
               private message: NzMessageService) {
   }
@@ -34,18 +33,17 @@ export class LoginComponent implements OnInit {
     this.loginUser.username = this.validateForm.get('userName').value;
     this.loginUser.password = this.validateForm.get('password').value;
     this.authService.login(this.loginUser).subscribe(value => {
-      console.log(value.token);
-      this.token.saveToken(value.token);
-      this.zone.run(() => this.router.navigate(['productsList']));
-      this.userService.updateUserState({
-        action: ACTION_LOGIN,
-        payload: this.loginUser.username
+        console.log(value.token);
+        this.zone.run(() => this.router.navigate(['productsList']));
+        this.authService.updateUserState({
+          action: ACTION_LOGIN,
+          payload: this.loginUser.username
+        });
+        this.createMessage('success', 'Successfully logged in!');
+      },
+      error => {
+        this.createMessage('error', `Wrong login or password! Please try log in one more time.`);
       });
-      this.createMessage('success', 'Successfully logged in!');
-    },
-    error => {
-      this.createMessage('error', `Wrong login or password! Please try log in one more time.`);
-    });
   }
 
 
@@ -68,5 +66,7 @@ export class LoginComponent implements OnInit {
   createMessage(type: string, message: string): void {
     this.message.create(type, message);
   }
+
+
 }
 

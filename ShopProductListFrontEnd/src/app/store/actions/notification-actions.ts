@@ -10,32 +10,43 @@ export const ACTION_INITIAL_NOTIFICATION = 'NOTIFICATION_INITIAL_STATE';
 export class CreateNotificationAction implements Action {
   readonly type = ACTION_NOTIFICATION_CREATE;
 
-  constructor(public payload: any) { }
+  constructor(public payload: any) {
+  }
 }
+
 export class AcceptNotificationAction implements Action {
   readonly type = ACTION_NOTIFICATION_ACCEPT;
 
-  constructor(public payload: any) { }
+  constructor(public payload: any) {
+  }
 }
+
 export class DeclineNotificationAction implements Action {
   readonly type = ACTION_NOTIFICATION_DECLINE;
 
-  constructor(public payload: any) { }
+  constructor(public payload: any) {
+  }
 }
+
 export class RefreshNotificationAction implements Action {
   readonly type = ACTION_NOTIFICATIONS_REFRESH;
 
-  constructor(public payload: any) { }
+  constructor(public payload: any) {
+  }
 }
+
 export class ReceivedNotificationAction implements Action {
   readonly type = ACTION_NOTIFICATIONS_RECEIVED;
 
-  constructor(public payload: any) { }
+  constructor(public payload: any) {
+  }
 }
+
 export class InitialNotificationAction implements Action {
   readonly type = ACTION_INITIAL_NOTIFICATION;
 
-  constructor(public payload: any) { }
+  constructor(public payload: any) {
+  }
 }
 
 export type NotificationActionsUnion

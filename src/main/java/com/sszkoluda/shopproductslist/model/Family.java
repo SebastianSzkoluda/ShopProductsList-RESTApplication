@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Set;
 
-@JsonIgnoreProperties(value = {"familyMembers"})
+@JsonIgnoreProperties(value = {"familyMembers","productsToBuyList","productsList"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -39,5 +39,10 @@ public class Family {
     @OneToMany(mappedBy = "family", fetch = FetchType.EAGER)
     @JsonIgnoreProperties("family")
     private Set<Product> productsList;
+
+    @Getter
+    @OneToMany(mappedBy = "family", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("family")
+    private Set<Product> productsToBuyList;
 
 }

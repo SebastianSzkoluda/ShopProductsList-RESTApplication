@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api")
 public class FamilyUserController {
@@ -51,12 +49,12 @@ public class FamilyUserController {
 
     @GetMapping("/user/sendInviteToFamily")
     public boolean sendInviteToFamily(@RequestParam("familyName") String familyName, @RequestParam("invitedUserName") String invitedUserName) {
-        return this.familyUserService.addingUserToFamilyNotificationStep(familyName, invitedUserName);
+        return this.familyUserService.sendInviteToFamily(familyName, invitedUserName);
     }
 
     @PostMapping("/user/acceptInviteToFamily")
     public ResponseEntity<?> acceptInviteToFamily(@RequestBody Notification notification) {
-        this.familyUserService.addingUserToFamilyAcceptStep(notification);
+        this.familyUserService.acceptInviteToFamily(notification);
         return ResponseEntity.ok().build();
     }
 

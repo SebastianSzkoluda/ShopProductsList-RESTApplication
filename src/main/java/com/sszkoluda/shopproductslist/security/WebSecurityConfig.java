@@ -52,8 +52,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().
                 authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers("/api/generate-token").permitAll()
-                .antMatchers("/api/register").permitAll()
+                .antMatchers("/api/auth/renewToken").permitAll()
+                .antMatchers("/api/auth/generateToken").permitAll()
+                .antMatchers("/api/auth/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()

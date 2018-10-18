@@ -1,26 +1,29 @@
-import {userReducer, UserReducerState} from './user-reducer';
-import {familyReducer} from './family-reducer';
+import {authReducer, AuthReducerState} from './auth-reducer';
+import {familyReducer, FamilyReducerState} from './family-reducer';
 import {productReducer, ProductReducerState} from './product-reducer';
 import {ActionReducerMap, createFeatureSelector, createSelector} from '@ngrx/store';
-import {FamilyReducerState} from './family-reducer';
 import {notificationReducer, NotificationReducerState} from './notification-reducer';
 
 interface AppState {
-  userReducer: UserReducerState;
+  authReducer: AuthReducerState;
   familyReducer: FamilyReducerState;
   productReducer: ProductReducerState;
   notificationReducer: NotificationReducerState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
-  userReducer: userReducer,
+  authReducer: authReducer,
   familyReducer: familyReducer,
   productReducer: productReducer,
   notificationReducer: notificationReducer
 };
 
-export const selectLoginState = createFeatureSelector<AppState,UserReducerState>('userReducer');
+export const selectLoginState = createFeatureSelector<AppState, AuthReducerState>('authReducer');
 
 export const selectLoggedIn = createSelector(
-  selectLoginState, (state: UserReducerState) => state.login
+  selectLoginState, (state: AuthReducerState) => state.login
+);
+
+export const selectLoggedUsername = createSelector(
+  selectLoginState, (state: AuthReducerState) => state.user
 );

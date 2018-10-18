@@ -2,13 +2,20 @@
   <a class="navbar-brand logo" routerLink="/productsList">Shop Products List</a>
   <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'" style="line-height: 64px; background-color: #060606">
     <li nz-menu-item routerLink="/usermanual">User Manual</li>
-    <li *ngIf="isLogged()" nz-menu-item routerLink="/productsList">Products List</li>
-    <li *ngIf="isLogged()" nz-menu-item><app-family></app-family></li>
-    <li *ngIf="isLogged()" nz-menu-item><app-user-invite></app-user-invite></li>
+    <li *ngIf="isLoggedIn$ | async" nz-menu-item routerLink="/productsList">Products List</li>
+    <li *ngIf="isLoggedIn$ | async" nz-menu-item>
+      <app-family></app-family>
+    </li>
+    <li *ngIf="isLoggedIn$ | async" nz-menu-item>
+      <app-user-invite></app-user-invite>
+    </li>
 
-    <li *ngIf="isLogged()" nz-menu-item style="float: right;" (click)="logout()" routerLink="/"><i class="anticon anticon-logout"></i>Logout</li>
-    <!--<li *ngIf="isLogged()" nz-menu-item style="float: right" ><i class="anticon anticon-logout"><a (click)="logout()" routerLink="/" class="nav-text">Logout</a></i></li>-->
-    <li *ngIf="isLogged()" style="float: right"><i class="anticon anticon-user"></i>{{loggedUser}}</li>
-    <li *ngIf="isLogged()" nz-menu-item style="float: right"><app-notification></app-notification></li>
+    <li *ngIf="isLoggedIn$ | async" nz-menu-item style="float: right;" (click)="logout()" routerLink="/"><i
+      class="anticon anticon-logout"></i>Logout
+    </li>
+    <li *ngIf="isLoggedIn$ | async" style="float: right"><i class="anticon anticon-user"></i>{{loggedUser$ | async}}</li>
+    <li *ngIf="isLoggedIn$ | async" nz-menu-item style="float: right">
+      <app-notification></app-notification>
+    </li>
   </ul>
 </nz-header>

@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {AuthService} from './auth/auth-manager/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,10 @@ import {Component} from '@angular/core';
 })
 export class AppComponent {
 
-  constructor() {
+  constructor(private authService: AuthService) {
   }
 
+  ngOnInit() {
+    this.authService.startIntervalPollingForRenewToken();
+  }
 }

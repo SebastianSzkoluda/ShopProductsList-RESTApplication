@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {FamilyUser} from '../../../model/family-user';
+import {FamilyUser} from '../../model/family-user';
 import {UserService} from '../user-manager/user.service';
 
 @Component({
@@ -11,14 +11,16 @@ import {UserService} from '../user-manager/user.service';
 export class UserComponent implements OnInit {
   constructor(private router: Router, private userService: UserService) {
   }
+
   public users: Array<FamilyUser>;
   sortName = null;
   sortValue = null;
+
   ngOnInit() {
     this
       .userService
       .getAllUsers().subscribe(users => {
-        this.users = users;
+      this.users = users;
       console.log(this.users);
     });
   }
@@ -33,7 +35,7 @@ export class UserComponent implements OnInit {
     /** sort data **/
     if (this.sortName) {
       const data = this.users.sort((a, b) =>
-        (this.sortValue === 'ascend') ? (a[ this.sortName ] > b[ this.sortName ] ? 1 : -1) : (b[ this.sortName ] > a[ this.sortName ] ? 1 : -1));
+        (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
       this.users = [...data];
     }
   }

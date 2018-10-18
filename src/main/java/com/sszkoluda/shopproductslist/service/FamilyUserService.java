@@ -19,7 +19,7 @@ public interface FamilyUserService {
 
     boolean doesLoadUserHaveAFamily();
 
-    boolean addingUserToFamilyNotificationStep(String familyName, String invitedUserEmail);
+    boolean sendInviteToFamily(String familyName, String invitedUserEmail);
 
-    void addingUserToFamilyAcceptStep(Notification notification);
+    void acceptInviteToFamily(Notification notification);
 }

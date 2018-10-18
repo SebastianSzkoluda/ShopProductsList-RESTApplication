@@ -1,4 +1,4 @@
-import * as notification  from '../actions/notification-actions';
+import * as notification from '../actions/notification-actions';
 import {Notification} from '../../model/notification';
 
 
@@ -34,6 +34,8 @@ export function notificationReducer(state = initialState, action: notification.N
         create: true,
         accept: false,
         decline: false,
+        refresh: false,
+        received: false,
         notification: action.payload
       };
     case notification.ACTION_NOTIFICATION_ACCEPT:
@@ -42,6 +44,8 @@ export function notificationReducer(state = initialState, action: notification.N
         create: false,
         accept: true,
         decline: false,
+        refresh: false,
+        received: false,
         notification: action.payload
       };
     case notification.ACTION_NOTIFICATION_DECLINE:
@@ -50,6 +54,8 @@ export function notificationReducer(state = initialState, action: notification.N
         create: false,
         accept: false,
         decline: true,
+        refresh: false,
+        received: false,
         notification: action.payload
       };
     case notification.ACTION_NOTIFICATIONS_REFRESH:
@@ -60,7 +66,6 @@ export function notificationReducer(state = initialState, action: notification.N
         decline: false,
         refresh: true,
         received: false,
-        notifications: action.payload
       };
     case notification.ACTION_NOTIFICATIONS_RECEIVED:
       return {

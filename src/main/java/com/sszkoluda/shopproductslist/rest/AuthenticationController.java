@@ -4,6 +4,7 @@ import com.sszkoluda.shopproductslist.jwt.JwtTokenUtil;
 import com.sszkoluda.shopproductslist.model.AuthToken;
 import com.sszkoluda.shopproductslist.model.FamilyUser;
 import com.sszkoluda.shopproductslist.model.LoginUser;
+import com.sszkoluda.shopproductslist.repository.FamilyUserRepository;
 import com.sszkoluda.shopproductslist.service.FamilyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ import javax.naming.AuthenticationException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
@@ -27,15 +28,18 @@ public class AuthenticationController {
 
     private final FamilyUserService familyUserService;
 
+    private final FamilyUserRepository familyUserRepository;
+
     @Autowired
-    public AuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, FamilyUserService familyUserService) {
+    public AuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, FamilyUserService familyUserService, FamilyUserRepository familyUserRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.familyUserService = familyUserService;
+        this.familyUserRepository = familyUserRepository;
     }
 
-    @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
-    public ResponseEntity<?> register(@RequestBody LoginUser loginUser) throws AuthenticationException {
+    @PostMapping("/generateToken")
+    public ResponseEntity<?> login(@RequestBody LoginUser loginUser) throws AuthenticationException {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginUser.getUsername(),
@@ -45,6 +49,13 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final Optional<FamilyUser> familyUser = familyUserService.findOne(loginUser.getUsername());
         final String token = jwtTokenUtil.generateToken(familyUser.get());
+        return ResponseEntity.ok(new AuthToken(token));
+    }
+
+    @PostMapping("/renewToken")
+    public ResponseEntity<?> renewToken(@RequestBody String username) throws AuthenticationException {
+        Optional<FamilyUser> familyUserToRenew = familyUserRepository.findByUserName(username);
+        final String token = jwtTokenUtil.generateToken(familyUserToRenew.get());
         return ResponseEntity.ok(new AuthToken(token));
     }
 
