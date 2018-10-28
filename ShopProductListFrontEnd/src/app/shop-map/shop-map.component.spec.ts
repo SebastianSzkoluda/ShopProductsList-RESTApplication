@@ -19,7 +19,7 @@ describe('ShopMapComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should createPending', () => {
     expect(component).toBeTruthy();
   });
 });

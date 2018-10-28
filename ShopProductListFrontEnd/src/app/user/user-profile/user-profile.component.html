@@ -1,0 +1,48 @@
+<div class="container">
+  <nz-card>
+    <div class="content">
+      <nz-upload class="avatar-uploader"
+                 nzAction="/api/avatar/"
+                 nzName="file"
+                 nzListType="picture-card"
+                 [nzShowUploadList]="false"
+                 [nzBeforeUpload]="beforeUpload"
+                 (nzChange)="handleChange($event)">
+        <ng-container *ngIf="!(avatarUrl$ | async)">
+          <i nz-icon class="anticon anticon-plus"></i>
+          <div class="ant-upload-text">Upload</div>
+        </ng-container>
+        <img *ngIf="avatarUrl$ | async" [attr.src]="('/api/avatar/' + (avatarUrl$ | async)) | secure | async" class="avatar">
+      </nz-upload>
+
+      <div id="wrapper">
+        <div id="inner1" style="float: left; margin-left: 30px"><h1>{{user.firstname + ' ' + user.lastname}}</h1></div>
+        <div id="inner2" style="margin-left: 30px">
+          <div class="inneri2">
+            <div class="label" style="float: left;">USERNAME:</div>
+            <div style="font-size:18px; float: left; margin-left: 10px;">{{user.username}}</div>
+          </div>
+
+          <div class="inneri2">
+            <div class="label" style="float: left;">EMAIL:</div>
+            <div style="font-size:18px; float: left; margin-left: 10px;"><a href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to={{user.email}}" target="_blank">{{user.email}}</a></div>
+          </div>
+
+          <div class="inneri2">
+            <div class="label" style="float: left;">USER FAMILIES:</div>
+            <div style="font-size:18px; float: left; margin-left: 10px"
+                 *ngFor="let family of user.userFamilies">{{family.familyName + ', ID: ' + family.familyId + ','}}</div>
+          </div>
+
+          <div class="inneri2">
+            <div class="label" style="float: left">GRANTED AUTHORITIES:</div>
+            <div style="font-size:18px; float: left; margin-left: 10px"
+                 *ngFor="let authority of user.authorities">{{authority.name}}</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </nz-card>
+</div>

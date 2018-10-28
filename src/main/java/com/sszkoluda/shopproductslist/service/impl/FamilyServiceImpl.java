@@ -5,6 +5,7 @@ import com.sszkoluda.shopproductslist.model.FamilyUser;
 import com.sszkoluda.shopproductslist.repository.FamilyRepository;
 import com.sszkoluda.shopproductslist.repository.FamilyUserRepository;
 import com.sszkoluda.shopproductslist.service.FamilyService;
+import com.sszkoluda.shopproductslist.service.FamilyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,17 +23,19 @@ public class FamilyServiceImpl implements FamilyService {
 
     private final FamilyUserRepository familyUserRepository;
 
+    private final FamilyUserService familyUserService;
+
     @Autowired
-    public FamilyServiceImpl(FamilyRepository familyRepository, FamilyUserRepository familyUserRepository) {
+    public FamilyServiceImpl(FamilyRepository familyRepository, FamilyUserRepository familyUserRepository, FamilyUserService familyUserService) {
         this.familyRepository = familyRepository;
         this.familyUserRepository = familyUserRepository;
+        this.familyUserService = familyUserService;
     }
 
     @Override
     public Optional<Family> saveFamily(Family family) {
         Set<FamilyUser> familyMembers = new HashSet<>();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
+        Optional<FamilyUser> familyUser = this.familyUserService.getCurrentUser();
         return familyUser.map(f -> {
             f.getUserFamilies().add(family);
             familyMembers.add(f);
@@ -54,8 +57,7 @@ public class FamilyServiceImpl implements FamilyService {
 
     @Override
     public Set<Family> getLoggedUserFamilies() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
+        Optional<FamilyUser> familyUser = this.familyUserService.getCurrentUser();
         return familyUser.map(FamilyUser::getUserFamilies).orElse(Collections.emptySet());
     }
 }

@@ -16,7 +16,7 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label nzRequired>Frequency of use</nz-form-label>
+      <nz-form-label nzRequired>Frequency of use (how many times a week)</nz-form-label>
       <nz-form-control>
         <nz-input-group nzPrefixIcon="anticon anticon-hourglass">
           <input type="text" nz-input formControlName="frequencyOfUse" placeholder="Frequency of use">
@@ -31,9 +31,9 @@
       <nz-form-label nzRequired>Price</nz-form-label>
       <nz-form-control>
         <nz-input-group nzPrefixIcon="anticon anticon-wallet">
-          <input type="text" nz-input formControlName="amount" placeholder="Price">
+          <input type="text" nz-input formControlName="price" placeholder="Price">
         </nz-input-group>
-        <nz-form-explain *ngIf="validateForm.get('amount').dirty && validateForm.get('amount').errors">Please input
+        <nz-form-explain *ngIf="validateForm.get('price').dirty && validateForm.get('price').errors">Please input
           product price!
         </nz-form-explain>
       </nz-form-control>

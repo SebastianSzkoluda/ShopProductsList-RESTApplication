@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -38,10 +39,14 @@ public class FamilyController {
     }
 
     @PostMapping("/family")
-    public ResponseEntity<Family> createFamily(@RequestBody Family family) {
-        return this.familyService.saveFamily(family)
-                .map(f -> new ResponseEntity<Family>(HttpStatus.CREATED))
-                .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
+    public ResponseEntity<?> createFamily(@RequestBody Family family) {
+
+        try {
+            Optional<Family> savedFamily = this.familyService.saveFamily(family);
+            return ResponseEntity.status(HttpStatus.OK).body(savedFamily);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("{}");
+        }
     }
 
     @GetMapping("/checkIfUserHaveFamily")

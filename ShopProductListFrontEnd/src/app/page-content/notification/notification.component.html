@@ -1,8 +1,11 @@
+<!--<nz-badge [nzDot]="checkIfNotificationNotEmpty()"><a (click)="open()"><i nz-icon class="anticon anticon-bell"></i></a></nz-badge>-->
 <a (click)="open()">
-  <nz-badge [nzCount]="notifications.length">
-    <a class="nav-text" style="width: 100px"><i class="anticon anticon-bell"></i></a>
+  <nz-badge [nzCount]="notifications.length" style="margin-right: 24px;">
+    <nz-avatar *ngIf="!(avatarUrl$ | async)" nzIcon="anticon anticon-user" [nzShape]="'circle'"></nz-avatar>
+    <nz-avatar *ngIf="(avatarUrl$ | async)" [nzSrc]="('/api/avatar/' + (avatarUrl$ | async)) | secure | async" [nzShape]="'circle'"></nz-avatar>
   </nz-badge>
 </a>
+
 <nz-drawer [nzClosable]="true" [nzWidth]="400" [nzVisible]="visible" nzPlacement="right" nzTitle="Invitations"
            (nzOnClose)="close()">
   <nz-card id="parent" *ngFor="let notification of notifications">

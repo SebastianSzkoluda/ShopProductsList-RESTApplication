@@ -5,16 +5,15 @@ export interface AuthReducerState {
   login: boolean;
   renew: boolean;
   received: boolean;
-  user: string;
-  token: string;
+  token: any;
+
 }
 
 const initialState: AuthReducerState = {
   login: (localStorage.getItem('currentUser') != null),
   renew: false,
   received: false,
-  user: localStorage.getItem('currentUser'),
-  token: null
+  token: JSON.parse(localStorage.getItem('token'))
 };
 
 export function authReducer(state = initialState, action: auth.AuthActionsUnion): AuthReducerState {
@@ -23,13 +22,21 @@ export function authReducer(state = initialState, action: auth.AuthActionsUnion)
       return {
         ...state,
         login: false,
-        user: action.payload
+        token: null
       };
-    case auth.ACTION_LOGIN:
+    case auth.ACTION_LOGGEDIN:
       return {
         ...state,
         login: true,
-        user: action.payload,
+        token: action.payload,
+      };
+    case auth.ACTION_UPLOAD_AVATAR:
+      return {
+        ...state,
+        token: {
+          ...state.token,
+          avatar: action.payload
+        }
       };
     case auth.ACTION_RENEW_TOKEN:
       return {

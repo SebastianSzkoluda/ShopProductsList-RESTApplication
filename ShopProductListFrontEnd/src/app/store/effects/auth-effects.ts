@@ -4,7 +4,8 @@ import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Observable} from 'rxjs/internal/Observable';
 import {debounceTime, map, switchMap} from 'rxjs/operators';
 import {AuthService} from '../../auth/auth-manager/auth.service';
-import * as auth from '../actions/auth-actions'
+import * as auth from '../actions/auth-actions';
+import {ReceivedTokenAction} from '../actions/auth-actions';
 
 @Injectable()
 export class AuthEffects {
@@ -20,11 +21,11 @@ export class AuthEffects {
       switchMap(() => {
         return this.authService.renewToken(localStorage.getItem('currentUser'))
           .pipe(map(value => {
-            console.log('dotarlem')
-            if (value.token.length > 0) {
-              return new auth.ReceivedTokenAction(value.token)
+            const decodedToken = this.authService.decodeToken(value.token);
+            if (decodedToken !== null) {
+              return new ReceivedTokenAction(decodedToken);
             } else {
-              return new auth.ReceivedTokenAction(null)
+              return new ReceivedTokenAction(null);
             }
           }));
       }));

@@ -5,6 +5,7 @@ import com.sszkoluda.shopproductslist.model.FamilyUser;
 import com.sszkoluda.shopproductslist.model.Product;
 import com.sszkoluda.shopproductslist.repository.FamilyUserRepository;
 import com.sszkoluda.shopproductslist.repository.ProductRepository;
+import com.sszkoluda.shopproductslist.service.FamilyUserService;
 import com.sszkoluda.shopproductslist.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -22,20 +24,21 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
+    private final FamilyUserService familyUserService;
+
     @Autowired
-    public ProductServiceImpl(FamilyUserRepository familyUserRepository, ProductRepository productRepository) {
+    public ProductServiceImpl(FamilyUserRepository familyUserRepository, ProductRepository productRepository, FamilyUserService familyUserService) {
         this.familyUserRepository = familyUserRepository;
         this.productRepository = productRepository;
+        this.familyUserService = familyUserService;
     }
 
 
     @Override
-    public Optional<Product> saveProductForCurrentFamily(Product product, String familyName) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
-
+    public Optional<Product> saveProductForCurrentFamily(Product product, Integer familyId) {
+        Optional<FamilyUser> familyUser = this.familyUserService.getCurrentUser();
         return familyUser.flatMap(fU -> fU.getUserFamilies().stream()
-                .filter(family -> family.getFamilyName().equals(familyName))
+                .filter(family -> family.getFamilyId().equals(familyId))
                 .findFirst()
                 .map(family -> {
                     product.setFamily(family);
@@ -45,13 +48,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Set<Product> getProductsForFamily(String familyName) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
+    public List<Product> getProductsForFamily(Integer familyId) {
+        Optional<FamilyUser> familyUser = this.familyUserService.getCurrentUser();
         return familyUser.map(fU -> fU.getUserFamilies().stream()
-                .filter(family -> family.getFamilyName().equals(familyName))
+                .filter(family -> family.getFamilyId().equals(familyId))
                 .findFirst()
-                .map(Family::getProductsList).orElse(Collections.emptySet())).get();
+                .map(Family::getProductsList).orElse(Collections.emptyList())).get();
     }
 
     @Override

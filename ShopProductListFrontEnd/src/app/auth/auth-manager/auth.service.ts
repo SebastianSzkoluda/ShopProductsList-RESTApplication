@@ -12,6 +12,8 @@ import * as auth from '../../store/actions/auth-actions';
 import {selectLoggedIn} from '../../store/reducers';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TokenStorage} from '../token/token.storage';
+import {decode} from 'punycode';
+import {ACTION_LOGGEDIN} from '../../store/actions/auth-actions';
 
 @Injectable()
 export class AuthService {
@@ -28,28 +30,30 @@ export class AuthService {
   login(loginUser: LoginUser): Observable<AuthToken> {
     return this.http.post <AuthToken>(this.authUrl + 'generateToken', loginUser).pipe(map(value => {
 
-      this.token.saveToken(value.token);
-      const decodedToken = this.helper.decodeToken(value.token);
-      console.log(decodedToken);
-      if (value) {
-        localStorage.setItem('currentUser', decodedToken.sub);
-        console.log(decodedToken.exp - decodedToken.iat);
-      }
+      const decodedToken = this.decodeToken(value.token);
+      this.updateUserState({
+        action: ACTION_LOGGEDIN,
+        payload: decodedToken
+      });
       return value;
     }));
   }
 
   renewToken(username: string) : Observable<AuthToken> {
     return this.http.post <AuthToken>(this.authUrl + 'renewToken', username).pipe(map(value => {
-
-      this.token.saveToken(value.token);
-      const decodedToken = this.helper.decodeToken(value.token);
-      console.log(decodedToken);
-      if (value) {
-        localStorage.setItem('currentUser', decodedToken.sub);
-      }
       return value;
     }));
+  }
+
+  decodeToken(token: string) {
+    this.token.saveToken(token);
+    const decodedToken = this.helper.decodeToken(token);
+    console.log(decodedToken);
+    if (decodedToken !== null) {
+      localStorage.setItem('currentUser', decodedToken.sub);
+      localStorage.setItem('token', JSON.stringify(decodedToken));
+    }
+    return decodedToken;
   }
 
 
@@ -73,7 +77,7 @@ export class AuthService {
   startIntervalPollingForRenewToken(): Subscription {
     const loggedIn$ = this.store.pipe(select(selectLoggedIn));
 
-    return interval(((15 * 60) - 2) * 1000).pipe(
+    return interval(((5 * 60 * 60) - 2) * 1000).pipe(
       startWith(0),
       withLatestFrom(loggedIn$),
       filter(([, loggedIn]) => loggedIn === true)

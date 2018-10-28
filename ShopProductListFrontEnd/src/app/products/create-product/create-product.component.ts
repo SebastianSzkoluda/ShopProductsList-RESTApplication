@@ -1,33 +1,35 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Product} from '../../model/product';
 import {ProductService} from '../product-manager/product.service';
-import {ACTION_CREATE_PRODUCT} from '../../store/actions/product-actions';
+import {CreateProductAction} from '../../store/actions/product-actions';
 import {NzMessageService} from 'ng-zorro-antd';
+import {Subject} from 'rxjs/internal/Subject';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'app-create-product',
   templateUrl: './create-product.component.html',
   styleUrls: ['./create-product.component.css']
 })
-export class CreateProductComponent implements OnInit {
-
-  constructor(private fb: FormBuilder, private productService: ProductService, private message: NzMessageService) {
-  }
-
+export class CreateProductComponent implements OnInit, OnDestroy {
   @Input()
-  familyName: string;
-  products: Array<Product>;
+  familyId: number;
   product = new Product();
   validateForm: FormGroup;
   isVisible = false;
   isOkLoading = false;
+  ł;
+  private destroyed$ = new Subject();
+
+  constructor(private fb: FormBuilder, private productService: ProductService, private message: NzMessageService, private store: Store<any>) {
+  }
 
   initialize(): void {
     this.validateForm = this.fb.group({
       productName: [null, [Validators.required]],
       frequencyOfUse: [null, [Validators.required]],
-      amount: [null, [Validators.required]],
+      price: [null, [Validators.required]],
       inStock: [null, [Validators.required]],
       userComment: [null, [Validators.required]]
     });
@@ -38,7 +40,7 @@ export class CreateProductComponent implements OnInit {
   }
 
   showModal(): void {
-    if (this.familyName === 'No family selected') {
+    if (this.familyId === 0) {
       this.createMessage('error', 'No family selected! Please select family!');
     } else {
       this.initialize();
@@ -57,16 +59,12 @@ export class CreateProductComponent implements OnInit {
   createProduct() {
     this.product.productName = this.validateForm.get('productName').value;
     this.product.frequencyOfUse = this.validateForm.get('frequencyOfUse').value;
-    this.product.amount = this.validateForm.get('amount').value;
+    this.product.price = this.validateForm.get('price').value;
     this.product.inStock = this.validateForm.get('inStock').value;
     this.product.userComment = this.validateForm.get('userComment').value;
-    this.productService.saveProductForCurrentFamily(this.product, this.familyName).subscribe(() => {
-      this.productService.updateProductState({
-        action: ACTION_CREATE_PRODUCT,
-        payload: this.product,
-      });
-      this.handleOk();
-    });
+
+    this.store.dispatch(new CreateProductAction(this.product, this.familyId));
+    this.handleOk();
   }
 
   createMessage(type: string, message: string): void {
@@ -83,5 +81,9 @@ export class CreateProductComponent implements OnInit {
 
   handleCancel(): void {
     this.isVisible = false;
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
   }
 }

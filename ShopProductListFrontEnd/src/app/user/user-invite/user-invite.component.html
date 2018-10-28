@@ -7,11 +7,11 @@
     <nz-form-item>
       <nz-form-label nzRequired>Family name</nz-form-label>
       <nz-form-control>
-        <nz-select id="familyName" formControlName="familyName" nzPlaceHolder="Select family">
-          <nz-option *ngFor="let family of families" nzValue={{family.familyName}}
-                     nzLabel={{family.familyName}}></nz-option>
+        <nz-select id="familyName" formControlName="familyId" nzPlaceHolder="Select family">
+          <nz-option *ngFor="let family of families" [nzValue]="family.familyId"
+                     [nzLabel]="family.familyName + ', ID: ' + family.familyId"></nz-option>
         </nz-select>
-        <nz-form-explain *ngIf="validateForm.get('familyName').dirty && validateForm.get('familyName').errors">Please
+        <nz-form-explain *ngIf="validateForm.get('familyId').dirty && validateForm.get('familyId').errors">Please
           select family!
         </nz-form-explain>
       </nz-form-control>
@@ -20,15 +20,14 @@
       <nz-form-label nzRequired>Username</nz-form-label>
       <nz-form-control>
         <nz-input-group nzPrefixIcon="anticon anticon-user-add">
-          <input type="text" placeholder="Username" formControlName="userName" nz-input
-                 (input)="onInput($event.target?.value)" [nzAutocomplete]="auto">
-          <nz-autocomplete nzBackfill #auto>
+          <input type="text" placeholder="Choose a user" formControlName="userInput" nz-input [nzAutocomplete]="auto">
+          <nz-autocomplete nzBackfill #auto >
             <nz-auto-option *ngFor="let option of options" [nzValue]=option.username>
               {{option.username}}
             </nz-auto-option>
           </nz-autocomplete>
         </nz-input-group>
-        <nz-form-explain *ngIf="validateForm.get('userName').dirty && validateForm.get('userName').errors">Please input
+        <nz-form-explain *ngIf="validateForm.get('userInput').dirty && validateForm.get('userInput').errors">Please input
           username!
         </nz-form-explain>
       </nz-form-control>

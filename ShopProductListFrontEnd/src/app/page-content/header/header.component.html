@@ -1,7 +1,8 @@
 <nz-header>
-  <a class="navbar-brand logo" routerLink="/productsList">Shop Products List</a>
+  <a class="navbar-brand logo" routerLink="/">Shop Products List</a>
   <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'" style="line-height: 64px; background-color: #060606">
     <li nz-menu-item routerLink="/usermanual">User Manual</li>
+    <li *ngIf="(isLoggedIn$ | async) && (isAdmin$ | async)" nz-menu-item routerLink="/user">Users List</li>
     <li *ngIf="isLoggedIn$ | async" nz-menu-item routerLink="/productsList">Products List</li>
     <li *ngIf="isLoggedIn$ | async" nz-menu-item>
       <app-family></app-family>
@@ -10,12 +11,14 @@
       <app-user-invite></app-user-invite>
     </li>
 
-    <li *ngIf="isLoggedIn$ | async" nz-menu-item style="float: right;" (click)="logout()" routerLink="/"><i
+    <a *ngIf="isLoggedIn$ | async" nz-menu-item style="float: right;" (click)="logout()" routerLink="/"><i
       class="anticon anticon-logout"></i>Logout
+    </a>
+    <li *ngIf="isLoggedIn$ | async" style="float: right;">
+      <app-notification *ngIf="isLoggedIn$ | async" style="float: right; width: 35px;"></app-notification>
+      <a class="fullname" routerLink="/userprofile">{{(loggedUserFullName$ | async)?.firstname + ' ' + (loggedUserFullName$ | async)?.lastname}}</a>
     </li>
-    <li *ngIf="isLoggedIn$ | async" style="float: right"><i class="anticon anticon-user"></i>{{loggedUser$ | async}}</li>
-    <li *ngIf="isLoggedIn$ | async" nz-menu-item style="float: right">
-      <app-notification></app-notification>
-    </li>
+
+
   </ul>
 </nz-header>

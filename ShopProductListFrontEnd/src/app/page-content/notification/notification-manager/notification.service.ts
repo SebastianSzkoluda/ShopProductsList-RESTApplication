@@ -7,7 +7,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {interval} from 'rxjs/internal/observable/interval';
 import {filter, startWith, withLatestFrom} from 'rxjs/operators';
 import * as notification from '../../../store/actions/notification-actions';
-import {selectLoggedIn} from '../../../store/reducers/index';
+import {selectLoggedIn} from '../../../store/reducers';
 
 @Injectable({
   providedIn: 'root'

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Family} from '../../model/family';
 import {FamilyService} from '../../family/family-manager/family.service';
@@ -6,34 +6,41 @@ import {FamilyUser} from '../../model/family-user';
 import {UserService} from '../user-manager/user.service';
 import {NzMessageService} from 'ng-zorro-antd';
 import {NotificationService} from '../../page-content/notification/notification-manager/notification.service';
-import {ACTION_NOTIFICATION_CREATE} from '../../store/actions/notification-actions';
+import {SendNotificationAction} from '../../store/actions/notification-actions';
+import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs/internal/Subject';
+import {Observable} from 'rxjs/internal/Observable';
+import {select, Store} from '@ngrx/store';
+import {selectSendInvitationFailed, selectSendInvitationSuccess} from '../../store/reducers';
 
 @Component({
   selector: 'app-user-invite',
   templateUrl: './user-invite.component.html',
   styleUrls: ['./user-invite.component.css']
 })
-export class UserInviteComponent implements OnInit {
+export class UserInviteComponent implements OnInit, OnDestroy {
+  families: Array<Family>;
+  users: Array<FamilyUser>;
+  options: Array<FamilyUser>;
+  validateForm: FormGroup;
+  isVisible = false;
+  isOkLoading = false;
+  private destroyed$ = new Subject();
 
   constructor(private fb: FormBuilder,
               private familyService: FamilyService,
               private userService: UserService,
               private message: NzMessageService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private store: Store<any>) {
   }
-
-  families = new Array<Family>();
-  users = new Array<FamilyUser>();
-  options = new Array<FamilyUser>();
-  validateForm: FormGroup;
-  isVisible = false;
-  isOkLoading = false;
 
   initialize(): void {
     this.validateForm = this.fb.group({
-      familyName: [null, [Validators.required]],
-      userName: [null, [Validators.required]]
+      familyId: [null, [Validators.required]],
+      userInput: [null, [Validators.required]]
     });
+    this.onInput();
   }
 
   ngOnInit(): void {
@@ -41,6 +48,7 @@ export class UserInviteComponent implements OnInit {
     this.getFamilies();
     this.getAllUsers();
     this.initialize();
+
   }
 
   showModal(): void {
@@ -69,49 +77,46 @@ export class UserInviteComponent implements OnInit {
   }
 
   getFamilies() {
-    return this.familyService.loggedUserFamilies().subscribe(value => {
+    return this.familyService.loggedUserFamilies().pipe(takeUntil(this.destroyed$)).subscribe(value => {
       this.families = value;
-      console.log(this.families);
     });
   }
 
   getAllUsers() {
-    return this.userService.getAllUsers().subscribe(value => this.users = value);
+    return this.userService.getAllUsers().pipe(takeUntil(this.destroyed$)).subscribe(value => this.users = value);
   }
 
-  onInput(value: string): void {
-    this.options = this.users
-      .filter(user => user.username.toLowerCase().indexOf(value.toLowerCase()) === 0);
+  onInput() {
+    this.validateForm
+      .get('userInput')
+      .valueChanges.subscribe(
+      term => {
+        if (term != '') {
+          this.userService.getAllUsersLikePartOfUsername(term).pipe(takeUntil(this.destroyed$)).subscribe(
+            data => {
+              this.options = data as any[];
+            });
+        }
+      });
   }
 
   sendInvite() {
-    this.userService.sendInviteToFamily(this.validateForm.get('familyName').value, this.validateForm.get('userName').value)
-      .subscribe(value => {
-        if (value) {
-          this.createMessage('success', 'Invite sent successfully!');
-          this.updateNotificationStateCreate();
-        } else {
-          this.createMessage('error', 'This user is in your family!');
-        }
-      });
+    console.log(this.validateForm.get('familyId').value, this.validateForm.get('userInput').value);
+    this.store.dispatch(new SendNotificationAction(
+      {'familyId': this.validateForm.get('familyId').value, 'invitedUser': this.validateForm.get('userInput').value})
+    );
     this.handleOk();
   }
 
-  createMessage(type: string, message: string): void {
-    this.message.create(type, message);
-  }
-
   updateFamilyState() {
-    this.familyService.getAllState().subscribe(state => {
-      if (state.family !== null && (state.create === true || state.join === true)) {
+    this.familyService.getAllState().pipe(takeUntil(this.destroyed$)).subscribe(state => {
+      if (state.family !== null && (state.createFinish === true || state.join === true)) {
         this.families.push(state.family);
       }
     });
   }
 
-  updateNotificationStateCreate() {
-    this.notificationService.updateNotificationState({
-      action: ACTION_NOTIFICATION_CREATE
-    });
+  ngOnDestroy(): void {
+    this.destroyed$.next();
   }
 }

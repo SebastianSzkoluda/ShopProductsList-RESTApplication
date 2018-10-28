@@ -29,8 +29,8 @@ public class Product {
     private Integer frequencyOfUse;
 
     @Getter
-    @Column(name = "amount")
-    private Integer amount;
+    @Column(name = "price")
+    private Float price;
 
     @Getter
     @Column(name = "in_stock")

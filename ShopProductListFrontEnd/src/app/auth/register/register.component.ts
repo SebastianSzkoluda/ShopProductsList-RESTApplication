@@ -1,19 +1,22 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FamilyUser} from '../../model/family-user';
 import {AuthService} from '../auth-manager/auth.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd';
+import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs/internal/Subject';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
 
   constructor(private userService: AuthService, private fb: FormBuilder, private message: NzMessageService) {
   }
 
+  private destroyed$ = new Subject();
   familyUser: FamilyUser = new FamilyUser();
   validateForm: FormGroup;
   isVisible = false;
@@ -21,10 +24,12 @@ export class RegisterComponent implements OnInit {
 
   initialize(): void {
     this.validateForm = this.fb.group({
-      userName: [null, [Validators.required]],
+      firstname: [null, [Validators.required]],
+      lastname: [null, [Validators.required]],
+      username: [null, [Validators.required]],
       password: [null, [Validators.required]],
       email: [null, [Validators.required]],
-      age: [null, [Validators.required]]
+      age: [null]
     });
   }
 
@@ -46,11 +51,13 @@ export class RegisterComponent implements OnInit {
   }
 
   register(): void {
-    this.familyUser.username = this.validateForm.get('userName').value;
+    this.familyUser.firstname = this.validateForm.get('firstname').value;
+    this.familyUser.lastname = this.validateForm.get('lastname').value;
+    this.familyUser.username = this.validateForm.get('username').value;
     this.familyUser.password = this.validateForm.get('password').value;
     this.familyUser.email = this.validateForm.get('email').value;
     this.familyUser.age = this.validateForm.get('age').value;
-    this.userService.register(this.familyUser).subscribe(() => {
+    this.userService.register(this.familyUser).pipe(takeUntil(this.destroyed$)).subscribe(() => {
         this.handleOk();
         this.createMessage('success', 'You have successfully create your account!');
       },
@@ -73,6 +80,10 @@ export class RegisterComponent implements OnInit {
 
   createMessage(type: string, message: string): void {
     this.message.create(type, message);
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
   }
 
 }

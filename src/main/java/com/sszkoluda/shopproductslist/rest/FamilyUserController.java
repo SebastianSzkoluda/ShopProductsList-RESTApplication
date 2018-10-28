@@ -10,7 +10,13 @@ import com.sszkoluda.shopproductslist.service.FamilyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -27,10 +33,10 @@ public class FamilyUserController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<FamilyUser> getUser(@RequestParam String email) throws FamilyUserException {
-        return this.familyUserService.findUserByEmail(email)
+    public ResponseEntity<FamilyUser> getLoggedUser() throws FamilyUserException {
+        return this.familyUserService.getCurrentUser()
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new FamilyUserException("User with email: " + email + " not found"));
+                .orElseThrow(() -> new FamilyUserException("Noone is logged"));
 
     }
 
@@ -47,10 +53,27 @@ public class FamilyUserController {
         return familyUserService.listAllUsers();
     }
 
-    @GetMapping("/user/sendInviteToFamily")
-    public boolean sendInviteToFamily(@RequestParam("familyName") String familyName, @RequestParam("invitedUserName") String invitedUserName) {
-        return this.familyUserService.sendInviteToFamily(familyName, invitedUserName);
+    @GetMapping("/listSpecifiedUsers")
+    public List<FamilyUser> getAllUsersLikePartOfUsername(@RequestParam String username) {
+        return familyUserService.findUsersLikePartOfUsername(username);
     }
+
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<FamilyUser> deleteUser(@PathVariable("id") Integer id) {
+        this.familyUserService.deleteUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/user/sendInviteToFamily")
+    public boolean sendInviteToFamily(@RequestParam("familyId") Integer familyId, @RequestParam("invitedUserName") String invitedUserName) {
+        return this.familyUserService.sendInviteToFamily(familyId, invitedUserName);
+    }
+//    @MessageMapping("/sendInviteToFamily/{familyName}/{invitedUserName}")
+////    @SendToUser("/queue/notify")
+//    public boolean sendInviteToFamily(@DestinationVariable String familyName, @DestinationVariable String invitedUserName, @Payload String username) {
+//        System.out.println("XXXXXXXXXXXX: " + familyName + "  " + invitedUserName + "  " + username);
+//        return this.familyUserService.sendInviteToFamily(familyName, invitedUserName, username);
+//    }
 
     @PostMapping("/user/acceptInviteToFamily")
     public ResponseEntity<?> acceptInviteToFamily(@RequestBody Notification notification) {

@@ -16,7 +16,7 @@ import {LoginActivate} from './auth/login/LoginActivate';
 import {TokenStorage} from './auth/token/token.storage';
 import {Interceptor} from './auth/token/interceptor';
 import {RegisterComponent} from './auth/register/register.component';
-import {UserManualComponent} from './user-manual/user-manual.component';
+import {UserManualComponent} from './user/user-manual/user-manual.component';
 import {FamilyComponent} from './family/create-family/family.component';
 import {FamilyService} from './family/family-manager/family.service';
 import {ProductListComponent} from './products/product-list/product-list.component';
@@ -36,6 +36,12 @@ import {NotificationService} from './page-content/notification/notification-mana
 import {AuthEffects} from './store/effects/auth-effects';
 import { ShopMapComponent } from './shop-map/shop-map.component';
 import {SafePipe} from './shop-map/safe-pipe';
+import {WebSocketService} from './websocket/web-socket.service';
+import { UserProfileComponent } from './user/user-profile/user-profile.component';
+import {FamilyEffects} from './store/effects/family-effects';
+import {ProductEffects} from './store/effects/product-effects';
+import {UploadFileService} from './upload-files/upload-file.service';
+import {SecurePipe} from './user/user-profile/secure-pipe';
 
 registerLocaleData(en);
 
@@ -46,6 +52,10 @@ const appRoutes: Routes = [
   }, {
     path: 'user',
     component: UserComponent,
+    canActivate: [LoginActivate]
+  }, {
+    path: 'userprofile',
+    component: UserProfileComponent,
     canActivate: [LoginActivate]
   }, {
     path: 'productsList',
@@ -76,7 +86,9 @@ const appRoutes: Routes = [
     NotificationComponent,
     UserInviteComponent,
     ShopMapComponent,
-    SafePipe
+    SafePipe,
+    SecurePipe,
+    UserProfileComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -87,7 +99,7 @@ const appRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     NgZorroAntdModule,
-    EffectsModule.forRoot([NotificationEffects, AuthEffects]),
+    EffectsModule.forRoot([NotificationEffects, AuthEffects, FamilyEffects, ProductEffects]),
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({
       maxAge: 5,
@@ -114,7 +126,9 @@ const appRoutes: Routes = [
     FamilyService,
     AuthService,
     ProductService,
-    NotificationService
+    NotificationService,
+    WebSocketService,
+    UploadFileService
   ],
   bootstrap: [AppComponent]
 })

@@ -4,6 +4,7 @@ import com.sszkoluda.shopproductslist.jwt.JwtAuthenticationEntryPoint;
 import com.sszkoluda.shopproductslist.jwt.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,6 +23,7 @@ import javax.annotation.Resource;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@ComponentScan("com.sszkoluda.shopproductslist.configuration")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource(name = "userService")
@@ -49,10 +51,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().
-                authorizeRequests()
+        http.cors().disable().csrf().disable()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+                .and()
+                .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers("/api/auth/renewToken").permitAll()
+                .antMatchers("/socket/**").permitAll()
                 .antMatchers("/api/auth/generateToken").permitAll()
                 .antMatchers("/api/auth/register").permitAll()
                 .anyRequest().authenticated()

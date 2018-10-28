@@ -1,22 +1,40 @@
-<div class="container">
-  <nz-table class="main" nzShowSizeChanger [nzFrontPagination]="true" #filterTable  [nzData]="users" [nzPageSize]="10">
+<div class="users-view">
+  <nz-card>
+  <nz-table #nzTable class="main"
+            [nzFrontPagination]="true"
+            [nzShowPagination]="true"
+            #filterTable
+            [nzData]="users"
+            [nzPageSize]="8"
+            nzSize="default">
       <thead (nzSortChange)="sort($event)" nzSingleSort>
       <tr>
         <th nzShowSort nzSortKey="user_id">UserId</th>
+        <th nzShowSort nzSortKey="firstname">First name</th>
+        <th nzShowSort nzSortKey="lastname">Last name</th>
         <th nzShowSort nzSortKey="username">UserName</th>
         <th nzShowSort nzSortKey="email">Email</th>
         <th nzShowSort nzSortKey="password">Password</th>
         <th nzShowSort nzSortKey="age">Age</th>
+        <th>Action</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let data of filterTable.data">
         <td>{{data.userId}}</td>
+        <td>{{data.firstname}}</td>
+        <td>{{data.lastname}}</td>
         <td>{{data.username}}</td>
         <td>{{data.email}}</td>
         <td>{{data.password}}</td>
         <td>{{data.age}}</td>
+        <td>
+          <button *ngIf="checkIfUserHaveRoleAdmin(data.userId)" nz-button (click)="deleteUser(data.userId)" nzType="danger" nz-tooltip nzTitle="delete user"
+                  nzShape="circle"><i class="anticon anticon-delete"></i></button>
+        </td>
+
       </tr>
       </tbody>
     </nz-table>
+  </nz-card>
 </div>

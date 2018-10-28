@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {validate} from 'codelyzer/walkerFactory/walkerFn';
 
 @Component({
   selector: 'app-shop-map',
@@ -40,14 +39,15 @@ export class ShopMapComponent implements OnInit {
     this.location = '';
     this.shopName = '';
   }
+
   submitForm() {
     this.location = this.validateForm.get('location').value;
     this.shopName = this.validateForm.get('shopName').value;
   }
 
   loadMap(): boolean {
-    if(this.location.length > 0 && this.shopName.length > 0) {
-      this.mapUrl = 'https://maps.google.com/maps?q=' + this.location + '%20' + this.shopName +'&t=&z=12&ie=UTF8&iwloc=&output=embed';
+    if (this.location.length > 0 && this.shopName.length > 0) {
+      this.mapUrl = 'https://maps.google.com/maps?q=' + this.location + '%20' + this.shopName + '&t=&z=12&ie=UTF8&iwloc=&output=embed';
       return true;
     }
     else {

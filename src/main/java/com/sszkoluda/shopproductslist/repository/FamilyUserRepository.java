@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FamilyUserRepository extends CrudRepository<FamilyUser, Integer> {
@@ -13,4 +14,7 @@ public interface FamilyUserRepository extends CrudRepository<FamilyUser, Integer
 
     @Query("SELECT u FROM FamilyUser u WHERE u.username LIKE :username ")
     Optional<FamilyUser> findByUserName(@Param("username") String username);
+
+    @Query("SELECT u FROM FamilyUser u WHERE u.username LIKE :username%")
+    Optional<List<FamilyUser>> findUsersLike(@Param("username") String username);
 }

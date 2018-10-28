@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @JsonIgnoreProperties(value = {"familyMembers","productsToBuyList","productsList"})
@@ -36,13 +37,13 @@ public class Family {
     private Set<FamilyUser> familyMembers;
 
     @Getter
-    @OneToMany(mappedBy = "family", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "family", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("family")
-    private Set<Product> productsList;
+    private List<Product> productsList;
 
     @Getter
-    @OneToMany(mappedBy = "family", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "family", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("family")
-    private Set<Product> productsToBuyList;
+    private List<Product> productsToBuyList;
 
 }

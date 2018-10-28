@@ -3,21 +3,29 @@ import {Notification} from '../../model/notification';
 
 
 export interface NotificationReducerState {
-  create: boolean;
+  sendPending: boolean;
+  sendFinish: boolean;
+  sendFailed: boolean;
   accept: boolean;
   decline: boolean;
+  removed: boolean;
   refresh: boolean;
   received: boolean;
+  invitation: any;
   notification: Notification;
   notifications: Array<Notification>;
 }
 
 const initialState: NotificationReducerState = {
-  create: false,
+  sendPending: false,
+  sendFinish: false,
+  sendFailed: false,
   accept: false,
   decline: false,
+  removed: false,
   refresh: false,
   received: false,
+  invitation: null,
   notification: null,
   notifications: []
 };
@@ -28,20 +36,44 @@ export function notificationReducer(state = initialState, action: notification.N
       return {
         ...initialState,
       };
-    case notification.ACTION_NOTIFICATION_CREATE:
+    case notification.ACTION_NOTIFICATION_SEND:
       return {
         ...state,
-        create: true,
+        sendPending: true,
         accept: false,
         decline: false,
         refresh: false,
         received: false,
-        notification: action.payload
+        invitation: action.payload
+      };
+    case notification.ACTION_NOTIFICATION_SEND_SUCCESS:
+      return {
+        ...state,
+        sendPending: false,
+        sendFinish: true,
+        sendFailed: false,
+        accept: false,
+        decline: false,
+        refresh: false,
+        received: false,
+        invitation: action.payload
+      };
+    case notification.ACTION_NOTIFICATION_SEND_FAILED:
+      return {
+        ...state,
+        sendPending: false,
+        sendFinish: false,
+        sendFailed: true,
+        accept: false,
+        decline: false,
+        refresh: false,
+        received: false,
+        invitation: action.payload
       };
     case notification.ACTION_NOTIFICATION_ACCEPT:
       return {
         ...state,
-        create: false,
+        sendPending: false,
         accept: true,
         decline: false,
         refresh: false,
@@ -51,9 +83,20 @@ export function notificationReducer(state = initialState, action: notification.N
     case notification.ACTION_NOTIFICATION_DECLINE:
       return {
         ...state,
-        create: false,
+        sendPending: false,
         accept: false,
         decline: true,
+        refresh: false,
+        received: false,
+        notification: action.payload
+      };
+    case notification.ACTION_NOTIFICATION_REMOVE_SUCCESS:
+      return {
+        ...state,
+        sendPending: false,
+        accept: false,
+        decline: false,
+        removed: true,
         refresh: false,
         received: false,
         notification: action.payload
@@ -61,7 +104,7 @@ export function notificationReducer(state = initialState, action: notification.N
     case notification.ACTION_NOTIFICATIONS_REFRESH:
       return {
         ...state,
-        create: false,
+        sendPending: false,
         accept: false,
         decline: false,
         refresh: true,
@@ -70,11 +113,21 @@ export function notificationReducer(state = initialState, action: notification.N
     case notification.ACTION_NOTIFICATIONS_RECEIVED:
       return {
         ...state,
-        create: false,
+        sendPending: false,
         accept: false,
         decline: false,
         refresh: false,
         received: true,
+        notifications: action.payload
+      };
+    case notification.ACTION_NOTIFICATIONS_RECEIVED_FAILED:
+      return {
+        ...state,
+        sendPending: false,
+        accept: false,
+        decline: false,
+        refresh: false,
+        received: false,
         notifications: action.payload
       };
   }

@@ -27,6 +27,7 @@ public class JwtTokenUtil implements Serializable {
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
+
         return claimsResolver.apply(claims);
     }
 
@@ -50,7 +51,9 @@ public class JwtTokenUtil implements Serializable {
 
         Claims claims = Jwts.claims().setSubject(user.getUsername());
         claims.put("scopes", user.getAuthorities());
-
+        claims.put("firstname", user.getFirstname());
+        claims.put("lastname", user.getLastname());
+        claims.put("avatar",user.getAvatarFilename() != null ? user.getAvatarFilename() : "");
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))

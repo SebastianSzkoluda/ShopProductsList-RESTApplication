@@ -1,0 +1,60 @@
+nz-card {
+  width: 100%;
+}
+.container {
+  height: 100%;
+  min-height: 100%;
+  padding-top: 50px;
+}
+
+.user-image {
+  float: left;
+  width: 290px;
+  height: 320px;
+}
+
+:host ::ng-deep .avatar-uploader > .ant-upload {
+  float: left;
+  width: 290px;
+  height: 320px;
+}
+:host ::ng-deep .ant-upload-select-picture-card i {
+  font-size: 32px;
+  color: #999;
+}
+:host ::ng-deep .ant-upload-select-picture-card .ant-upload-text {
+  margin-top: 8px;
+  color: #666;
+}
+
+.avatar {
+  float: left;
+  width: 290px;
+  height: 320px;
+}
+
+.content {
+  height: 600px;
+  padding: 60px 0 60px 0;
+}
+#wrapper{
+  float: left;
+}
+#inner1{
+  float: left;
+}
+#inner2{
+  float: left;
+  clear: left;
+}
+.inneri2{
+  float: left;
+  clear: left;
+  width: 700px;
+  margin-bottom: 10px;
+}
+
+.label {
+  font-weight: bold;
+  font-size: 18px;
+}

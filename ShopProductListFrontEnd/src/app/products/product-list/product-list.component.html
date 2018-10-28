@@ -9,18 +9,18 @@
           </a>
           <ul nz-menu>
             <li *ngIf="families?.length == 0" nz-menu-item>empty</li>
-            <li *ngFor="let family of families" (click)="getProductsForFamily(family.familyName)" nz-menu-item
-                routerLink="/productsList">{{family.familyName}}
+            <li *ngFor="let family of families" (click)="getProductsForFamily(family.familyName, family.familyId)" nz-menu-item
+                routerLink="/productsList">{{family.familyName + ' ID: ' + family.familyId}}
             </li>
           </ul>
         </nz-dropdown>
       </div>
     </div>
-    <app-create-product [familyName]="familyName"></app-create-product>
+    <app-create-product [familyId]="familyId"></app-create-product>
 
     <div class="container">
       <div>
-        <h5>Selected family: {{familyName}}<app-shop-map style="float: right"></app-shop-map></h5>
+        <h5>Selected family: {{familyName + ', ID: ' + familyId}}<app-shop-map style="float: right"></app-shop-map></h5>
 
       </div>
 
@@ -34,10 +34,10 @@
         <thead (nzSortChange)="sort($event)" nzSingleSort>
         <tr>
           <th nzShowExpand></th>
-          <th nzShowSort nzSortKey="productId">ProductID</th>
+          <th nzShowSort nzSortKey="productId">ProductId</th>
           <th nzShowSort nzSortKey="product_name">ProductName</th>
           <th nzShowSort nzSortKey="frequency_of_use">FrequencyOfUse</th>
-          <th nzShowSort nzSortKey="amount">Amount</th>
+          <th nzShowSort nzSortKey="price">Price</th>
           <th nzShowSort nzSortKey="in_stock">InStock</th>
           <th>Action</th>
         </tr>
@@ -49,7 +49,7 @@
             <td>{{data.productId}}</td>
             <td>{{data.productName}}</td>
             <td>{{data.frequencyOfUse}}</td>
-            <td>{{data.amount}}</td>
+            <td>{{data.price}}</td>
             <td>{{data.inStock}}</td>
             <td>
               <button nz-button (click)="deleteProduct(data)" nzType="danger" nz-tooltip nzTitle="delete product"

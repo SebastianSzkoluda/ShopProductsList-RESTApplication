@@ -26,6 +26,14 @@ public class FamilyUser {
     private String password;
 
     @Getter
+    @Column(name = "firstname")
+    private String firstname;
+
+    @Getter
+    @Column(name = "lastname")
+    private String lastname;
+
+    @Getter
     @Column(name = "username")
     private String username;
 
@@ -37,6 +45,10 @@ public class FamilyUser {
     @Getter
     @Column(name = "age")
     private Integer age;
+
+    @Getter
+    @Column(name = "avatar_filename")
+    private String avatarFilename;
 
     @Getter
     @ManyToMany(fetch = FetchType.EAGER)

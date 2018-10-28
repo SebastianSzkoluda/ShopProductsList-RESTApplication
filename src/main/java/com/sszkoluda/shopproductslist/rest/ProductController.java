@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -28,8 +29,8 @@ public class ProductController {
     }
 
     @GetMapping("/product")
-    public Set<Product> getProductsForFamily(@RequestParam String familyName) {
-        return this.productService.getProductsForFamily(familyName);
+    public List<Product> getProductsForFamily(@RequestParam Integer familyId) {
+        return this.productService.getProductsForFamily(familyId);
     }
 
     @GetMapping("/product/{id}")
@@ -38,8 +39,8 @@ public class ProductController {
     }
 
     @PostMapping("/product")
-    public ResponseEntity<Product> saveProductForCurrentFamily(@RequestBody Product product, @RequestParam String familyName) {
-        return this.productService.saveProductForCurrentFamily(product, familyName)
+    public ResponseEntity<Product> saveProductForCurrentFamily(@RequestBody Product product, @RequestParam Integer familyId) {
+        return this.productService.saveProductForCurrentFamily(product, familyId)
                 .map(p -> new ResponseEntity<Product>(HttpStatus.CREATED))
                 .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
@@ -47,7 +48,7 @@ public class ProductController {
     @PutMapping("/product/{id}")
     public Optional<Product> editProduct(@PathVariable("id") Integer productId, @RequestBody Product product) {
         return this.productRepository.findById(productId).map(productEdit -> {
-            productEdit.setAmount(product.getAmount());
+            productEdit.setPrice(product.getPrice());
             productEdit.setFrequencyOfUse(product.getFrequencyOfUse());
             productEdit.setInStock(product.getInStock());
             productEdit.setProductName(product.getProductName());

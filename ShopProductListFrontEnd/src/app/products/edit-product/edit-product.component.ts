@@ -1,43 +1,49 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Product} from '../../model/product';
 import {ProductService} from '../product-manager/product.service';
-import {ACTION_EDIT_PRODUCT} from '../../store/actions/product-actions';
+import {EditProductAction} from '../../store/actions/product-actions';
+import {Subject} from 'rxjs/internal/Subject';
+import {takeUntil} from 'rxjs/operators';
+import {Store} from '@ngrx/store';
+import {NzMessageService} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
   styleUrls: ['./edit-product.component.css']
 })
-export class EditProductComponent implements OnInit {
+export class EditProductComponent implements OnInit, OnDestroy {
   @Input()
   productId: number;
   product = new Product();
   validateForm: FormGroup;
   isVisible = false;
   isOkLoading = false;
+  private destroyed$ = new Subject();
 
-  constructor(private fb: FormBuilder, private productService: ProductService) {
+  constructor(private fb: FormBuilder, private productService: ProductService, private store: Store<any>, private message: NzMessageService) {
+
   }
 
   initialize(): void {
     this.validateForm = this.fb.group({
       productName: [null, [Validators.required]],
       frequencyOfUse: [null, [Validators.required]],
-      amount: [null, [Validators.required]],
+      price: [null, [Validators.required]],
       inStock: [null, [Validators.required]],
       userComment: [null, [Validators.required]]
     });
-    this.productService.getAllState().subscribe(state => {
-      if (state.editButtonClicked == true) {
-          this.productId = state.product.productId;
-          this.product = state.product;
-          this.validateForm.get('productName').setValue(this.product.productName);
-          this.validateForm.get('frequencyOfUse').setValue(this.product.frequencyOfUse);
-          this.validateForm.get('amount').setValue(this.product.amount);
-          this.validateForm.get('inStock').setValue(this.product.inStock);
-          this.validateForm.get('userComment').setValue(this.product.userComment);
-          this.showModal();
+    this.productService.getAllState().pipe(takeUntil(this.destroyed$)).subscribe(state => {
+      if (state.showEditProductModal == true) {
+        this.productId = state.product.productId;
+        this.product = state.product;
+        this.validateForm.get('productName').setValue(this.product.productName);
+        this.validateForm.get('frequencyOfUse').setValue(this.product.frequencyOfUse);
+        this.validateForm.get('price').setValue(this.product.price);
+        this.validateForm.get('inStock').setValue(this.product.inStock);
+        this.validateForm.get('userComment').setValue(this.product.userComment);
+        this.showModal();
       }
     });
   }
@@ -61,17 +67,12 @@ export class EditProductComponent implements OnInit {
   editProduct() {
     this.product.productName = this.validateForm.get('productName').value;
     this.product.frequencyOfUse = this.validateForm.get('frequencyOfUse').value;
-    this.product.amount = this.validateForm.get('amount').value;
+    this.product.price = this.validateForm.get('price').value;
     this.product.inStock = this.validateForm.get('inStock').value;
     this.product.userComment = this.validateForm.get('userComment').value;
-    this.productService.editProduct(this.product, this.productId).subscribe(value => {
-      this.productService.updateProductState({
-        action: ACTION_EDIT_PRODUCT,
-        payload: this.product,
-      });
-      console.log(value);
-      this.handleOk();
-    });
+
+    this.store.dispatch(new EditProductAction(this.product));
+    this.handleOk();
   }
 
   submitForm(): void {
@@ -84,5 +85,9 @@ export class EditProductComponent implements OnInit {
 
   handleCancel(): void {
     this.isVisible = false;
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
   }
 }

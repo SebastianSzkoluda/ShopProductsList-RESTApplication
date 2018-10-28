@@ -22,13 +22,7 @@
   margin-right: -10px;
   font-size: 18px;
 }
-.logout {
-  position: absolute;
-  right: 7%;
-  padding: 0px 10px 0px;
-  margin-right: -10px;
-  font-size: 18px;
-}
+
 
 .logo {
   top: 0;
@@ -43,7 +37,10 @@
   margin: 16px 0px 36px 0px;
   float: left;
 }
-
+.anticon-logout {
+  margin: 5px !important;
+  color: #ffffffa6;
+}
 .anticon {
   color: #ffffffa6;
 }
@@ -59,6 +56,13 @@ nz-header {
 }
 .dropdown-toggle {
   padding: 0;
+}
+
+.fullname {
+  text-decoration: none !important;
+  color: inherit;
+  margin: 0 8px;
+  float: right;
 }
 
 

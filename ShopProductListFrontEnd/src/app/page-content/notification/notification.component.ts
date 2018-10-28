@@ -1,31 +1,42 @@
 ///<reference path="../../store/actions/family-actions.ts"/>
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NotificationService} from './notification-manager/notification.service';
 import {Notification} from '../../model/notification';
 import {UserService} from '../../user/user-manager/user.service';
-import {ACTION_CREATE_FAMILY, ACTION_JOIN_FAMILY} from '../../store/actions/family-actions';
+import {JoinFamilyAction} from '../../store/actions/family-actions';
 import {FamilyService} from '../../family/family-manager/family.service';
 import {Family} from '../../model/family';
-import {
-  ACTION_INITIAL_NOTIFICATION,
-  ACTION_NOTIFICATION_ACCEPT,
-  ACTION_NOTIFICATION_DECLINE
-} from '../../store/actions/notification-actions';
+import {AcceptNotificationAction, DeclineNotificationAction} from '../../store/actions/notification-actions';
+import {Subject} from 'rxjs/internal/Subject';
+import {takeUntil} from 'rxjs/operators';
+import {WebSocketService} from '../../websocket/web-socket.service';
+import {select, Store} from '@ngrx/store';
+import {Observable} from 'rxjs/internal/Observable';
+import {selectUserAvatar} from '../../store/reducers';
 
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.css']
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent implements OnInit, OnDestroy {
 
-  constructor(private notificationService: NotificationService, private userService: UserService, private familyService: FamilyService) {
+  constructor(private notificationService: NotificationService,
+              private userService: UserService,
+              private familyService: FamilyService,
+              private webSocketService: WebSocketService,
+              private store: Store<any>) {
+    this.avatarUrl$ = this.store.pipe(select(selectUserAvatar));
   }
 
-  notifications = new Array<Notification>();
+
+  avatarUrl$: Observable<boolean>;
+  private destroyed$ = new Subject();
+  notifications = [];
   family: Family;
 
   ngOnInit() {
+    // this.notificationService.getNotificationsForLoggedUser().subscribe(value => this.notifications = value);
     this.updateNotificationDrawer();
   }
 
@@ -40,39 +51,42 @@ export class NotificationComponent implements OnInit {
   }
 
   decline(notification: Notification) {
-    this.userService.declineInviteToFamily(notification).subscribe(() => {
-      this.notificationService.updateNotificationState({
-        action: ACTION_NOTIFICATION_DECLINE,
-        payload: notification
-      });
-      this.notifications = this.notifications.filter(item => item != notification);
-    });
+    this.store.dispatch(new DeclineNotificationAction(notification));
+    this.notifications = this.notifications.filter(item => item != notification);
+
   }
 
   accept(notification: Notification) {
     console.log(notification);
-    this.familyService.getFamilyById(notification.familyIdFromFamilyUser).subscribe(value => {
+    this.familyService.getFamilyById(notification.familyIdFromFamilyUser).pipe(takeUntil(this.destroyed$)).subscribe(value => {
       this.family = value;
-      this.userService.acceptInviteToFamily(notification).subscribe(() => {
-        this.notificationService.updateNotificationState({
-          action: ACTION_NOTIFICATION_ACCEPT,
-          payload: notification
-        });
-        this.notifications = this.notifications.filter(item => item != notification);
-        this.familyService.updateFamiliesState({
-          action: ACTION_JOIN_FAMILY,
-          payload: this.family,
-        });
-      });
+      this.store.dispatch(new AcceptNotificationAction(notification));
+      this.store.dispatch(new JoinFamilyAction(this.family));
+      this.notifications = this.notifications.filter(item => item != notification);
     });
   }
 
   updateNotificationDrawer() {
+    // let stompClient = this.webSocketService.connect();
+    // stompClient.connect({}, frame => {
+    //   // Subscribe to notification topic
+    //   // stompClient.subscribe('/user/queue/notify', notification => {
+    //   stompClient.subscribe('/topic/notify', notification => {
+    //     console.log('Websocket: => ' + notification.body );
+    //     // Update notifications attribute with the recent messsage sent from the server
+    //     this.notifications.push(JSON.parse(notification.body));
+    //   })
+    // });
+
     this.notificationService.startIntervalPollingForNotifications();
-    this.notificationService.getAllState().subscribe(state => {
+    this.notificationService.getAllState().pipe(takeUntil(this.destroyed$)).subscribe(state => {
       if (state.received == true) {
         this.notifications = state.notifications;
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
   }
 }

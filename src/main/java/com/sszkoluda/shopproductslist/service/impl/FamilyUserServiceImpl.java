@@ -4,28 +4,22 @@ import com.sszkoluda.shopproductslist.model.Authority;
 import com.sszkoluda.shopproductslist.model.Family;
 import com.sszkoluda.shopproductslist.model.FamilyUser;
 import com.sszkoluda.shopproductslist.model.Notification;
+import com.sszkoluda.shopproductslist.repository.AuthorityRepository;
 import com.sszkoluda.shopproductslist.repository.FamilyRepository;
 import com.sszkoluda.shopproductslist.repository.FamilyUserRepository;
 import com.sszkoluda.shopproductslist.repository.NotificationRepository;
 import com.sszkoluda.shopproductslist.service.FamilyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
-@Service(value = "userService")
-public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsService {
+@Service
+public class FamilyUserServiceImpl implements FamilyUserService {
 
     private final FamilyRepository familyRepository;
 
@@ -35,21 +29,30 @@ public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsServ
 
     private final NotificationRepository notificationRepository;
 
+    private final AuthorityRepository authorityRepository;
+
+    private final SimpMessageSendingOperations messagingTemplate;
+
     @Autowired
-    public FamilyUserServiceImpl(FamilyUserRepository familyUserRepository, BCryptPasswordEncoder bcryptEncoder, FamilyRepository familyRepository, NotificationRepository notificationRepository) {
+    public FamilyUserServiceImpl(FamilyUserRepository familyUserRepository, BCryptPasswordEncoder bcryptEncoder, FamilyRepository familyRepository, NotificationRepository notificationRepository, AuthorityRepository authorityRepository, SimpMessageSendingOperations messagingTemplate) {
         this.familyUserRepository = familyUserRepository;
         this.bcryptEncoder = bcryptEncoder;
         this.familyRepository = familyRepository;
         this.notificationRepository = notificationRepository;
+        this.authorityRepository = authorityRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @Override
     public Optional<FamilyUser> saveUser(FamilyUser user) {
+        Optional<Authority> authority = this.authorityRepository.findByName("ROLE_USER");
         Set<Authority> authorities = new HashSet<>();
-        authorities.add(new Authority("user"));
+        authorities.add(authority.get());
         Optional<FamilyUser> newUser = Optional.of(FamilyUser.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
                 .age(user.getAge())
                 .password(bcryptEncoder.encode(user.getPassword()))
                 .authorities(authorities)
@@ -74,37 +77,55 @@ public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsServ
     }
 
     @Override
+    public List<FamilyUser> findUsersLikePartOfUsername(String username) {
+        return this.familyUserRepository.findUsersLike(username).orElse(Collections.emptyList());
+    }
+
+    @Override
+    public void deleteUser(Integer id) {
+        this.familyUserRepository.deleteById(id);
+    }
+
+    @Override
     public Optional<FamilyUser> findUserByEmail(String email) {
         return this.familyUserRepository.findByEmail(email);
     }
 
     @Override
-    public boolean doesLoadUserHaveAFamily() {
+    public Optional<FamilyUser> getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
+        return this.familyUserRepository.findByUserName(auth.getName());
+    }
+
+    @Override
+    public boolean doesLoadUserHaveAFamily() {
+        Optional<FamilyUser> familyUser = getCurrentUser();
         return familyUser.map(fU -> fU.getUserFamilies().isEmpty()).get();
     }
 
     @Override
-    public boolean sendInviteToFamily(String familyName, String invitedUserName) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
+    public boolean sendInviteToFamily(Integer familyId, String invitedUserName) {
+        Optional<FamilyUser> familyUser = getCurrentUser();
+        System.out.println("AAAAAAAAAAAAAAAA: " + familyUser);
         Optional<FamilyUser> invitedUser = familyUserRepository.findByUserName(invitedUserName);
         return invitedUser
                 .map(iU -> {
                     Family familyFromFamilyUser = familyUser.map(familyUser1 -> familyUser1.getUserFamilies()
-                            .stream().filter(family -> family.getFamilyName().equals(familyName)).findFirst().get()).get();
+                            .stream().filter(family -> family.getFamilyId().equals(familyId)).findFirst().get()).get();
                     if (familyFromFamilyUser.getFamilyMembers().stream().noneMatch(familyUser1 -> familyUser1.getUsername().equals(iU.getUsername()))) {
                         Notification notification = Notification.builder()
                                 .familyUser(iU)
-                                .notificationInfo(familyUser.get().getUsername() + " wants to invite you to family: " + familyName)
+                                .notificationInfo(familyUser.get().getUsername() + " wants to invite you to family: " + familyFromFamilyUser.getFamilyName() + ", ID: " + familyId)
                                 .familyUserNameFrom(familyUser.get().getUsername())
-                                .familyIdFromFamilyUser(familyFromFamilyUser.getFamilyId())
-                                .familyNameFromFamilyUser(familyName).build();
+                                .familyIdFromFamilyUser(familyId)
+                                .familyNameFromFamilyUser(familyFromFamilyUser.getFamilyName()).build();
                         if (iU.getNotificationsList().stream()
                                 .noneMatch(n -> notification.getNotificationInfo().equals(n.getNotificationInfo()))) {
                             iU.getNotificationsList().add(notification);
                             this.notificationRepository.save(notification);
+
+//                            messagingTemplate.convertAndSend("/topic/notify",notification);
+//                            this.messagingTemplate.convertAndSendToUser(iU.getUsername(), "/queue/notify", notification);
                             return true;
                         } else {
                             return false;
@@ -130,20 +151,4 @@ public class FamilyUserServiceImpl implements FamilyUserService, UserDetailsServ
         this.notificationRepository.delete(notification);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(s);
-        if (familyUser == null) {
-            throw new UsernameNotFoundException("Invalid username or password.");
-        }
-        return new User(familyUser.get().getUsername(), familyUser.get().getPassword(), getAuthority(familyUser.get()));
-    }
-
-    private Set<GrantedAuthority> getAuthority(FamilyUser familyUser) {
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (Authority role : familyUser.getAuthorities()) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
-        return grantedAuthorities;
-    }
 }

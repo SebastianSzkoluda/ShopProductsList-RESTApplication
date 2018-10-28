@@ -28,14 +28,11 @@ public class AuthenticationController {
 
     private final FamilyUserService familyUserService;
 
-    private final FamilyUserRepository familyUserRepository;
-
     @Autowired
-    public AuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, FamilyUserService familyUserService, FamilyUserRepository familyUserRepository) {
+    public AuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, FamilyUserService familyUserService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.familyUserService = familyUserService;
-        this.familyUserRepository = familyUserRepository;
     }
 
     @PostMapping("/generateToken")
@@ -53,9 +50,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/renewToken")
-    public ResponseEntity<?> renewToken(@RequestBody String username) throws AuthenticationException {
-        Optional<FamilyUser> familyUserToRenew = familyUserRepository.findByUserName(username);
-        final String token = jwtTokenUtil.generateToken(familyUserToRenew.get());
+    public ResponseEntity<?> renewToken() throws AuthenticationException {
+        Optional<FamilyUser> familyUser = this.familyUserService.getCurrentUser();
+        final String token = jwtTokenUtil.generateToken(familyUser.get());
         return ResponseEntity.ok(new AuthToken(token));
     }
 

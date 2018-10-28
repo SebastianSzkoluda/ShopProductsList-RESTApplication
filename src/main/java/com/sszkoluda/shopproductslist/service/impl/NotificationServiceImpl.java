@@ -4,6 +4,7 @@ import com.sszkoluda.shopproductslist.model.FamilyUser;
 import com.sszkoluda.shopproductslist.model.Notification;
 import com.sszkoluda.shopproductslist.repository.FamilyUserRepository;
 import com.sszkoluda.shopproductslist.repository.NotificationRepository;
+import com.sszkoluda.shopproductslist.service.FamilyUserService;
 import com.sszkoluda.shopproductslist.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,10 +22,13 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final FamilyUserRepository familyUserRepository;
 
+    private final FamilyUserService familyUserService;
+
     @Autowired
-    public NotificationServiceImpl(NotificationRepository notificationRepository, FamilyUserRepository familyUserRepository) {
+    public NotificationServiceImpl(NotificationRepository notificationRepository, FamilyUserRepository familyUserRepository, FamilyUserService familyUserService) {
         this.notificationRepository = notificationRepository;
         this.familyUserRepository = familyUserRepository;
+        this.familyUserService = familyUserService;
     }
 
     @Override
@@ -34,8 +38,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public Set<Notification> getAllNotificationsForLoggedUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<FamilyUser> familyUser = familyUserRepository.findByUserName(auth.getName());
+        Optional<FamilyUser> familyUser = this.familyUserService.getCurrentUser();
         return familyUser.map(FamilyUser::getNotificationsList).orElse(Collections.emptySet());
     }
 }
