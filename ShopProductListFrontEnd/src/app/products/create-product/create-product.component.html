@@ -2,7 +2,7 @@
 <nz-modal [nzStyle]="{ top: '70px' }" nzOkText="Create product" nzMaskClosable="true" [(nzVisible)]="isVisible"
           nzTitle="Create Product" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm()" [nzOkLoading]="isOkLoading">
 
-  <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
     <nz-form-item>
       <nz-form-label nzRequired>Product name</nz-form-label>
       <nz-form-control>

@@ -94,8 +94,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   updateFamilyState() {
+    this.store.dispatch(new InitialFamilyAction());
     this.familyService.getAllState().pipe(takeUntil(this.destroyed$)).subscribe(state => {
-      if (state.family !== null && (state.createFinish === true || state.join === true)) {
+      if (state.family !== null && (state.createFamilyFinish === true || state.joinFamily === true)) {
         console.log(state.family);
         this.families.push(state.family);
         this.store.dispatch(new InitialFamilyAction());
@@ -105,7 +106,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   updateProductState() {
     this.productService.getAllState().pipe(takeUntil(this.destroyed$)).subscribe(state => {
-      if (state.product !== null && (state.editFinish === true || state.createFinish === true)) {
+      if (state.product !== null && (state.editProductFinish === true || state.createProductFinish === true)) {
         this.getProductsForFamily(this.familyName, this.familyId);
         this.products.push(state.product);
         this.store.dispatch(new InitialProductAction());

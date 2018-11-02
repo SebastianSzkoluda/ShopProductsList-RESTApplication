@@ -3,31 +3,31 @@ import {Product} from '../../model/product';
 
 
 export interface ProductReducerState {
-  createPending: boolean;
-  createFinish: boolean;
-  createFailed: boolean;
-  editPending: boolean;
-  editFinish: boolean;
-  editFailed: boolean;
+  createProductPending: boolean;
+  createProductFinish: boolean;
+  createProductFailed: boolean;
+  editProductPending: boolean;
+  editProductFinish: boolean;
+  editProductFailed: boolean;
   showEditProductModal: boolean;
-  deletePending: boolean;
-  deleteFinish: boolean;
-  deleteFailed: boolean;
+  deleteProductPending: boolean;
+  deleteProductFinish: boolean;
+  deleteProductFailed: boolean;
   product: Product;
   familyId: number;
 }
 
 const initialState: ProductReducerState = {
-  createPending: false,
-  createFinish: false,
-  createFailed: false,
-  editPending: false,
-  editFinish: false,
-  editFailed: false,
+  createProductPending: false,
+  createProductFinish: false,
+  createProductFailed: false,
+  editProductPending: false,
+  editProductFinish: false,
+  editProductFailed: false,
   showEditProductModal: false,
-  deletePending: false,
-  deleteFinish: false,
-  deleteFailed: false,
+  deleteProductPending: false,
+  deleteProductFinish: false,
+  deleteProductFailed: false,
   product: null,
   familyId: null
 };
@@ -41,106 +41,106 @@ export function productReducer(state = initialState, action: product.ProductActi
     case product.ACTION_CREATE_PRODUCT:
       return {
         ...state,
-        createPending: true,
-        editPending: false,
+        createProductPending: true,
+        editProductPending: false,
         showEditProductModal: false,
-        deletePending: false,
+        deleteProductPending: false,
         product: action.product,
         familyId: action.familyId
       };
     case product.ACTION_CREATE_PRODUCT_SUCCESS:
       return {
         ...state,
-        createPending: false,
-        createFinish: true,
-        createFailed: false,
-        editPending: false,
+        createProductPending: false,
+        createProductFinish: true,
+        createProductFailed: false,
+        editProductPending: false,
         showEditProductModal: false,
-        deletePending: false,
+        deleteProductPending: false,
         product: action.product,
         familyId: action.familyId
       };
     case product.ACTION_CREATE_PRODUCT_FAILED:
       return {
         ...state,
-        createPending: false,
-        createFinish: false,
-        createFailed: true,
-        editPending: false,
+        createProductPending: false,
+        createProductFinish: false,
+        createProductFailed: true,
+        editProductPending: false,
         showEditProductModal: false,
-        deletePending: false,
+        deleteProductPending: false,
         product: action.product,
         familyId: action.familyId
       };
     case product.ACTION_EDIT_PRODUCT:
       return {
         ...state,
-        createPending: false,
-        editPending: true,
+        createProductPending: false,
+        editProductPending: true,
         showEditProductModal: false,
-        deletePending: false,
+        deleteProductPending: false,
         product: action.payload
       };
     case product.ACTION_EDIT_PRODUCT_SUCCESS:
       return {
         ...state,
-        createPending: false,
-        editPending: false,
-        editFinish: true,
-        editFailed: false,
+        createProductPending: false,
+        editProductPending: false,
+        editProductFinish: true,
+        editProductFailed: false,
         showEditProductModal: false,
-        deletePending: false,
+        deleteProductPending: false,
         product: action.payload
       };
     case product.ACTION_EDIT_PRODUCT_FAILED:
       return {
         ...state,
-        createPending: false,
-        editPending: false,
-        editFinish: false,
-        editFailed: true,
+        createProductPending: false,
+        editProductPending: false,
+        editProductFinish: false,
+        editProductFailed: true,
         showEditProductModal: false,
-        deletePending: false,
+        deleteProductPending: false,
         product: action.payload
       };
     case product.ACTION_DELETE_PRODUCT:
       return {
         ...state,
-        createPending: false,
-        editPending: false,
+        createProductPending: false,
+        editProductPending: false,
         showEditProductModal: false,
-        deletePending: true,
+        deleteProductPending: true,
         product: action.payload
       };
     case product.ACTION_DELETE_PRODUCT_SUCCESS:
       return {
         ...state,
-        createPending: false,
-        editPending: false,
+        createProductPending: false,
+        editProductPending: false,
         showEditProductModal: false,
-        deletePending: false,
-        deleteFinish: true,
-        deleteFailed: false,
+        deleteProductPending: false,
+        deleteProductFinish: true,
+        deleteProductFailed: false,
         product: action.payload
       };
     case product.ACTION_DELETE_PRODUCT_FAILED:
       return {
         ...state,
-        createPending: false,
-        editPending: false,
+        createProductPending: false,
+        editProductPending: false,
         showEditProductModal: false,
-        deletePending: true,
-        deleteFinish: false,
-        deleteFailed: true,
+        deleteProductPending: true,
+        deleteProductFinish: false,
+        deleteProductFailed: true,
         product: action.payload
       };
     case product.ACTION_EDIT_BUTTON:
       return {
         ...state,
-        createPending: false,
-        editPending: false,
+        createProductPending: false,
+        editProductPending: false,
         showEditProductModal: true,
-        deletePending: false,
+        deleteProductPending: false,
         product: action.payload
       };
   }

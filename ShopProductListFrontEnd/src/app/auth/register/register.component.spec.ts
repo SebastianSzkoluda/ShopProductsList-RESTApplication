@@ -19,7 +19,7 @@ describe('RegisterComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should createPending', () => {
+  it('should createFamilyPending', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -40,6 +40,8 @@ export function notificationReducer(state = initialState, action: notification.N
       return {
         ...state,
         sendPending: true,
+        sendFinish: false,
+        sendFailed: false,
         accept: false,
         decline: false,
         refresh: false,

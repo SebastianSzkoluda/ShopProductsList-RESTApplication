@@ -1,5 +1,6 @@
-nz-card {
+.outside {
   width: 100%;
+  background-color: #575757f5;
 }
 .container {
   height: 100%;

@@ -1,4 +1,8 @@
 nz-layout  {
   min-height: 100%;
-  background: url('http://thumbs.dreamstime.com/b/black-brick-wall-dark-background-design-gloomy-stone-texture-84568943.jpg') fixed;
+  background: url('../assets/chalk-1869492_1920.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }

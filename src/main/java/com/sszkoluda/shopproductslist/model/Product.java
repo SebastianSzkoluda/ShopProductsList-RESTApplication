@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -21,18 +22,22 @@ public class Product {
     private Integer productId;
 
     @Getter
+    @NotNull
     @Column(name = "product_name")
     private String productName;
 
     @Getter
+    @NotNull
     @Column(name = "frequency_of_use")
     private Integer frequencyOfUse;
 
     @Getter
+    @NotNull
     @Column(name = "price")
     private Float price;
 
     @Getter
+    @NotNull
     @Column(name = "in_stock")
     private Integer inStock;
 

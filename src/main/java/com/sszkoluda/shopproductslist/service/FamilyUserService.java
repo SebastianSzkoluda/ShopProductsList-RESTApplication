@@ -26,7 +26,7 @@ public interface FamilyUserService {
 
     boolean doesLoadUserHaveAFamily();
 
-    boolean sendInviteToFamily(Integer familyId, String invitedUserEmail);
+    Optional<Notification> sendInviteToFamily(Integer familyId, String invitedUserEmail);
 
     void acceptInviteToFamily(Notification notification);
 }

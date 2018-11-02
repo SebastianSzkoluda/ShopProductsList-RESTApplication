@@ -59,11 +59,11 @@ export const selectFamily = createSelector(
 );
 
 export const selectCreateFamilySuccess = createSelector(
-  selectFamilyState, (state: FamilyReducerState) => state.createFinish
+  selectFamilyState, (state: FamilyReducerState) => state.createFamilyFinish
 );
 
 export const selectCreateFamilyFailed = createSelector(
-  selectFamilyState, (state: FamilyReducerState) => state.createFailed
+  selectFamilyState, (state: FamilyReducerState) => state.createFamilyFailed
 );
 /*
 * Notification Selectors
@@ -99,25 +99,25 @@ export const selectShowEditProductModal = createSelector(
 );
 
 export const selectCreateProductSuccess = createSelector(
-  selectProductState, (state: ProductReducerState) => state.createFinish
+  selectProductState, (state: ProductReducerState) => state.createProductFinish
 );
 
 export const selectCreateProductFailed = createSelector(
-  selectProductState, (state: ProductReducerState) => state.createFailed
+  selectProductState, (state: ProductReducerState) => state.createProductFailed
 );
 
 export const selectEditProductSuccess = createSelector(
-  selectProductState, (state: ProductReducerState) => state.editFinish
+  selectProductState, (state: ProductReducerState) => state.editProductFinish
 );
 
 export const selectEditProductFailed = createSelector(
-  selectProductState, (state: ProductReducerState) => state.editFailed
+  selectProductState, (state: ProductReducerState) => state.editProductFailed
 );
 
 export const selectDeleteProductSuccess = createSelector(
-  selectProductState, (state: ProductReducerState) => state.deleteFinish
+  selectProductState, (state: ProductReducerState) => state.deleteProductFinish
 );
 
 export const selectDeleteProductFailed = createSelector(
-  selectProductState, (state: ProductReducerState) => state.deleteFailed
+  selectProductState, (state: ProductReducerState) => state.deleteProductFailed
 );

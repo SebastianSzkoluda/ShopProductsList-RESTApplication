@@ -50,8 +50,9 @@ export class NotificationEffects {
       withLatestFrom(this.store.pipe(select(selectInvitation))),
       switchMap(([, invitation]) => {
         return this.userService.sendInviteToFamily(invitation.familyId, invitation.invitedUser)
-          .pipe(map(() => new SendNotificationSuccessAction(invitation)));
-      }), catchError(() => of(new SendNotificationFailedAction(null))));
+          .pipe(map(() => new SendNotificationSuccessAction(invitation))
+            ,catchError(() => of(new SendNotificationFailedAction({familyId: null,invitedUser: null}))));
+      }));
 
   @Effect()
   declineInviteToFamily$: Observable<Action> = this.actions$
@@ -91,7 +92,7 @@ export class NotificationEffects {
       ofType(notification.ACTION_NOTIFICATION_SEND_FAILED),
       debounceTime(300),
       tap(() => {
-        return this.message.create('error', 'This user is in your family!');
+        return this.message.create('error', 'Somethig goes wrong! Maybe this user is in your family, or your input is incorrect?');
       })
     );
 }

@@ -3,18 +3,18 @@ import {Family} from '../../model/family';
 
 
 export interface FamilyReducerState {
-  createPending: boolean;
-  join: boolean;
-  createFinish: boolean;
-  createFailed: boolean;
+  createFamilyPending: boolean;
+  joinFamily: boolean;
+  createFamilyFinish: boolean;
+  createFamilyFailed: boolean;
   family: Family;
 }
 
 const initialState: FamilyReducerState = {
-  createPending: false,
-  join: false,
-  createFinish: false,
-  createFailed: false,
+  createFamilyPending: false,
+  joinFamily: false,
+  createFamilyFinish: false,
+  createFamilyFailed: false,
   family: null,
 };
 
@@ -27,35 +27,35 @@ export function familyReducer(state = initialState, action: family.FamilyActions
     case family.ACTION_CREATE_FAMILY:
       return {
         ...state,
-        createPending: true,
-        join: false,
+        createFamilyPending: true,
+        joinFamily: false,
         family: action.payload
       };
     case family.ACTION_FAIMLY_CREATE_SUCCESS:
       return {
         ...state,
-        createPending: false,
-        createFinish: true,
-        createFailed: false,
-        join: false,
+        createFamilyPending: false,
+        createFamilyFinish: true,
+        createFamilyFailed: false,
+        joinFamily: false,
         family: action.payload
       };
     case family.ACTION_FAIMLY_CREATE_FAILED:
       return {
         ...state,
-        createPending: false,
-        createFinish: false,
-        createFailed: true,
-        join: false,
+        createFamilyPending: false,
+        createFamilyFinish: false,
+        createFamilyFailed: true,
+        joinFamily: false,
         family: action.payload
       };
     case family.ACTION_JOIN_FAMILY:
       return {
         ...state,
-        createPending: false,
-        createFinish: false,
-        createFailed: false,
-        join: true,
+        createFamilyPending: false,
+        createFamilyFinish: false,
+        createFamilyFailed: false,
+        joinFamily: true,
         family: action.payload
       };
   }

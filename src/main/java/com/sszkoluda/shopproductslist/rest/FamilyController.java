@@ -40,25 +40,13 @@ public class FamilyController {
 
     @PostMapping("/family")
     public ResponseEntity<?> createFamily(@RequestBody Family family) {
-
-        try {
-            Optional<Family> savedFamily = this.familyService.saveFamily(family);
-            return ResponseEntity.status(HttpStatus.OK).body(savedFamily);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("{}");
-        }
+        return this.familyService.saveFamily(family)
+                .map(p -> new ResponseEntity<Family>(HttpStatus.CREATED))
+                .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     @GetMapping("/checkIfUserHaveFamily")
     public boolean checkIfUserHaveFamily() {
         return this.familyUserService.doesLoadUserHaveAFamily();
-    }
-
-    @ExceptionHandler(FamilyException.class)
-    public ResponseEntity<ErrorResponse> exceptionHandler(Exception ex) {
-        ErrorResponse error = new ErrorResponse();
-        error.setErrorCode(HttpStatus.NOT_FOUND.value());
-        error.setMessage(ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }

@@ -104,36 +104,32 @@ public class FamilyUserServiceImpl implements FamilyUserService {
     }
 
     @Override
-    public boolean sendInviteToFamily(Integer familyId, String invitedUserName) {
+    public Optional<Notification> sendInviteToFamily(Integer familyId, String invitedUserName) {
         Optional<FamilyUser> familyUser = getCurrentUser();
-        System.out.println("AAAAAAAAAAAAAAAA: " + familyUser);
         Optional<FamilyUser> invitedUser = familyUserRepository.findByUserName(invitedUserName);
-        return invitedUser
-                .map(iU -> {
-                    Family familyFromFamilyUser = familyUser.map(familyUser1 -> familyUser1.getUserFamilies()
-                            .stream().filter(family -> family.getFamilyId().equals(familyId)).findFirst().get()).get();
-                    if (familyFromFamilyUser.getFamilyMembers().stream().noneMatch(familyUser1 -> familyUser1.getUsername().equals(iU.getUsername()))) {
-                        Notification notification = Notification.builder()
-                                .familyUser(iU)
-                                .notificationInfo(familyUser.get().getUsername() + " wants to invite you to family: " + familyFromFamilyUser.getFamilyName() + ", ID: " + familyId)
-                                .familyUserNameFrom(familyUser.get().getUsername())
-                                .familyIdFromFamilyUser(familyId)
-                                .familyNameFromFamilyUser(familyFromFamilyUser.getFamilyName()).build();
-                        if (iU.getNotificationsList().stream()
-                                .noneMatch(n -> notification.getNotificationInfo().equals(n.getNotificationInfo()))) {
-                            iU.getNotificationsList().add(notification);
-                            this.notificationRepository.save(notification);
+//        System.out.println("Invited User" + invitedUser.get());
 
+        return invitedUser.flatMap(iU -> {
+            Family familyFromFamilyUser = familyUser.map(familyUser1 -> familyUser1.getUserFamilies()
+                    .stream().filter(family -> family.getFamilyId().equals(familyId)).findFirst().get()).get();
+            if (familyFromFamilyUser.getFamilyMembers().stream().noneMatch(familyUser1 -> familyUser1.getUsername().equals(iU.getUsername()))) {
+                Notification notification = Notification.builder()
+                        .familyUser(iU)
+                        .notificationInfo(familyUser.get().getUsername() + " wants to invite you to family: " + familyFromFamilyUser.getFamilyName() + ", ID: " + familyId)
+                        .familyUserNameFrom(familyUser.get().getUsername())
+                        .familyIdFromFamilyUser(familyId)
+                        .familyNameFromFamilyUser(familyFromFamilyUser.getFamilyName()).build();
+                if (iU.getNotificationsList().stream()
+                        .noneMatch(n -> notification.getNotificationInfo().equals(n.getNotificationInfo()))) {
+                    iU.getNotificationsList().add(notification);
+                    return Optional.of(this.notificationRepository.save(notification));
 //                            messagingTemplate.convertAndSend("/topic/notify",notification);
 //                            this.messagingTemplate.convertAndSendToUser(iU.getUsername(), "/queue/notify", notification);
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    } else {
-                        return false;
-                    }
-                }).get();
+                }
+            }
+            return Optional.empty();
+        });
+
     }
 
     @Override

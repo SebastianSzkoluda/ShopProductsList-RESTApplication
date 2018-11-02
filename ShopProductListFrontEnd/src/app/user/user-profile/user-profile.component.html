@@ -2,7 +2,7 @@
   <nz-card>
     <div class="content">
       <nz-upload class="avatar-uploader"
-                 nzAction="/api/avatar/"
+                 nzAction="/api/user/avatar/"
                  nzName="file"
                  nzListType="picture-card"
                  [nzShowUploadList]="false"
@@ -12,7 +12,7 @@
           <i nz-icon class="anticon anticon-plus"></i>
           <div class="ant-upload-text">Upload</div>
         </ng-container>
-        <img *ngIf="avatarUrl$ | async" [attr.src]="('/api/avatar/' + (avatarUrl$ | async)) | secure | async" class="avatar">
+        <img *ngIf="avatarUrl$ | async" [attr.src]="('/api/user/avatar/' + (avatarUrl$ | async)) | secure | async" class="avatar">
       </nz-upload>
 
       <div id="wrapper">
@@ -21,6 +21,11 @@
           <div class="inneri2">
             <div class="label" style="float: left;">USERNAME:</div>
             <div style="font-size:18px; float: left; margin-left: 10px;">{{user.username}}</div>
+          </div>
+
+          <div class="inneri2">
+            <div class="label" style="float: left;">AGE:</div>
+            <div style="font-size:18px; float: left; margin-left: 10px;">{{user.age}}</div>
           </div>
 
           <div class="inneri2">

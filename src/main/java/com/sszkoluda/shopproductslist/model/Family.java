@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +28,7 @@ public class Family {
 
     @Getter
     @Column(name = "family_name")
+    @NotNull
     private String familyName;
 
     @Getter

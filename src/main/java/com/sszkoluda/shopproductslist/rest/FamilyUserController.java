@@ -17,6 +17,7 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -65,8 +66,11 @@ public class FamilyUserController {
     }
 
     @GetMapping("/user/sendInviteToFamily")
-    public boolean sendInviteToFamily(@RequestParam("familyId") Integer familyId, @RequestParam("invitedUserName") String invitedUserName) {
-        return this.familyUserService.sendInviteToFamily(familyId, invitedUserName);
+    public ResponseEntity<?> sendInviteToFamily(@RequestParam("familyId") Integer familyId,
+                                                @RequestParam("invitedUserName") String invitedUserName) throws FamilyUserException {
+        return this.familyUserService.sendInviteToFamily(familyId, invitedUserName)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new FamilyUserException("Error when creating notification"));
     }
 //    @MessageMapping("/sendInviteToFamily/{familyName}/{invitedUserName}")
 ////    @SendToUser("/queue/notify")
@@ -85,13 +89,5 @@ public class FamilyUserController {
     public ResponseEntity<?> declineInviteToFamily(@RequestBody Notification notification) {
         this.notificationRepository.delete(notification);
         return ResponseEntity.ok().build();
-    }
-
-    @ExceptionHandler(FamilyUserException.class)
-    public ResponseEntity<ErrorResponse> exceptionHandler(Exception ex) {
-        ErrorResponse error = new ErrorResponse();
-        error.setErrorCode(HttpStatus.NOT_FOUND.value());
-        error.setMessage(ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }

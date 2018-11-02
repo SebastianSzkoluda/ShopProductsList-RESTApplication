@@ -39,5 +39,4 @@ test-output
 atlassian-ide-plugin.xml
 .gradletasknamecache
 
-*.jpg
-/upload-dir/
+upload-dir/

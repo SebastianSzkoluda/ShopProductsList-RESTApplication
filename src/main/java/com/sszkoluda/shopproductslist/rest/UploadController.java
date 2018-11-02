@@ -26,7 +26,7 @@ public class UploadController {
 
     List<String> files = new ArrayList<String>();
 
-    @PostMapping("/avatar")
+    @PostMapping("/user/avatar")
     public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
         String message = "";
         String filename= "";
@@ -52,7 +52,7 @@ public class UploadController {
         return ResponseEntity.ok().body(fileNames);
     }
 
-    @GetMapping("/avatar/{filename:.+}")
+    @GetMapping("/user/avatar/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
         Resource file = storageService.loadFile(filename);

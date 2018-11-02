@@ -42,11 +42,12 @@ export class UserService {
       ));
   }
 
-  sendInviteToFamily(familyId: number, invitedUserName: string): Observable<boolean> {
+  sendInviteToFamily(familyId: number, invitedUserName: string): Observable<Notification> {
+      if(familyId === null) familyId = -1;
     let httpParams = new HttpParams()
       .set('familyId', familyId.toString())
       .set('invitedUserName', invitedUserName);
-    return this.http.get<boolean>(this.baseUrl + 'user/sendInviteToFamily', {params: httpParams});
+    return this.http.get<Notification>(this.baseUrl + 'user/sendInviteToFamily', {params: httpParams});
   }
 
   // sendInviteToFamily(familyName: string, invitedUserName: string): Observable<boolean> {

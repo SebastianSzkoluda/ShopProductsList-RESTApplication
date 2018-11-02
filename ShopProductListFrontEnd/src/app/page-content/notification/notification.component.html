@@ -2,7 +2,7 @@
 <a (click)="open()">
   <nz-badge [nzCount]="notifications.length" style="margin-right: 24px;">
     <nz-avatar *ngIf="!(avatarUrl$ | async)" nzIcon="anticon anticon-user" [nzShape]="'circle'"></nz-avatar>
-    <nz-avatar *ngIf="(avatarUrl$ | async)" [nzSrc]="('/api/avatar/' + (avatarUrl$ | async)) | secure | async" [nzShape]="'circle'"></nz-avatar>
+    <nz-avatar *ngIf="(avatarUrl$ | async)" [nzSrc]="('/api/user/avatar/' + (avatarUrl$ | async)) | secure | async" [nzShape]="'circle'"></nz-avatar>
   </nz-badge>
 </a>
 

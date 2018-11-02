@@ -5,7 +5,9 @@ import {ProductService} from '../product-manager/product.service';
 import {CreateProductAction} from '../../store/actions/product-actions';
 import {NzMessageService} from 'ng-zorro-antd';
 import {Subject} from 'rxjs/internal/Subject';
-import {Store} from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
+import {Observable} from 'rxjs/internal/Observable';
+import {selectCreateProductSuccess} from '../../store/reducers';
 
 @Component({
   selector: 'app-create-product',
@@ -19,10 +21,11 @@ export class CreateProductComponent implements OnInit, OnDestroy {
   validateForm: FormGroup;
   isVisible = false;
   isOkLoading = false;
-  ł;
+  createProductFinish$: Observable<boolean>;
   private destroyed$ = new Subject();
 
   constructor(private fb: FormBuilder, private productService: ProductService, private message: NzMessageService, private store: Store<any>) {
+    this.createProductFinish$ = this.store.pipe(select(selectCreateProductSuccess));
   }
 
   initialize(): void {
@@ -64,7 +67,10 @@ export class CreateProductComponent implements OnInit, OnDestroy {
     this.product.userComment = this.validateForm.get('userComment').value;
 
     this.store.dispatch(new CreateProductAction(this.product, this.familyId));
-    this.handleOk();
+    this.createProductFinish$.pipe().subscribe(value => {
+      if(value) this.handleOk();
+    })
+
   }
 
   createMessage(type: string, message: string): void {

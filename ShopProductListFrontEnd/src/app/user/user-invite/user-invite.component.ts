@@ -9,9 +9,9 @@ import {NotificationService} from '../../page-content/notification/notification-
 import {SendNotificationAction} from '../../store/actions/notification-actions';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs/internal/Subject';
-import {Observable} from 'rxjs/internal/Observable';
 import {select, Store} from '@ngrx/store';
-import {selectSendInvitationFailed, selectSendInvitationSuccess} from '../../store/reducers';
+import {Observable} from 'rxjs/internal/Observable';
+import {selectSendInvitationSuccess} from '../../store/reducers';
 
 @Component({
   selector: 'app-user-invite',
@@ -25,6 +25,7 @@ export class UserInviteComponent implements OnInit, OnDestroy {
   validateForm: FormGroup;
   isVisible = false;
   isOkLoading = false;
+  sendInvitationSuccess$: Observable<boolean>;
   private destroyed$ = new Subject();
 
   constructor(private fb: FormBuilder,
@@ -33,6 +34,7 @@ export class UserInviteComponent implements OnInit, OnDestroy {
               private message: NzMessageService,
               private notificationService: NotificationService,
               private store: Store<any>) {
+    this.sendInvitationSuccess$ = this.store.pipe(select(selectSendInvitationSuccess));
   }
 
   initialize(): void {
@@ -89,7 +91,7 @@ export class UserInviteComponent implements OnInit, OnDestroy {
   onInput() {
     this.validateForm
       .get('userInput')
-      .valueChanges.subscribe(
+      .valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(
       term => {
         if (term != '') {
           this.userService.getAllUsersLikePartOfUsername(term).pipe(takeUntil(this.destroyed$)).subscribe(
@@ -105,12 +107,14 @@ export class UserInviteComponent implements OnInit, OnDestroy {
     this.store.dispatch(new SendNotificationAction(
       {'familyId': this.validateForm.get('familyId').value, 'invitedUser': this.validateForm.get('userInput').value})
     );
-    this.handleOk();
+    this.sendInvitationSuccess$.pipe().subscribe(value => {
+      if (value) this.handleOk();
+    });
   }
 
   updateFamilyState() {
     this.familyService.getAllState().pipe(takeUntil(this.destroyed$)).subscribe(state => {
-      if (state.family !== null && (state.createFinish === true || state.join === true)) {
+      if (state.family !== null && (state.createFamilyFinish === true || state.join === true)) {
         this.families.push(state.family);
       }
     });

@@ -1,5 +1,6 @@
 nz-card {
   width: 100%;
+  background-color: #575757f5;
 }
 .container {
   height: 100%;
@@ -9,7 +10,7 @@ nz-card {
 
 .user-image {
   float: left;
-  width: 290px;
+  width: 310px;
   height: 320px;
 }
 

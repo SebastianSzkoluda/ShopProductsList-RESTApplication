@@ -23,6 +23,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private destroyed$ = new Subject();
   isLoggedIn$: Observable<boolean>;
+  loginUser: LoginUser = new LoginUser(null, null);
+  validateForm: FormGroup;
 
   constructor(private router: Router,
               private authService: AuthService,
@@ -35,8 +37,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isLoggedIn$ = this.store.pipe(select(selectLoggedIn));
   }
 
-  loginUser: LoginUser = new LoginUser(null, null);
-  validateForm: FormGroup;
+
 
   public login(): void {
     this.loginUser.username = this.validateForm.get('username').value;

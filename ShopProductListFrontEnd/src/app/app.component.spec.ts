@@ -8,7 +8,7 @@ describe('AppComponent', () => {
       ],
     }).compileComponents();
   }));
-  it('should createPending the app', async(() => {
+  it('should createFamilyPending the app', async(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();

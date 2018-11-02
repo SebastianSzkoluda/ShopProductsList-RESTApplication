@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Data
@@ -22,14 +23,17 @@ public class FamilyUser {
     private Integer userId;
 
     @Getter
+    @NotNull
     @Column(name = "password")
     private String password;
 
     @Getter
+    @NotNull
     @Column(name = "firstname")
     private String firstname;
 
     @Getter
+    @NotNull
     @Column(name = "lastname")
     private String lastname;
 
@@ -39,6 +43,7 @@ public class FamilyUser {
 
     @Getter
     @Email
+    @NotNull
     @Column(name = "email")
     private String email;
 

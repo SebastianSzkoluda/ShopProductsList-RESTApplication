@@ -4,7 +4,9 @@ import {Family} from '../../model/family';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CreateFamilyAction} from '../../store/actions/family-actions';
 import {Subject} from 'rxjs/internal/Subject';
-import {Store} from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
+import {Observable} from 'rxjs/internal/Observable';
+import {selectCreateFamilySuccess} from '../../store/reducers';
 
 @Component({
   selector: 'app-family',
@@ -14,9 +16,11 @@ import {Store} from '@ngrx/store';
 export class FamilyComponent implements OnInit, OnDestroy {
 
   constructor(private familyService: FamilyService, private fb: FormBuilder, private store: Store<any>) {
+    this.createFamilySuccess$ = this.store.pipe(select(selectCreateFamilySuccess));
   }
 
   private destroyed$ = new Subject();
+  createFamilySuccess$: Observable<boolean>;
   family: Family = new Family();
   validateForm: FormGroup;
   isVisible = false;
@@ -48,7 +52,9 @@ export class FamilyComponent implements OnInit, OnDestroy {
   createFamily() {
     this.family.familyName = this.validateForm.get('familyName').value;
     this.store.dispatch(new CreateFamilyAction(this.family));
-    this.handleOk();
+    this.createFamilySuccess$.pipe().subscribe(value => {
+      if(value) this.handleOk();
+    })
   }
 
 

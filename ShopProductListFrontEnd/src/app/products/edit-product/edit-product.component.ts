@@ -5,8 +5,10 @@ import {ProductService} from '../product-manager/product.service';
 import {EditProductAction} from '../../store/actions/product-actions';
 import {Subject} from 'rxjs/internal/Subject';
 import {takeUntil} from 'rxjs/operators';
-import {Store} from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import {NzMessageService} from 'ng-zorro-antd';
+import {Observable} from 'rxjs/internal/Observable';
+import {selectEditProductSuccess} from '../../store/reducers';
 
 @Component({
   selector: 'app-edit-product',
@@ -20,10 +22,11 @@ export class EditProductComponent implements OnInit, OnDestroy {
   validateForm: FormGroup;
   isVisible = false;
   isOkLoading = false;
+  editProductSucces$: Observable<boolean>;
   private destroyed$ = new Subject();
 
-  constructor(private fb: FormBuilder, private productService: ProductService, private store: Store<any>, private message: NzMessageService) {
-
+  constructor(private fb: FormBuilder, private productService: ProductService, private store: Store<any>) {
+    this.editProductSucces$ = this.store.pipe(select(selectEditProductSuccess));
   }
 
   initialize(): void {
@@ -72,7 +75,9 @@ export class EditProductComponent implements OnInit, OnDestroy {
     this.product.userComment = this.validateForm.get('userComment').value;
 
     this.store.dispatch(new EditProductAction(this.product));
-    this.handleOk();
+    this.editProductSucces$.pipe().subscribe(value => {
+      if(value) this.handleOk();
+    })
   }
 
   submitForm(): void {

@@ -14,7 +14,7 @@ export class UploadFileService {
 
     formdata.append('file', file);
 
-    const req = new HttpRequest('POST', '/api/postImage', formdata, {
+    const req = new HttpRequest('POST', '/api/user/avatar', formdata, {
       reportProgress: true,
       responseType: 'text'
     });
@@ -26,7 +26,4 @@ export class UploadFileService {
     return this.http.get<string[]>('/api/getallfiles');
   }
 
-  getFile(filename: string): Observable<any> {
-    return this.http.get('/api/files/' + `${filename}`)
-  }
 }
