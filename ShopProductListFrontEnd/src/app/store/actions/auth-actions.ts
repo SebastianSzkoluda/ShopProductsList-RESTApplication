@@ -10,7 +10,7 @@ export const ACTION_RECEIVED_TOKEN = 'RECEIVED TOKEN';
 export class LoginAction implements Action {
   readonly type = ACTION_LOGGEDIN;
 
-  constructor(public payload: any, public token: Array<any>) {
+  constructor(public payload: any) {
   }
 }
 

@@ -1,16 +1,16 @@
 import {Action} from '@ngrx/store';
 import {Product} from '../../model/product';
 
-export const ACTION_CREATE_PRODUCT = 'CREATE_PRODUCT';
+export const ACTION_CREATE_PRODUCT = 'CREATE_PRODUCT_PENDING';
 export const ACTION_CREATE_PRODUCT_SUCCESS = 'CREATE_PRODUCT_SUCCESS';
 export const ACTION_CREATE_PRODUCT_FAILED = 'CREATE_PRODUCT_FAILED';
-export const ACTION_EDIT_PRODUCT = 'EDIT_PRODUCT';
+export const ACTION_EDIT_PRODUCT = 'EDIT_PRODUCT_PENDING';
 export const ACTION_EDIT_PRODUCT_SUCCESS = 'EDIT_PRODUCT_SUCCESS';
 export const ACTION_EDIT_PRODUCT_FAILED = 'EDIT_PRODUCT_FAILED';
-export const ACTION_DELETE_PRODUCT = 'DELETE_PRODUCT';
+export const ACTION_DELETE_PRODUCT = 'DELETE_PRODUCT_PENDING';
 export const ACTION_DELETE_PRODUCT_SUCCESS = 'DELETE_PRODUCT_SUCCESS';
 export const ACTION_DELETE_PRODUCT_FAILED = 'DELETE_PRODUCT_FAILED';
-export const ACTION_EDIT_BUTTON = 'EDIT_BUTTON_CLICKED';
+export const ACTION_EDIT_PRODUCT_BUTTON = 'EDIT_PRODUCT_BUTTON_CLICKED';
 export const ACTION_INITIAL_PRODUCT = 'PRODUCT_INITIAL_STATE';
 
 export class CreateProductAction implements Action {
@@ -76,8 +76,8 @@ export class DeleteProductFailedAction implements Action {
   }
 }
 
-export class EditButtonAction implements Action {
-  readonly type = ACTION_EDIT_BUTTON;
+export class EditProductButtonAction implements Action {
+  readonly type = ACTION_EDIT_PRODUCT_BUTTON;
 
   constructor(public payload: any) {
   }
@@ -100,5 +100,5 @@ export type ProductActionsUnion
   | DeleteProductAction
   | DeleteProductSuccessAction
   | DeleteProductFailedAction
-  | EditButtonAction
+  | EditProductButtonAction
   | InitialProductAction;

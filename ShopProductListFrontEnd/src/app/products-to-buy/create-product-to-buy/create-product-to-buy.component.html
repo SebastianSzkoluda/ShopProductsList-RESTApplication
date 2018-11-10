@@ -1,0 +1,44 @@
+<button nz-button nzType="primary" (click)="showModal()">Create Product</button>
+<nz-modal [nzStyle]="{ top: '70px' }" nzOkText="Create product" nzMaskClosable="true" [(nzVisible)]="isVisible"
+          nzTitle="Create Product" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm()" [nzOkLoading]="isOkLoading">
+
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label nzRequired>Product name</nz-form-label>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="anticon anticon-barcode">
+          <input type="text" nz-input formControlName="productName" placeholder="Product name">
+        </nz-input-group>
+        <nz-form-explain *ngIf="validateForm.get('productName').dirty && validateForm.get('productName').errors">Please
+          input product name!
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Amount To Buy</nz-form-label>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="anticon anticon-inbox">
+          <input type="text" nz-input formControlName="amountToBuy" placeholder="Amount to buy">
+        </nz-input-group>
+        <nz-form-explain *ngIf="validateForm.get('amountToBuy').dirty && validateForm.get('amountToBuy').errors">
+          Please input product amount to buy!
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Shop</nz-form-label>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="anticon anticon-wallet">
+          <input type="text" nz-input formControlName="shop" placeholder="Shop">
+        </nz-input-group>
+        <nz-form-explain *ngIf="validateForm.get('shop').dirty && validateForm.get('shop').errors">Please input
+          product price!
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+
+</nz-modal>

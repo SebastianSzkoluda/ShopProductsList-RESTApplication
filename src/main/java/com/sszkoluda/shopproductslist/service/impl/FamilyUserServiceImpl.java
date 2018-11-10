@@ -140,7 +140,6 @@ public class FamilyUserServiceImpl implements FamilyUserService {
                 .filter(family -> family.getFamilyId().equals(notification.getFamilyIdFromFamilyUser()))
                 .findFirst()).map(family -> {
             FamilyUser familyUserInvited = notification.getFamilyUser();
-            familyUserInvited.getUserFamilies().add(family.get());
             family.get().getFamilyMembers().add(familyUserInvited);
             return this.familyUserRepository.save(familyUserInvited);
         });

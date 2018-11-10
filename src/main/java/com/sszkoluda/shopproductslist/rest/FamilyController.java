@@ -3,6 +3,7 @@ package com.sszkoluda.shopproductslist.rest;
 import com.sszkoluda.shopproductslist.exception.ErrorResponse;
 import com.sszkoluda.shopproductslist.exception.FamilyException;
 import com.sszkoluda.shopproductslist.model.Family;
+import com.sszkoluda.shopproductslist.model.Product;
 import com.sszkoluda.shopproductslist.repository.FamilyRepository;
 import com.sszkoluda.shopproductslist.service.FamilyService;
 import com.sszkoluda.shopproductslist.service.FamilyUserService;
@@ -34,14 +35,14 @@ public class FamilyController {
     }
 
     @GetMapping("family/{id}")
-    public Family getFamilyById(@PathVariable("id") Integer id) {
-        return this.familyService.findFamilyById(id).get();
+    public Optional<Family> getFamilyById(@PathVariable("id") Integer id) {
+        return this.familyService.findFamilyById(id);
     }
 
     @PostMapping("/family")
-    public ResponseEntity<?> createFamily(@RequestBody Family family) {
+    public ResponseEntity<Family> createFamily(@RequestBody Family family) {
         return this.familyService.saveFamily(family)
-                .map(p -> new ResponseEntity<Family>(HttpStatus.CREATED))
+                .map(f -> new ResponseEntity<>(f,HttpStatus.CREATED))
                 .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 

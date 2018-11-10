@@ -2,11 +2,10 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Product} from '../../model/product';
 import {ProductService} from '../product-manager/product.service';
-import {EditProductAction} from '../../store/actions/product-actions';
+import {EditProductAction, InitialProductAction} from '../../store/actions/product-actions';
 import {Subject} from 'rxjs/internal/Subject';
 import {takeUntil} from 'rxjs/operators';
 import {select, Store} from '@ngrx/store';
-import {NzMessageService} from 'ng-zorro-antd';
 import {Observable} from 'rxjs/internal/Observable';
 import {selectEditProductSuccess} from '../../store/reducers';
 
@@ -38,7 +37,7 @@ export class EditProductComponent implements OnInit, OnDestroy {
       userComment: [null, [Validators.required]]
     });
     this.productService.getAllState().pipe(takeUntil(this.destroyed$)).subscribe(state => {
-      if (state.showEditProductModal == true) {
+      if (state.showEditProductModal === true) {
         this.productId = state.product.productId;
         this.product = state.product;
         this.validateForm.get('productName').setValue(this.product.productName);
@@ -76,8 +75,8 @@ export class EditProductComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(new EditProductAction(this.product));
     this.editProductSucces$.pipe().subscribe(value => {
-      if(value) this.handleOk();
-    })
+      if (value) this.handleOk();
+    });
   }
 
   submitForm(): void {
@@ -89,6 +88,7 @@ export class EditProductComponent implements OnInit, OnDestroy {
   }
 
   handleCancel(): void {
+    this.store.dispatch(new InitialProductAction());
     this.isVisible = false;
   }
 

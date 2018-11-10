@@ -12,8 +12,7 @@ import * as auth from '../../store/actions/auth-actions';
 import {selectLoggedIn} from '../../store/reducers';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TokenStorage} from '../token/token.storage';
-import {decode} from 'punycode';
-import {ACTION_LOGGEDIN} from '../../store/actions/auth-actions';
+import {LoginAction} from '../../store/actions/auth-actions';
 
 @Injectable()
 export class AuthService {
@@ -28,18 +27,15 @@ export class AuthService {
   }
 
   login(loginUser: LoginUser): Observable<AuthToken> {
-    return this.http.post <AuthToken>(this.authUrl + 'generateToken', loginUser).pipe(map(value => {
+    return this.http.post <AuthToken>(this.authUrl + 'signin', loginUser).pipe(map(value => {
 
       const decodedToken = this.decodeToken(value.token);
-      this.updateUserState({
-        action: ACTION_LOGGEDIN,
-        payload: decodedToken
-      });
+      this.store.dispatch(new LoginAction(decodedToken));
       return value;
     }));
   }
 
-  renewToken(username: string) : Observable<AuthToken> {
+  renewToken(username: string): Observable<AuthToken> {
     return this.http.post <AuthToken>(this.authUrl + 'renewToken', username).pipe(map(value => {
       return value;
     }));
@@ -58,7 +54,7 @@ export class AuthService {
 
 
   register(familyUser: FamilyUser): Observable<FamilyUser> {
-    return this.http.post<FamilyUser>(this.authUrl + 'register', familyUser);
+    return this.http.post<FamilyUser>(this.authUrl + 'signup', familyUser);
   }
 
   getAllState() {

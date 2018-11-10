@@ -4,7 +4,7 @@ import {Family} from '../../model/family';
 import {ProductService} from '../product-manager/product.service';
 import {Product} from '../../model/product';
 import {map, takeUntil} from 'rxjs/operators';
-import {DeleteProductAction, EditButtonAction, InitialProductAction} from '../../store/actions/product-actions';
+import {DeleteProductAction, EditProductButtonAction, InitialProductAction} from '../../store/actions/product-actions';
 import {InitialFamilyAction} from '../../store/actions/family-actions';
 import {Subject} from 'rxjs/internal/Subject';
 import {select, Store} from '@ngrx/store';
@@ -18,8 +18,9 @@ import {selectDeleteProductFailed, selectDeleteProductSuccess} from '../../store
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit, OnDestroy {
+
   familyName = 'No family selected';
-  familyId: number = 0;
+  familyId = 0;
   families: Array<Family>;
   products: Array<Product>;
   sortName = null;
@@ -55,7 +56,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   editMode(product: Product) {
-    this.store.dispatch(new EditButtonAction(product));
+    this.store.dispatch(new EditProductButtonAction(product));
   }
 
   deleteProduct(product: Product) {
@@ -64,7 +65,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.deleteSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(value => {
       if (value) {
         this.createMessage('success', 'Product deleted successfully!');
-        this.products = this.products.filter(item => item != product);
+        this.products = this.products.filter(item => item !== product);
       }
     });
 
@@ -98,7 +99,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.familyService.getAllState().pipe(takeUntil(this.destroyed$)).subscribe(state => {
       if (state.family !== null && (state.createFamilyFinish === true || state.joinFamily === true)) {
         console.log(state.family);
-        this.families.push(state.family);
+        this.families = [...this.families, state.family];
+        console.log(this.families);
         this.store.dispatch(new InitialFamilyAction());
       }
     });
@@ -106,10 +108,19 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   updateProductState() {
     this.productService.getAllState().pipe(takeUntil(this.destroyed$)).subscribe(state => {
-      if (state.product !== null && (state.editProductFinish === true || state.createProductFinish === true)) {
-        this.getProductsForFamily(this.familyName, this.familyId);
-        this.products.push(state.product);
-        this.store.dispatch(new InitialProductAction());
+      if (state.product !== null) {
+        console.log(state.product);
+        if (state.editProductFinish === true ) {
+          this.products.forEach(element => {
+            if (element.productId === state.product.productId) { element = state.product; }
+          });
+          console.log(this.products);
+          this.store.dispatch(new InitialProductAction());
+        } else if (state.createProductFinish === true) {
+          this.products = [...this.products, state.product];
+          console.log(this.products);
+          this.store.dispatch(new InitialProductAction());
+        }
       }
     });
   }

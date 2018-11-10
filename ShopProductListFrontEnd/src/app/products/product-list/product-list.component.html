@@ -1,4 +1,4 @@
-<div class="container">
+<div class="products-list">
   <nz-card>
     <app-edit-product></app-edit-product>
     <div id="wrapper">
@@ -9,28 +9,30 @@
           </a>
           <ul nz-menu>
             <li *ngIf="families?.length == 0" nz-menu-item>empty</li>
-            <li *ngFor="let family of families" (click)="getProductsForFamily(family.familyName, family.familyId)" nz-menu-item
+            <li *ngFor="let family of families" (click)="getProductsForFamily(family.familyName, family.familyId)"
+                nz-menu-item
                 routerLink="/productsList">{{family.familyName + ' ID: ' + family.familyId}}
             </li>
           </ul>
         </nz-dropdown>
       </div>
     </div>
-    <app-create-product [familyId]="familyId"></app-create-product>
 
-    <div class="container">
+    <div class="list-view">
       <div>
-        <h5>Selected family: {{familyName + ', ID: ' + familyId}}<app-shop-map style="float: right"></app-shop-map></h5>
-
+        <h5>Selected family: {{familyName + ', ID: ' + familyId}}</h5>
+        <br>
+        <div style="margin-bottom: 1%">
+          <app-create-product [familyId]="familyId"></app-create-product>
+          <!--<app-shop-map style="float: right"></app-shop-map>-->
+        </div>
       </div>
 
       <nz-table #nzTable class="main"
                 [nzFrontPagination]="true"
                 [nzShowPagination]="true"
-                #filterTable
                 [nzData]="products"
-                [nzPageSize]="5"
-                nzSize="default">
+                [nzPageSize]="5">
         <thead (nzSortChange)="sort($event)" nzSingleSort>
         <tr>
           <th nzShowExpand></th>

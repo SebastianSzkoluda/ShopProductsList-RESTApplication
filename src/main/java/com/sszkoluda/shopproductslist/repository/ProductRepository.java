@@ -9,6 +9,7 @@ import java.util.Optional;
 
 
 public interface ProductRepository extends CrudRepository<Product, Integer> {
+
     @Query("SELECT p FROM Product p WHERE p.productName LIKE :productName ")
     Optional<Product> findByProductName(@Param("productName") String productName);
 }

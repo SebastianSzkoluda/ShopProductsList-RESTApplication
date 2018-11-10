@@ -3,7 +3,8 @@
   <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'" style="line-height: 64px; background-color: #060606">
     <li nz-menu-item routerLink="/usermanual">User Manual</li>
     <li *ngIf="(isLoggedIn$ | async) && (isAdmin$ | async)" nz-menu-item routerLink="/user">Users List</li>
-    <li *ngIf="isLoggedIn$ | async" nz-menu-item routerLink="/productsList">Products List</li>
+    <li *ngIf="isLoggedIn$ | async" nz-menu-item routerLink="/productsList">Products At Home List</li>
+    <li *ngIf="isLoggedIn$ | async" nz-menu-item routerLink="/productsToBuyList">Products To Buy List</li>
     <li *ngIf="isLoggedIn$ | async" nz-menu-item>
       <app-family></app-family>
     </li>

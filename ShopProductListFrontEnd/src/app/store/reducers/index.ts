@@ -3,11 +3,13 @@ import {familyReducer, FamilyReducerState} from './family-reducer';
 import {productReducer, ProductReducerState} from './product-reducer';
 import {ActionReducerMap, createFeatureSelector, createSelector} from '@ngrx/store';
 import {notificationReducer, NotificationReducerState} from './notification-reducer';
+import {productToBuyReducer, ProductToBuyReducerState} from './product-to-buy-reducer';
 
 interface AppState {
   authReducer: AuthReducerState;
   familyReducer: FamilyReducerState;
   productReducer: ProductReducerState;
+  productToBuyReducer: ProductToBuyReducerState;
   notificationReducer: NotificationReducerState;
 }
 
@@ -15,6 +17,7 @@ export const reducers: ActionReducerMap<AppState> = {
   authReducer: authReducer,
   familyReducer: familyReducer,
   productReducer: productReducer,
+  productToBuyReducer: productToBuyReducer,
   notificationReducer: notificationReducer
 };
 
@@ -25,6 +28,8 @@ export const selectFamilyState = createFeatureSelector<AppState, FamilyReducerSt
 export const selectNotificationState = createFeatureSelector<AppState, NotificationReducerState>('notificationReducer');
 
 export const selectProductState = createFeatureSelector<AppState, ProductReducerState>('productReducer');
+
+export const selectProductToBuyState = createFeatureSelector<AppState, ProductToBuyReducerState>('productToBuyReducer');
 
 
 /*
@@ -120,4 +125,30 @@ export const selectDeleteProductSuccess = createSelector(
 
 export const selectDeleteProductFailed = createSelector(
   selectProductState, (state: ProductReducerState) => state.deleteProductFailed
+);
+/*
+* ProductToBuy Selectors
+*/
+export const selectProductToBuy = createSelector(
+  selectProductToBuyState, (state: ProductToBuyReducerState) => state.productToBuy
+);
+
+export const selectFamilyIdProductToBuy = createSelector(
+  selectProductToBuyState, (state: ProductToBuyReducerState) => state.familyId
+);
+
+export const selectCreateProductToBuySuccess = createSelector(
+  selectProductToBuyState, (state: ProductToBuyReducerState) => state.createProductToBuyFinish
+);
+
+export const selectEditProductToBuySuccess = createSelector(
+  selectProductToBuyState, (state: ProductToBuyReducerState) => state.editProductToBuyFinish
+);
+
+export const selectDeleteProductToBuySuccess = createSelector(
+  selectProductToBuyState, (state: ProductToBuyReducerState) => state.deleteProductToBuyFinish
+);
+
+export const selectDeleteProductToBuyFailed = createSelector(
+  selectProductToBuyState, (state: ProductToBuyReducerState) => state.deleteProductToBuyFailed
 );

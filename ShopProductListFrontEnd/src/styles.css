@@ -62,3 +62,9 @@ body, html {
       -webkit-transform: scale(1.0);
     }
 }
+
+body > app-root > nz-layout > app-header > nz-header > ul > li:nth-child(7) > app-notification > a > nz-badge > sup {
+  box-shadow: none !important;
+  top: -7px;
+}
+

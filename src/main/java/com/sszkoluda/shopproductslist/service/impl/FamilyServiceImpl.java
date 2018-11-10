@@ -37,11 +37,12 @@ public class FamilyServiceImpl implements FamilyService {
         Set<FamilyUser> familyMembers = new HashSet<>();
         Optional<FamilyUser> familyUser = this.familyUserService.getCurrentUser();
         return familyUser.map(f -> {
-            f.getUserFamilies().add(family);
             familyMembers.add(f);
-            return this.familyRepository.save(Family.builder()
+            Family familyToSave = Family.builder()
                     .familyName(family.getFamilyName())
-                    .familyMembers(familyMembers).build());
+                    .familyMembers(familyMembers).build();
+
+            return this.familyRepository.save(familyToSave);
         });
     }
 

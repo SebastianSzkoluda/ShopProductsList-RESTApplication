@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Product} from '../../model/product';
 import {ProductService} from '../product-manager/product.service';
-import {CreateProductAction} from '../../store/actions/product-actions';
+import {CreateProductAction, InitialProductAction} from '../../store/actions/product-actions';
 import {NzMessageService} from 'ng-zorro-antd';
 import {Subject} from 'rxjs/internal/Subject';
 import {select, Store} from '@ngrx/store';
@@ -86,6 +86,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
   }
 
   handleCancel(): void {
+    this.store.dispatch(new InitialProductAction());
     this.isVisible = false;
   }
 

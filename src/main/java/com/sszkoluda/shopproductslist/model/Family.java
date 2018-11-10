@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -39,13 +41,15 @@ public class Family {
     private Set<FamilyUser> familyMembers;
 
     @Getter
-    @OneToMany(mappedBy = "family", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "family", fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonIgnoreProperties("family")
     private List<Product> productsList;
 
     @Getter
-    @OneToMany(mappedBy = "family", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "family", fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonIgnoreProperties("family")
-    private List<Product> productsToBuyList;
+    private List<ProductToBuy> productsToBuyList;
 
 }

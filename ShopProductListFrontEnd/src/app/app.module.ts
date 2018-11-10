@@ -43,6 +43,12 @@ import {ProductEffects} from './store/effects/product-effects';
 import {UploadFileService} from './upload-files/upload-file.service';
 import {SecurePipe} from './user/user-profile/secure-pipe';
 
+import {OverlayModule} from '@angular/cdk/overlay';
+import { CreateProductToBuyComponent } from './products-to-buy/create-product-to-buy/create-product-to-buy.component';
+import { EditProductToBuyComponent } from './products-to-buy/edit-product-to-buy/edit-product-to-buy.component';
+import { ProductToBuyListComponent } from './products-to-buy/product-to-buy-list/product-to-buy-list.component';
+import {ProductToBuyEffects} from './store/effects/product-to-buy-effects';
+
 registerLocaleData(en);
 
 const appRoutes: Routes = [
@@ -60,6 +66,10 @@ const appRoutes: Routes = [
   }, {
     path: 'productsList',
     component: ProductListComponent,
+    canActivate: [LoginActivate]
+  }, {
+    path: 'productsToBuyList',
+    component: ProductToBuyListComponent,
     canActivate: [LoginActivate]
   }, {
     path: 'usermanual',
@@ -88,9 +98,13 @@ const appRoutes: Routes = [
     ShopMapComponent,
     SafePipe,
     SecurePipe,
-    UserProfileComponent
+    UserProfileComponent,
+    CreateProductToBuyComponent,
+    EditProductToBuyComponent,
+    ProductToBuyListComponent
   ],
   imports: [
+    OverlayModule,
     RouterModule.forRoot(appRoutes),
     BrowserModule,
     BrowserAnimationsModule,
@@ -99,7 +113,7 @@ const appRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     NgZorroAntdModule,
-    EffectsModule.forRoot([NotificationEffects, AuthEffects, FamilyEffects, ProductEffects]),
+    EffectsModule.forRoot([NotificationEffects, AuthEffects, FamilyEffects, ProductEffects, ProductToBuyEffects]),
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({
       maxAge: 5,

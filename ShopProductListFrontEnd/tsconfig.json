@@ -1,5 +1,7 @@
 {
   "compileOnSave": false,
+  "include": ["node_modules/ng-zorro-antd/node_modules/@angular/cdk/**/typings/index.d.ts", "node_modules/@angular/cdk/**/typings/index.d.ts", "src/**/*.ts"],
+  "exclude": ["**/*.spec.ts"],
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
     "sourceMap": true,

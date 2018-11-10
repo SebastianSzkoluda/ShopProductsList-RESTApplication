@@ -5,14 +5,12 @@ import com.sszkoluda.shopproductslist.model.Product;
 import com.sszkoluda.shopproductslist.repository.ProductRepository;
 import com.sszkoluda.shopproductslist.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -41,7 +39,7 @@ public class ProductController {
     @PostMapping("/product")
     public ResponseEntity<Product> saveProductForCurrentFamily(@RequestBody Product product, @RequestParam Integer familyId) {
         return this.productService.saveProductForCurrentFamily(product, familyId)
-                .map(p -> new ResponseEntity<Product>(HttpStatus.CREATED))
+                .map(p -> new ResponseEntity<>(p,HttpStatus.CREATED))
                 .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 

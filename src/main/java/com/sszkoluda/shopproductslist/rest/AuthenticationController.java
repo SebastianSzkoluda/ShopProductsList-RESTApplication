@@ -1,10 +1,11 @@
 package com.sszkoluda.shopproductslist.rest;
 
+import com.sszkoluda.shopproductslist.DTO.FamilyUserDTO;
 import com.sszkoluda.shopproductslist.jwt.JwtTokenUtil;
+import com.sszkoluda.shopproductslist.mapper.FamilyUserMapper;
 import com.sszkoluda.shopproductslist.model.AuthToken;
 import com.sszkoluda.shopproductslist.model.FamilyUser;
 import com.sszkoluda.shopproductslist.model.LoginUser;
-import com.sszkoluda.shopproductslist.repository.FamilyUserRepository;
 import com.sszkoluda.shopproductslist.service.FamilyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.naming.AuthenticationException;
 import java.util.Optional;
@@ -35,7 +39,7 @@ public class AuthenticationController {
         this.familyUserService = familyUserService;
     }
 
-    @PostMapping("/generateToken")
+    @PostMapping("/signin")
     public ResponseEntity<?> login(@RequestBody LoginUser loginUser) throws AuthenticationException {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -56,7 +60,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(new AuthToken(token));
     }
 
-    @PostMapping("/register")
+    @PostMapping("/signup")
     public ResponseEntity<FamilyUser> saveUser(@RequestBody FamilyUser user) {
         return this.familyUserService.saveUser(user)
                 .map(fU -> new ResponseEntity<FamilyUser>(HttpStatus.CREATED))

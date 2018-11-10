@@ -31,7 +31,7 @@ export class ProductEffects {
       withLatestFrom(this.store.pipe(select(selectProduct)), this.store.pipe(select(selectFamilyId))),
       switchMap(([, product, familyId]) => {
         return this.productService.saveProductForCurrentFamily(product, familyId)
-          .pipe(map(() => new CreateProductSuccessAction(product, familyId)),
+          .pipe(map(pr => new CreateProductSuccessAction(pr, familyId)),
             catchError(() => of(new CreateProductFailedAction(null, null))));
       })
     );
@@ -44,7 +44,7 @@ export class ProductEffects {
       withLatestFrom(this.store.pipe(select(selectProduct))),
       switchMap(([, product]) => {
         return this.productService.editProduct(product)
-          .pipe(map(() => new EditProductSuccessAction(product)),
+          .pipe(map(pr => new EditProductSuccessAction(pr)),
             catchError(() => of(new EditProductFailedAction(null))));
       })
     );

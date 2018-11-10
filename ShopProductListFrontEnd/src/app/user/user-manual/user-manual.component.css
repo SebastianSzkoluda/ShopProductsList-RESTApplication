@@ -2,8 +2,10 @@
   width: 100%;
   background-color: #575757f5;
 }
-.container {
+.user-manual-view {
   height: 100%;
   min-height: 100%;
   padding-top: 50px;
+  margin-left: 15%;
+  margin-right: 15%;
 }

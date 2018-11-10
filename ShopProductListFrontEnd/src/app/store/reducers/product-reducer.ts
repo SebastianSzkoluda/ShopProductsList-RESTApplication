@@ -134,7 +134,7 @@ export function productReducer(state = initialState, action: product.ProductActi
         deleteProductFailed: true,
         product: action.payload
       };
-    case product.ACTION_EDIT_BUTTON:
+    case product.ACTION_EDIT_PRODUCT_BUTTON:
       return {
         ...state,
         createProductPending: false,

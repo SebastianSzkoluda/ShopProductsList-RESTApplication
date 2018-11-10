@@ -20,8 +20,16 @@ public class ProductToBuy {
     private Integer productId;
 
     @Getter
-    @Column(name = "available_shop")
-    private String availableShop;
+    @Column(name = "product_name")
+    private String productName;
+
+    @Getter
+    @Column(name = "shop")
+    private String shop;
+
+    @Getter
+    @Column(name = "amount_to_buy")
+    private Integer amountToBuy;
 
     @Getter
     @ManyToOne(fetch = FetchType.EAGER)
