@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import javax.annotation.Resource;
 
 @SpringBootApplication
-public class ShopProductsListApplication {
+public class ShopProductsListApplication implements CommandLineRunner {
 
     @Resource
     StorageService storageService;
@@ -17,8 +17,9 @@ public class ShopProductsListApplication {
         SpringApplication.run(ShopProductsListApplication.class, args);
     }
 
-//    @Override
-//    public void run(String... arg) throws Exception {
-//        storageService.init();
-//    }
+    @Override
+    public void run(String... arg) throws Exception {
+        storageService.deleteAll();
+        storageService.init();
+    }
 }

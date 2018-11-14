@@ -57,9 +57,9 @@ public class ProductToBuyController {
     @DeleteMapping("/productToBuy/{id}")
     public ResponseEntity<Product> deleteProductToBuy(@PathVariable("id") Integer productToBuyId) {
         if (this.productToBuyService.removeProductToBuy(productToBuyId)) {
-            return ResponseEntity.ok().build();
+            return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return null;
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
     }

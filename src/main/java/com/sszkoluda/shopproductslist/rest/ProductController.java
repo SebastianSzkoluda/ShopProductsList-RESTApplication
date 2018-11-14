@@ -58,9 +58,9 @@ public class ProductController {
     @DeleteMapping("/product/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable("id") Integer productId) {
         if (this.productService.removeProduct(productId)) {
-            return ResponseEntity.ok().build();
+            return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return null;
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
     }

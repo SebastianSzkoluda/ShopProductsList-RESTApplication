@@ -62,7 +62,7 @@ public class FamilyUserController {
     @DeleteMapping("/user/{id}")
     public ResponseEntity<FamilyUser> deleteUser(@PathVariable("id") Integer id) {
         this.familyUserService.deleteUser(id);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/user/sendInviteToFamily")
@@ -82,12 +82,12 @@ public class FamilyUserController {
     @PostMapping("/user/acceptInviteToFamily")
     public ResponseEntity<?> acceptInviteToFamily(@RequestBody Notification notification) {
         this.familyUserService.acceptInviteToFamily(notification);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/user/declineInviteToFamily")
     public ResponseEntity<?> declineInviteToFamily(@RequestBody Notification notification) {
         this.notificationRepository.delete(notification);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
