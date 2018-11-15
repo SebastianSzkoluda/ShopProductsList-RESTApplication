@@ -41,6 +41,7 @@ nz-card {
   padding: 60px 0 60px 0;
 }
 #wrapper{
+  width: 400px;
   float: left;
 }
 #inner1{
